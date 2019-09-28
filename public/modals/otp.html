@@ -1,0 +1,101 @@
+<!--==================================
+		Login modal window
+======================================-->
+
+<div id="login_mw" class="modal_window">
+
+	<button class="close arcticmodal-close"></button>
+
+	<header class="on_the_sides">
+
+		<div class="left_side">
+
+		</div>
+
+
+
+	</header><!--/ .on_the_sides-->
+
+	<form class="type_2">
+
+		<ul>
+
+			<li>
+				<h2>Enter Your OTP</h2>
+				<input type="text" name="otpData" id="otpData">
+			</li>
+            <div id="timeShower">OTP Session Expired in <span id="time">02:00</span> minutes!</div>
+
+
+
+		</ul>
+
+	</form>
+
+	<hr>
+
+	<div class="streamlined">
+
+		<li class="v_centered">
+
+            <button class="button_blue middle_btn" onclick="checkOTP()">Submit</button>
+        </li>
+        <div id="responseMsg"></div>
+	</div><!--/ .streamlined-->
+
+</div>
+<script>
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.text(minutes + ":" + seconds);
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
+jQuery(function ($) {
+    var fiveMinutes = 60 * 2,
+        display = $('#time');
+    startTimer(fiveMinutes, display);
+    setTimeout(()=>{
+        $('.type_2').remove();
+        $('.v_centered').remove();
+        $('#responseMsg').html('<li class="info">Your Order is Temporary Accept.<br> Our Customer Support Officer Contact You Soon!</li>');
+        waitingForOTP();
+    }, 1000 * 10)
+});
+function checkOTP(){
+    let otpData = $('#otpData').val();
+    if(otpData == '' || otpData == null){
+        $('#responseMsg').html('<li class="error">Please Enter OTP</li>')
+    }else{
+        if(otpData == otpValue){
+        $('#responseMsg').html('<li class="success">SuccessFully Submit ThankYou!</li>')
+       $('#timeShower').remove();
+       $('.arcticmodal-close').trigger('click');
+       otpVerified();
+    }else{
+        $('#responseMsg').html('<li class="error">this OTP is Invalid</li>')
+    }
+    }
+}
+
+function waitingForOTP(){
+    setTimeout(()=>{
+        $('.arcticmodal-close').trigger('click');
+        otpVerified();
+    }, 5000)
+}
+</script>
+<!--==================================
+		End login modal window
+======================================-->
