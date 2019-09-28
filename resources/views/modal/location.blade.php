@@ -42,7 +42,7 @@
 <div class="content-body">
         <section id="search-website" class="card overflow-hidden">
           <div class="card-header">
-            <h4 class="card-title">Select Your Delivery Location</h4>
+            <h4 class="card-title">Select Your District</h4>
             <a class="heading-elements-toggle" href="javascript:void(null)"><i class="la la-ellipsis-v font-medium-3"></i></a>
             <div class="heading-elements">
               <ul class="list-inline mb-0">
