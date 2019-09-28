@@ -81,6 +81,8 @@ class pageController extends Controller
             // $category = category::all();
             $product = product::all();
             $adModel = adModel::all();
+            $brand_slider = brand::where('status',0)->where('brand_image','!=',null)->get();
+           // return response()->json($brands);
             if(Session::get('locations') == 'Madurai'){
 
                 $product_today = product::where('featured', 'on')->orderBy('id', 'DESC')->take(10)->get();
@@ -481,7 +483,7 @@ $output .= '
             }
         }
         
-            return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel','paint'));
+            return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel','paint','brand_slider'));
 
             //  foreach($product_today as $row){
             //     return response()->json($row);

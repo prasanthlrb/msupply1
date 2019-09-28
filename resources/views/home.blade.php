@@ -424,7 +424,30 @@
 						<!-- - - - - - - - - - - - - - End of main slider - - - - - - - - - - - - - - - - -->
 
 					</div><!--/ .row-->
+					<br>
+					@if(count($brand_slider) >0)
+					<section class="section_offset animated transparent" data-animation="fadeInDown">
 
+								<h3 class="offset_title">Our Brands</h3>
+
+								<!-- - - - - - - - - - - - - - Carousel of brands - - - - - - - - - - - - - - - - -->
+
+								<div class="owl_carousel brands">
+									@foreach($brand_slider as $brand)
+									<!--Brand-->
+									<a href="javascript:void(null)">
+									<img src="upload_brand/{{$brand->brand_image}}" alt="">
+									</a>
+									<!--End brand-->
+
+									@endforeach
+
+								</div><!--/ .owl_carousel-->
+								
+								<!-- - - - - - - - - - - - - - End of carousel of brands - - - - - - - - - - - - - - - - -->
+
+							</section><!--/ .section_offset.animated.transparent-->
+							@endif
 				</div><!--/ .container-->
 
 			</div><!--/ .page_wrapper-->
@@ -440,7 +463,7 @@ window.onscroll = function() {scrollFunction()};
 function scrollFunction() {
   if (document.documentElement.scrollTop > 905 && document.documentElement.scrollTop < 2900) {
 	$('#stricky-sideimg').addClass('fixedSideImage');
-	  console.log(document.documentElement.scrollTop)
+	  //console.log(document.documentElement.scrollTop)
     // document.getElementById("stricky-sideimg").style.fontSize = "30px";
   } else {
 	 $('#stricky-sideimg').removeClass('fixedSideImage');
