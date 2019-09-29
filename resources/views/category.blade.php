@@ -353,32 +353,7 @@
                                             
                                             </p>
                                             @endif
-                                            <?/*php 
-                                            $getRating = App\rating::where('item_id',$product1->id)->get();
-                                            if(count($getRating) > 0){
-                                                $rating_count;
-                                            $total=0;
-                                            foreach($getRating as $row){
-                                                $total +=$row->rating;
-                                            }
-                                            $rating_count = $total/count($getRating);
-                                       
-                                            }
-                                               
-                
-                
-                                                */?>
-                                                {{-- @if(count($getRating) > 0)
-                                                    <ul class="rating alignright">
-                
-                                                            <li class="active"></li>
-                                                            <li class="{{ $rating_count >= 2 ? 'active' : '' }}"></li>
-                                                            <li class="{{ $rating_count >= 3 ? 'active' : '' }}"></li>
-                                                            <li class="{{ $rating_count >= 4 ? 'active' : '' }}"></li>
-                                                            <li class="{{ $rating_count >= 5 ? 'active' : '' }}"></li>
-                
-                                                        </ul>
-                                                        @endif --}}
+                                            
 
                                         </div>
 
@@ -392,30 +367,11 @@
                                             
                                         </a>
 
-                                         {{-- <div class="v_centered product_reviews">
-                                        
-                                            <ul class="rating">
-
-                                                <li class="active"></li>
-                                                <li class="active"></li>
-                                                <li class="active"></li>
-                                                <li class="active"></li>
-                                                <li></li>
-
-                                            </ul>
-
-                                            <ul class="topbar">
-
-                                                <li><a href="#">3 Review(s)</a></li>
-                                                <li><a href="#">Add Your Review</a></li>
-
-                                            </ul>
-
-                                        </div>  --}}
+                                  
 
                                         <div><?php echo $product1->product_description;?></div>
 
-                                        <!-- <a href="#" class="learn_more">Learn More</a> -->
+                                      
 
                                     </div>
 
