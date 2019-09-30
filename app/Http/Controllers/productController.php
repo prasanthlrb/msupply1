@@ -1232,9 +1232,10 @@ public function getProduct(){
         foreach($category as $row){
           $data[]=$row->id;  
         }
+        $brand = brand::all();
         $subcategory = category::whereIn('parent_id',$data)->get();
         //return response()->json($data);
-        return view('admin.tiles',compact('category','subcategory'));
+        return view('admin.tiles',compact('category','subcategory','brand'));
     }
 
     public function updateTilesSubCategory(Request $request){
@@ -1368,5 +1369,12 @@ public function getProduct(){
             'tax'=>$request->tax);
         $all_product = product::where('category',1)->update($values);
         return back();
+    }
+
+    public function updateTilesBrands(Request $request){
+         $product = product::find($request->product_id);
+        $product->brand_name = $request->data;
+        $product->save();
+        return response()->json(['message'=>'Upload Successfully'],200);
     }
 }

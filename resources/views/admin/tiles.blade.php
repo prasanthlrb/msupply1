@@ -152,7 +152,14 @@
                             <tbody>
                                 <tr>
                                     <td>Brand</td>
-                                    <td class="font-weight-bold">KAG</td>
+                                    <td class="font-weight-bold">
+                                        <select name="brands" id="brands" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                         @foreach($brand as $data)
+                                            <option value="{{$data->id}}">{{$data->brand}}</option>
+                                           @endforeach
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Name</td>
@@ -332,6 +339,7 @@ function getProduct(id){
             $('#amount').val(data[0].amount);
             $('#product_description').text(data[0].product_description);
             $('#product_name').text(data[0].product_name);
+            $('select[name=brands]').val(data[0].brand_name);
             $('#length').val(data[0].length);
             $('#updated_at').text(data[0].updated_at);
             if(data[2] != null){
@@ -433,6 +441,19 @@ $('#length').change(function(){
         url: '/admin/update-length',
         method: "GET",
         data: { product_id: product_id, data: length },
+        dataType: "JSON",
+        success: function (data) {
+            //console.log(data);
+            toastr.success(data.message);
+        }
+    })
+});
+$('#brands').change(function(){
+    let brands = $('#brands').val();
+   $.ajax({
+        url: '/admin/update-tiles-brands',
+        method: "GET",
+        data: { product_id: product_id, data: brands },
         dataType: "JSON",
         success: function (data) {
             //console.log(data);

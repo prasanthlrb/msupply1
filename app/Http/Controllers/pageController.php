@@ -75,6 +75,10 @@ class pageController extends Controller
     public function home()
     {
         try {
+
+            $test = product::select('product_description')->where('category',1)->groupBy('product_description')->get();
+
+            return response()->json($test);
             $slider = homeSlider::orderBy('position', 'ASC')->get();
             $layouts = home_product_layout::orderBy('position', 'ASC')->get();
             

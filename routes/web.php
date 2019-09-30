@@ -378,6 +378,7 @@ Route::get('/update-price_type','productController@updatePriceType');
 Route::get('/update-value_type','productController@updateValueType');
 Route::get('/update-amount','productController@updateAmount');
 Route::get('/update-length','productController@updateLength');
+Route::get('/update-tiles-brands','productController@updateTilesBrands');
 
 });
 
