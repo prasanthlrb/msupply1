@@ -281,8 +281,10 @@ class pageController extends Controller
                                     $output .= '
             <div class="product_item type_2">
             <div class="image_wrap">';
-            
+            if(isset($brand->brand_image)){
+
                 $output .='<img src="'.asset('upload_brand/'.$brand->brand_image.'').'" alt="">';
+            }
           
             $output .=' <div class="actions_wrap">
           
