@@ -1328,7 +1328,13 @@ public function getProduct(){
         ->addColumn('category', function($product){
             if($product->second_sub_category != null){
                 $secondSubCat = category::find($product->second_sub_category);
-                return '<td class="text-success">'.$secondSubCat->category_name.'</td>';
+                if(isset($secondSubCat->category_name)){
+                    return '<td class="text-success">'.$secondSubCat->category_name.'</td>';
+
+                }else{
+
+                    return '<td class="text-success">NA</td>';
+                }
             }else{
                 if($product->sub_category ==  3){
                     return '<td class="text-success">Floor Tiles</td>';
