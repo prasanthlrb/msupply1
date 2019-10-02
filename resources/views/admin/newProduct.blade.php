@@ -88,7 +88,8 @@
                               <div class="form-group row">
                                     <label class="col-md-3 label-control" for="Select Brand">Select Category</label>
                                     <div class="col-md-9">
-                                      <select style="width:100%" name="category" id="category" class="select2 form-control col-md-12" placeholder="search for Category">
+                                      <select style="width:100%" name="category" id="category" class="select2 form-control col-md-12" onchange="getCategoryById(1)">
+                                       <option value="" selected="" disabled="">Select Category</option>
                                         @foreach($category as $cat)
                                         <option value="{{$cat->id}}">{{$cat->category_name}}</option>
                                         @endforeach
@@ -98,33 +99,27 @@
                               <div class="form-group row">
                                     <label class="col-md-3 label-control" for="Select Brand">Select Sub Category</label>
                                     <div class="col-md-9">
-                                      <select style="width:100%" name="sub_category" id="sub_category" class="select2 form-control col-md-12" placeholder="search for Category">
-                                       <option value="" selected="" disabled="">Select Sub Category</option>
-                                        @foreach($category as $cat)
-                                        <option value="{{$cat->id}}">{{$cat->category_name}}</option>
-                                        @endforeach
+                                      <select style="width:100%" name="sub_category" id="sub_category" class="select2 form-control col-md-12" onchange="getCategoryById(2)">
+                                       <option value="" selected="">Select Sub Category</option>
+                                    
                                       </select>
                                     </div>
                                   </div>
                               <div class="form-group row">
                                     <label class="col-md-3 label-control" for="Select Brand">Select Second Sub Category</label>
                                     <div class="col-md-9">
-                                      <select style="width:100%" name="second_sub_category" id="second_sub_category" class="select2 form-control col-md-12" placeholder="search for Category">
-                                         <option value="" selected="" disabled="">Select Second Category</option>
-                                        @foreach($category as $cat)
-                                        <option value="{{$cat->id}}">{{$cat->category_name}}</option>
-                                        @endforeach
+                                      <select style="width:100%" name="second_sub_category" id="second_sub_category" class="select2 form-control col-md-12" onchange="getCategoryById(3)">
+                                         <option value="" selected="">Select Second Category</option>
+                                   
                                       </select>
                                     </div>
                                   </div>
                               <div class="form-group row">
                                     <label class="col-md-3 label-control" for="Select Brand">Select Third Sub Category</label>
                                     <div class="col-md-9">
-                                      <select style="width:100%" name="third_sub_category" id="third_sub_category" class="select2 form-control col-md-12" placeholder="search for Category">
-                                        <option value="" selected="" disabled="">Select Third Category</option>
-                                        @foreach($category as $cat)
-                                        <option value="{{$cat->id}}">{{$cat->category_name}}</option>
-                                        @endforeach
+                                      <select style="width:100%" name="third_sub_category" id="third_sub_category" class="select2 form-control col-md-12">
+                                        <option value="" selected="">Select Third Category</option>
+                                        
                                       </select>
                                     </div>
                                   </div>
@@ -973,6 +968,32 @@ function removeDistanceHandle(id){
     });
     $( "#distance_handle"+id ).remove();
   }
+}
+
+//category process
+
+function getCategoryById(cat){
+  var cat_name;
+  var id;
+  if(cat ==1){
+    cat_name ='sub_category';
+    id = $('#category').val();
+  }else if(cat ==2){
+    cat_name ='second_sub_category';
+    id = $('#sub_category').val();
+  }else{
+     cat_name ='third_sub_category';
+    id = $('#second_sub_category').val();
+  }
+  $.ajax({
+      url : '/admin/product-subcategory-get/'+id,
+      type: "GET",
+      success: function(data)
+      {
+
+         $('#'+cat_name).append(data);
+      }
+ });
 }
 
 </script>

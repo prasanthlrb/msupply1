@@ -71,7 +71,8 @@ class productController extends Controller
         $request->validate([
             'brand'=>'required',
           ]);
-            $if_check = brand::find($request->id);
+        $brand = brand::find($request->id);
+        $brand->brand = $request->brand;
         if($request->brand_image!=""){
             $old_image = "upload_brand/".$request->brand_image1;
             if (file_exists($old_image)) {
@@ -84,22 +85,9 @@ class productController extends Controller
             $fileName = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('upload_brand/'), $fileName);
             }
+            $brand->brand_image = $fileName;
         }
-        else
-        {
-            if($request->brand_image!=""){
-                $fileName = $request->brand_image1;
-
-            }else{
-                if($if_check->brand_image !=null){
-                $old_brand_image = "upload_brand/".$if_check->brand_image;
-            if (file_exists($old_brand_image)) {
-                @unlink($old_brand_image);
-            }
-                }
-                $fileName = NULL;
-            }
-        }
+    
 
         if($request->thumbnail!=""){
             $brand_thumbnail = "brand_thumbnail/".$request->thumbnail;
@@ -113,29 +101,10 @@ class productController extends Controller
             $thumbnail = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('brand_thumbnail/'), $thumbnail);
             }
+            $brand->thumbnail = $thumbnail;
         }
-        else
-        {
-             if($request->thumbnail1!=""){
-
-                 $thumbnail = $request->thumbnail1;
-             }else{
-                if($if_check->thumbnail !=null){
-                    $old_image = "brand_thumbnail/".$request->thumbnail1;
-               if (file_exists($old_image)) {
-                   @unlink($old_image);
-               }
-               
-            }
-            $thumbnail = NULL; 
-             }
-
-        }
-
-        $brand = brand::find($request->id);
-        $brand->brand = $request->brand;
-        $brand->brand_image = $fileName;
-        $brand->thumbnail = $thumbnail;
+        
+        
         $brand->status = $request->status;
         $brand->save();
         return response()->json(['message'=>'Successfully Update'],200);
@@ -323,7 +292,7 @@ class productController extends Controller
         $brand = brand::all();
         $product = product::all();
         $attribute = attribute::all();
-        $category = category::all();
+        $category = category::where('parent_id',0)->get();
         $role = role::find(Auth::guard('admin')->user()->role_id);
         $units = unit::all();
         return view('admin.newProduct',compact('group','brand','product','attribute','category','role','units'));
@@ -905,7 +874,8 @@ class productController extends Controller
         // ->get();
         $product_attribute = product_attribute::where('product_id', $id)->get();
         $group = product_group::all();
-        $category = category::all();
+        $category = category::where('parent_id',0)->get();
+        $sub_category = category::all();
         $attribute = attribute::all();
         $product = product::all();
         $brand = brand::all();
@@ -927,9 +897,9 @@ class productController extends Controller
        if(count($optionGroup) > 0){
         $optionGroupGetter = optionGroup::where('product_id',$id)->select('id')->get();
         $optionValue = optionValue::whereIn('group_id',$optionGroupGetter)->get();
-        return view('admin/editProduct',compact('distance_price','optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
+        return view('admin/editProduct',compact('sub_category','distance_price','optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
     }else{
-        return view('admin/editProduct',compact('distance_price','optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
+        return view('admin/editProduct',compact('sub_category','distance_price','optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
     }
 
     }
@@ -1431,5 +1401,14 @@ public function getProduct(){
         $product->sub_category = $request->data;
         $product->save();
         return response()->json(['message'=>'Upload Successfully'],200);
+    }
+
+    public function productSubCategoryGet($id){
+        $category = category::where('parent_id',$id)->get();
+        $output ='';
+        foreach($category as $row){
+            $output .='<option value="'.$row->id.'">'.$row->category_name.'</option>';
+        }
+        return response()->json($output);
     }
 }

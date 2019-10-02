@@ -87,7 +87,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 label-control" for="Select Brand">Select Category</label>
                                             <div class="col-md-9">
-                                                <select style="width:100%" name="category" id="category" class="select2 form-control col-md-12" placeholder="search for Category">
+                                                <select style="width:100%" name="category" id="category" class="select2 form-control col-md-12" onchange="getCategoryById(1)">
                                                     @foreach($category as $cat)
                                                     <option {{$cat->id==$product_find->category ? 'selected' : ''}} value="{{$cat->id}}">{{$cat->category_name}}</option>
                                                     @endforeach
@@ -97,9 +97,9 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 label-control" for="Select Brand">Select Sub Category</label>
                                             <div class="col-md-9">
-                                                <select style="width:100%" name="sub_category" id="sub_category" class="select2 form-control col-md-12" placeholder="search for Category">
-                                                    <option value="" selected="" disabled="">Select Sub Category</option>
-                                                    @foreach($category as $cat)
+                                                <select style="width:100%" name="sub_category" id="sub_category" class="select2 form-control col-md-12" onchange="getCategoryById(2)">
+                                                    <option value="" selected="" >Select Sub Category</option>
+                                                    @foreach($sub_category as $cat)
                                                     <option {{$cat->id==$product_find->sub_category ? 'selected' : ''}} value="{{$cat->id}}">{{$cat->category_name}}</option>
                                                     @endforeach
                                                 </select>
@@ -108,9 +108,9 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 label-control" for="Select Brand">Select Second Category</label>
                                             <div class="col-md-9">
-                                                <select style="width:100%" name="second_sub_category" id="second_sub_category" class="select2 form-control col-md-12" placeholder="search for Category">
-                                                      <option value="" selected="" disabled="">Select Second Category</option>
-                                                    @foreach($category as $cat)
+                                                <select style="width:100%" name="second_sub_category" id="second_sub_category" class="select2 form-control col-md-12" onchange="getCategoryById(3)">
+                                                      <option value="" selected="" >Select Second Category</option>
+                                                    @foreach($sub_category as $cat)
                                                     <option {{$cat->id==$product_find->second_sub_category ? 'selected' : ''}} value="{{$cat->id}}">{{$cat->category_name}}</option>
                                                     @endforeach
                                                 </select>
@@ -119,9 +119,9 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 label-control" for="Select Brand">Select Third Category</label>
                                             <div class="col-md-9">
-                                                <select style="width:100%" name="third_sub_category" id="third_sub_category" class="select2 form-control col-md-12" placeholder="search for Category">
-                                                    <option value="" selected="" disabled="">Select Third Category</option>
-                                                    @foreach($category as $cat)
+                                                <select style="width:100%" name="third_sub_category" id="third_sub_category" class="select2 form-control col-md-12">
+                                                    <option value="" selected="" >Select Third Category</option>
+                                                    @foreach($sub_category as $cat)
                                                     <option {{$cat->id==$product_find->third_sub_category ? 'selected' : ''}} value="{{$cat->id}}">{{$cat->category_name}}</option>
                                                     @endforeach
                                                 </select>
@@ -1304,6 +1304,29 @@ function removeDistanceHandleOld(id){
       }
  });
   }
+}
+function getCategoryById(cat){
+  var cat_name;
+  var id;
+  if(cat ==1){
+    cat_name ='sub_category';
+    id = $('#category').val();
+  }else if(cat ==2){
+    cat_name ='second_sub_category';
+    id = $('#sub_category').val();
+  }else{
+     cat_name ='third_sub_category';
+    id = $('#second_sub_category').val();
+  }
+  $.ajax({
+      url : '/admin/product-subcategory-get/'+id,
+      type: "GET",
+      success: function(data)
+      {
+ 
+         $('#'+cat_name).html(data);
+      }
+ });
 }
 
 </script>

@@ -380,6 +380,8 @@ Route::get('/update-amount','productController@updateAmount');
 Route::get('/update-length','productController@updateLength');
 Route::get('/update-tiles-brands','productController@updateTilesBrands');
 Route::get('/update-tiles-sub_category','productController@updateTilesSubCategory');
+//product category based process
+Route::get('/product-subcategory-get/{id}','productController@productSubCategoryGet');
 
 });
 

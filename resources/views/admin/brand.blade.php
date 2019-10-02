@@ -121,7 +121,7 @@
             <div class="col-md-9">
               <input type="hidden" name="brand_image1" id="brand_image1">
               <div id="brand_image_place"></div>
-              <input type="file" class="form-control" placeholder="Upload your Brand Name"
+              <input type="file" class="form-control"
               name="brand_image" id="brand_image">
             </div>
           </div>
@@ -130,7 +130,7 @@
             <div class="col-md-9">
               <input type="hidden" name="thumbnail1" id="thumbnail1">
                 <div id="thumbnail_image_place"></div>
-              <input type="file" class="form-control" placeholder="Upload your thumbnail image"
+              <input type="file" class="form-control"
               name="thumbnail" id="thumbnail">
             
             </div>
@@ -228,8 +228,8 @@
         {
           let thumbnail = '<i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeThumbnail()"></i>';
           let brand_image = '<i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeBrandImage()"></i>';
-          $('#thumbnail_image_place').after(thumbnail);
-          $('#brand_image_place').after(brand_image);
+          $('#thumbnail_image_place').html(thumbnail);
+          $('#brand_image_place').html(brand_image);
           $('#myModalLabel8').text('Update brand');
           $('#saveCat').text('Save Change');
           $('input[name=brand]').val(data.brand);
@@ -257,11 +257,12 @@
     }
      }
      function removeThumbnail(){
-
+        $('#thumbnail').val("")
+      
      }
 
     function removeBrandImage(){
-
+     $('#brand_image').val("")
 }
 </script>
 @endsection
