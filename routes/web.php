@@ -242,7 +242,7 @@ Route::post('/update_faq','settingController@faqUpdate');
 Route::get('/tiles-upload','settingController@tilesUpload');
 Route::get('/tiles','productController@viewTitle');
 Route::get('/get-tiles-product','productController@getTilesProduct');
-Route::get('/update-secondSubcategory','productController@updateTilesSubCategory');
+Route::get('/update-secondSubcategory','productController@updateTilesSecondSubCategory');
 Route::get('/update-thirdSubcategory','productController@updateTilesThirdSubCategory');
 Route::post('/tiles-tax','productController@tilesTax');
 
@@ -379,6 +379,7 @@ Route::get('/update-value_type','productController@updateValueType');
 Route::get('/update-amount','productController@updateAmount');
 Route::get('/update-length','productController@updateLength');
 Route::get('/update-tiles-brands','productController@updateTilesBrands');
+Route::get('/update-tiles-sub_category','productController@updateTilesSubCategory');
 
 });
 

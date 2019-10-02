@@ -40,11 +40,10 @@
                     <th>S No</th>
                     <th>Brand Name</th>
                     <th>Brand Image</th>
+                     <th>Thumbnail</th>
                     <th>Status</th>
                     @if($role->brand_action ==1)
-                    <th>Edit</th>
-
-                    <th>Delete</th>
+                  <th>Action</th>
                     @endif
                   </tr>
                 </thead>
@@ -54,6 +53,7 @@
                     <td>{{$row->id}}</td>
                     <td>{{$row->brand}}</td>
                     <td><img style="width: 100px;" src="{{asset('upload_brand/').'/'.$row->brand_image}}" alt=""></td>
+                    <td><img style="width: 100px;" src="{{asset('brand_thumbnail/').'/'.$row->thumbnail}}" alt=""></td>
 
                     <td class="text-center" onclick="editCat({{$row->id}})">
                       @if($row->status == 0)
@@ -63,9 +63,10 @@
                       @endif
                     </td>
                     @if($role->brand_action ==1)
-                    <td class="text-center" onclick="editCat({{$row->id}})"><i class="ft-edit"></i></td>
-
-                    <td class="text-center" onclick="deleteCat({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    <td class="text-center" >
+                      <i class="ft-edit" onclick="editCat({{$row->id}})"></i>
+                    <i class="ft-trash-2" onclick="deleteCat({{$row->id}})"></i>
+                    </td>
                     @endif
                   </tr>
                 @endforeach
@@ -75,11 +76,11 @@
                         <th>S No</th>
                         <th>Brand Name</th>
                         <th>Brand Image</th>
+                        <th>Thumbnail</th>
                         <th>Status</th>
                         @if($role->brand_action ==1)
-                        <th>Edit</th>
+                        <th>Action</th>
 
-                        <th>Delete</th>
                         @endif
                   </tr>
                 </tfoot>
@@ -119,8 +120,19 @@
             <label class="col-md-3 label-control" for="projectinput1">Brand Image</label>
             <div class="col-md-9">
               <input type="hidden" name="brand_image1" id="brand_image1">
-              <input type="file" class="form-control" placeholder="Enter your Brand Name"
+              <div id="brand_image_place"></div>
+              <input type="file" class="form-control" placeholder="Upload your Brand Name"
               name="brand_image" id="brand_image">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">thumbnail image</label>
+            <div class="col-md-9">
+              <input type="hidden" name="thumbnail1" id="thumbnail1">
+                <div id="thumbnail_image_place"></div>
+              <input type="file" class="form-control" placeholder="Upload your thumbnail image"
+              name="thumbnail" id="thumbnail">
+            
             </div>
           </div>
           <div class="form-group row">
@@ -214,6 +226,10 @@
         dataType: "JSON",
         success: function(data)
         {
+          let thumbnail = '<i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeThumbnail()"></i>';
+          let brand_image = '<i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeBrandImage()"></i>';
+          $('#thumbnail_image_place').after(thumbnail);
+          $('#brand_image_place').after(brand_image);
           $('#myModalLabel8').text('Update brand');
           $('#saveCat').text('Save Change');
           $('input[name=brand]').val(data.brand);
@@ -240,6 +256,12 @@
       });
     }
      }
+     function removeThumbnail(){
 
+     }
+
+    function removeBrandImage(){
+
+}
 </script>
 @endsection

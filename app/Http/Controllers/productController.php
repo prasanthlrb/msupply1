@@ -51,9 +51,17 @@ class productController extends Controller
     $fileName = rand() . '.' . $image->getClientOriginalExtension();
     $image->move(public_path('upload_brand/'), $fileName);
     }
+    //image thumbnail
+    $thumbnail = null;
+    if($request->file('thumbnail')!="" || $request->file('thumbnail') != null){
+    $image = $request->file('thumbnail');
+    $thumbnail = rand() . '.' . $image->getClientOriginalExtension();
+    $image->move(public_path('brand_thumbnail/'), $thumbnail);
+    }
         $brand = new brand;
         $brand->brand = $request->brand;
         $brand->brand_image = $fileName;
+        $brand->thumbnail = $thumbnail;
         $brand->status = $request->status;
         $brand->save();
         return response()->json(['message'=>'Successfully Store'],200);
@@ -63,7 +71,7 @@ class productController extends Controller
         $request->validate([
             'brand'=>'required',
           ]);
-
+            $if_check = brand::find($request->id);
         if($request->brand_image!=""){
             $old_image = "upload_brand/".$request->brand_image1;
             if (file_exists($old_image)) {
@@ -79,12 +87,55 @@ class productController extends Controller
         }
         else
         {
-            $fileName = $request->brand_image1;
+            if($request->brand_image!=""){
+                $fileName = $request->brand_image1;
+
+            }else{
+                if($if_check->brand_image !=null){
+                $old_brand_image = "upload_brand/".$if_check->brand_image;
+            if (file_exists($old_brand_image)) {
+                @unlink($old_brand_image);
+            }
+                }
+                $fileName = NULL;
+            }
+        }
+
+        if($request->thumbnail!=""){
+            $brand_thumbnail = "brand_thumbnail/".$request->thumbnail;
+            if (file_exists($brand_thumbnail)) {
+                @unlink($brand_thumbnail);
+            }
+            //image upload
+            $thumbnail = null;
+            if($request->file('thumbnail')!=""){
+            $image = $request->file('thumbnail');
+            $thumbnail = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('brand_thumbnail/'), $thumbnail);
+            }
+        }
+        else
+        {
+             if($request->thumbnail1!=""){
+
+                 $thumbnail = $request->thumbnail1;
+             }else{
+                if($if_check->thumbnail !=null){
+                    $old_image = "brand_thumbnail/".$request->thumbnail1;
+               if (file_exists($old_image)) {
+                   @unlink($old_image);
+               }
+               
+            }
+            $thumbnail = NULL; 
+             }
+
         }
 
         $brand = brand::find($request->id);
         $brand->brand = $request->brand;
         $brand->brand_image = $fileName;
+        $brand->thumbnail = $thumbnail;
         $brand->status = $request->status;
         $brand->save();
         return response()->json(['message'=>'Successfully Update'],200);
@@ -426,6 +477,7 @@ class productController extends Controller
         $product->amount = $request->amount;
         $product->items = $request->items;
         $product->order_limit = $request->order_limit;
+        $product->map_location = $request->map_location;
         $product->save();
 
         if(isset($request->attribute)){
@@ -575,6 +627,7 @@ class productController extends Controller
         $product->amount = $request->amount;
         $product->items = $request->items;
         $product->order_limit = $request->order_limit;
+        $product->map_location = $request->map_location;
         $product->save();
 
         if(isset($request->attribute)){
@@ -1238,7 +1291,7 @@ public function getProduct(){
         return view('admin.tiles',compact('category','subcategory','brand'));
     }
 
-    public function updateTilesSubCategory(Request $request){
+    public function updateTilesSecondSubCategory(Request $request){
          $product = product::find($request->product_id);
          $product->second_sub_category = $request->data;
          $product->save();
@@ -1374,6 +1427,12 @@ public function getProduct(){
     public function updateTilesBrands(Request $request){
          $product = product::find($request->product_id);
         $product->brand_name = $request->data;
+        $product->save();
+        return response()->json(['message'=>'Upload Successfully'],200);
+    }
+    public function updateTilesSubCategory(Request $request){
+         $product = product::find($request->product_id);
+        $product->sub_category = $request->data;
         $product->save();
         return response()->json(['message'=>'Upload Successfully'],200);
     }

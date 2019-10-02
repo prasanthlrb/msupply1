@@ -468,6 +468,10 @@
                                         <input type="checkbox" name="group_product" id="group_product" class="switchery-xs" />
                                         <label for="switchery5" class="card-title ml-1">Enable Group Product options</label>
                                       </div>
+                                      <div class="dropdown-item">
+                                        <input type="checkbox" name="map_location" id="map_location" class="switchery-xs" />
+                                        <label for="switchery5" class="card-title ml-1">Enable Map Option</label>
+                                      </div>
                                 </div>
 
                                 {{-- Custom Quantity --}}

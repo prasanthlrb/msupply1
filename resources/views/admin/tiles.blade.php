@@ -190,8 +190,21 @@
                                      <td><input type="text" style="width:100%" name="length" id="length"></td>
                                   
                                 </tr>
+                                      <tr>
+                                    <td> Subcategory</td>
+                                    <td>
+                                
+                                      <select name="sub_category" id="sub_category" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                        <option value="2">Wall Tiles </option>
+                                        <option value="3">Floor Tiles </option>
+                                         
+                                        </select>
+                               
+                                    </td>
+                                </tr>
                                 <tr>
-                                    <td>Subcategory</td>
+                                    <td>Second Subcategory</td>
                                     <td>
                                 
                                       <select name="second_sub_category" id="second_sub_category" class="form-control">
@@ -340,6 +353,7 @@ function getProduct(id){
             $('#product_description').text(data[0].product_description);
             $('#product_name').text(data[0].product_name);
             $('select[name=brands]').val(data[0].brand_name);
+            $('select[name=sub_category]').val(data[0].sub_category);
             $('#length').val(data[0].length);
             $('#updated_at').text(data[0].updated_at);
             if(data[2] != null){
@@ -454,6 +468,19 @@ $('#brands').change(function(){
         url: '/admin/update-tiles-brands',
         method: "GET",
         data: { product_id: product_id, data: brands },
+        dataType: "JSON",
+        success: function (data) {
+            //console.log(data);
+            toastr.success(data.message);
+        }
+    })
+})
+$('#sub_category').change(function(){
+    let sub_category = $('#sub_category').val();
+   $.ajax({
+        url: '/admin/update-tiles-sub_category',
+        method: "GET",
+        data: { product_id: product_id, data: sub_category },
         dataType: "JSON",
         success: function (data) {
             //console.log(data);
