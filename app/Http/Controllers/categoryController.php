@@ -209,7 +209,7 @@ class categoryController extends Controller
          //return response()->json($relatedProducts);
          return view('tilesProduct',compact('product1','subCategoty','relatedProducts','stock'));
     }
-    else if($product1->category == 7 || $product1->map_location == 'on'){
+    else if($product1->map_location == 'on'){
        // return response()->json($Upload);
         $custom_qty = custom_qty::where('product_id',$product1->id)->get();
         return view('bricksProduct',compact('product1','custom_qty','Upload'));

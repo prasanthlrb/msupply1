@@ -275,7 +275,11 @@
                                     <label for="projectinput1">Minimum Order Limit</label>
                                     <input type="text" id="order_limit" class="form-control" name="order_limit">
                                   </div>
-
+                                <div class="form-group" style="padding-left:10px">
+                                    <label for="projectinput1">Default Unit Type</label>
+                                    <input type="text" id="default_unit_type" class="form-control" name="default_unit_type">
+                                  </div>
+                                  
                                 </div>
                                 <div class="tab-pane tap2" id="tabVerticalLeft22" aria-labelledby="baseVerticalLeft2-tab2">
                                     <div class="form-group" style="padding-left:10px">

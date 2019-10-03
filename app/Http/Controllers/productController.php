@@ -465,6 +465,7 @@ class productController extends Controller
         $product->items = $request->items;
         $product->order_limit = $request->order_limit;
         $product->map_location = $request->map_location;
+        $product->default_unit_type = $request->default_unit_type;
         $product->save();
 
         if(isset($request->attribute)){
@@ -615,6 +616,7 @@ class productController extends Controller
         $product->items = $request->items;
         $product->order_limit = $request->order_limit;
         $product->map_location = $request->map_location;
+        $product->default_unit_type = $request->default_unit_type;
         $product->save();
 
         if(isset($request->attribute)){

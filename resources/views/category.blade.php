@@ -341,7 +341,7 @@
                                         <a href="/product/{{$product1->id}}">{{$product1->product_name}}</a>
 
                                         <div class="clearfix product_info">
-                                            @if($product1->category != 21 && $product1->category != 7)
+                                            @if($product1->category != 21 && $product1->map_location == null)
                                             <p class="product_price alignleft">
                                                 
                                                 	@if($product1->regular_price != null)

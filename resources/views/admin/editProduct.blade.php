@@ -275,10 +275,13 @@
                                         <input type="text" id="sales_price" class="form-control" name="sales_price" value="{{$product_find->sales_price}}">
                                     </div>
                                     <div class="form-group" style="padding-left:10px">
-                                        <label for="projectinput1">Order Limits</label>
+                                        <label for="projectinput1">Minimum Order Limits</label>
                                         <input type="text" id="order_limit" class="form-control" name="order_limit" value="{{$product_find->order_limit}}">
                                     </div>
-
+                                     <div class="form-group" style="padding-left:10px">
+                                    <label for="projectinput1">Default Unit Type</label>
+                                    <input type="text" id="default_unit_type" class="form-control" name="default_unit_type" value="{{$product_find->default_unit_type}}">
+                                  </div>
                                 </div>
                                 <div class="tab-pane tap2" id="tabVerticalLeft22" aria-labelledby="baseVerticalLeft2-tab2">
                                     <div class="form-group" style="padding-left:10px">
