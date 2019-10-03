@@ -109,6 +109,24 @@ class productController extends Controller
         $brand->save();
         return response()->json(['message'=>'Successfully Update'],200);
     }
+    public function deleteBrandImage($id,$type){
+        $brand = brand::find($id);
+        if($type == 1){
+            $old_image = "upload_brand/".$brand->brand_image;
+            if (file_exists($old_image)) {
+                @unlink($old_image);
+            }
+            $brand->brand_image = null;
+        }else{
+            $brand_thumbnail = "brand_thumbnail/".$brand->thumbnail;
+            if (file_exists($brand_thumbnail)) {
+                @unlink($brand_thumbnail);
+            }
+            $brand->thumbnail = null;
+        }
+        $brand->save();
+         return response()->json(['message'=>'Successfully Removed'],200);
+    }
     public function editBrand($id){
         $brand = brand::find($id);
         return response()->json($brand);

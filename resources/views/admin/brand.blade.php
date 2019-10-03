@@ -168,6 +168,8 @@
   $('#open_model').click(function(){
     $('#brand_model').modal('show');
     $("#brand_form")[0].reset();
+    $('#thumb_set').remove();
+    $('#brand_set').remove();
     action_type = 1;
     $('#saveCat').text('Save');
     $('#myModalLabel8').text('Create Brand');
@@ -219,17 +221,25 @@
     }
 
     function editCat(id){
-
+$('#thumb_set').remove();
+$('#brand_set').remove();
       $.ajax({
         url : '/admin/edit_brand/'+id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
-          let thumbnail = '<i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeThumbnail()"></i>';
-          let brand_image = '<i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeBrandImage()"></i>';
-          $('#thumbnail_image_place').html(thumbnail);
+          if(data.thumbnail != null){
+          let thumbnail = '<div id="thumb_set"><i class="ft-minus-circle text-danger" style="cursor:pointer" onclick="removeThumbnail('+data.id+')"></i>'+
+          '<img src="/brand_thumbnail/'+data.thumbnail+'" width="100px"></div><br>';
+          $('#thumbnail_image_place').html(thumbnail)
+          }
+          if(data.brand_image != null){
+          let brand_image = '<div id="brand_set"><i class="ft-minus-circle text-danger" style="cursor:pointer" onclick="removeBrandImage('+data.id+')"></i>'+
+          '<img src="/upload_brand/'+data.brand_image+'" width="100px"></div><br>';
           $('#brand_image_place').html(brand_image);
+
+          }
           $('#myModalLabel8').text('Update brand');
           $('#saveCat').text('Save Change');
           $('input[name=brand]').val(data.brand);
@@ -256,13 +266,33 @@
       });
     }
      }
-     function removeThumbnail(){
-        $('#thumbnail').val("")
+     function removeThumbnail(id){
+       $.ajax({
+        url : '/admin/delete_brand_image/'+id+'/2',
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+           $('#brand_model').modal('hide');
+           toastr.success(data.message);
+          location.reload();
+        }
+      });
       
      }
 
-    function removeBrandImage(){
-     $('#brand_image').val("")
+    function removeBrandImage(id){
+   $.ajax({
+        url : '/admin/delete_brand_image/'+id+'/1',
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+           $('#brand_model').modal('hide');
+           toastr.success(data.message);
+          location.reload();
+        }
+      });
 }
 </script>
 @endsection

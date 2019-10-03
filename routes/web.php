@@ -382,6 +382,7 @@ Route::get('/update-tiles-brands','productController@updateTilesBrands');
 Route::get('/update-tiles-sub_category','productController@updateTilesSubCategory');
 //product category based process
 Route::get('/product-subcategory-get/{id}','productController@productSubCategoryGet');
+Route::get('/delete_brand_image/{id}/{type}','productController@deleteBrandImage');
 
 });
 
