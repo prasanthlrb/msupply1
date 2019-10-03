@@ -386,6 +386,15 @@ $('#second_sub_category').on('change',function(){
                 // $('#updateTile2Cat').modal('hide');
               //  $('.zero-configuration').load(location.href+' .zero-configuration');
                 toastr.success(data.message);
+                  $.ajax({
+      url : '/admin/product-subcategory-get/'+subcategory,
+      type: "GET",
+      success: function(output)
+      {
+        // console.log(data)
+         $('#third_sub_category').html(output);
+      }
+ });
           },error: function (data) {
             toastr.error('Subcategory Required', 'Required!');
         }
@@ -485,9 +494,39 @@ $('#sub_category').change(function(){
         success: function (data) {
             //console.log(data);
             toastr.success(data.message);
+    $.ajax({
+      url : '/admin/product-subcategory-get/'+sub_category,
+      type: "GET",
+      success: function(output)
+      {
+        // console.log(data)
+         $('#second_sub_category').html(output);
+      }
+ });
         }
     })
 })
+
+// function getCategoryById(cat){
+//   var cat_name;
+//   var id;
+//    if(cat == 1){
+//     cat_name ='second_sub_category';
+//     id = $('#sub_category').val();
+//   }else{
+//      cat_name ='third_sub_category';
+//     id = $('#second_sub_category').val();
+//   }
+//   $.ajax({
+//       url : '/admin/product-subcategory-get/'+id,
+//       type: "GET",
+//       success: function(data)
+//       {
+//         console.log(data)
+//          $('#'+cat_name).html(data);
+//       }
+//  });
+// }
 </script>
 
 
