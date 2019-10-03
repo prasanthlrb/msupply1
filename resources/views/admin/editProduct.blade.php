@@ -924,7 +924,7 @@ $xy++;
     }
 
     function CallDropZone() {
-        console.log('CALLOK');
+        // console.log('CALLOK');
         $('#testSubmit').trigger('click')
     }
 
@@ -1016,7 +1016,7 @@ $xy++;
             processData: false,
             dataType: "JSON",
             success: function(data) {
-                console.log(data);
+                //console.log(data);
                 $('#testSubmit').trigger('click')
             },
             error: function(textStatus, errorThrown) {

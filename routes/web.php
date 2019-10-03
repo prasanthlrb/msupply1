@@ -204,8 +204,8 @@ Route::get('/get-category-tree','productController@categoryTree');
 Route::get('/get_terms/{id}','productController@get_terms');
 Route::post('/productSave','productController@productSave');
 Route::post('/productUpdate','productController@productUpdate');
-Route::post('/images-save', 'UploadImagesController@store');
-Route::post('/images-delete', 'UploadImagesController@destroy');
+Route::post('/images-save', 'uploadImagesController@store');
+Route::post('/images-delete', 'uploadImagesController@destroy');
 Route::get('/viewProduct','productController@viewProduct');
 Route::get('/get-product','productController@getProduct');
 Route::get('/productDelete/{id}','productController@productDelete');
@@ -213,7 +213,7 @@ Route::get('/editProduct/{id}','productController@editProduct');
 Route::get('/get_edit_attribute/{id}','productController@getEditAttribute');
 
 Route::get('server-images/{id}','productController@getServerImages');
-Route::post('/images-delete', 'UploadImagesController@destroy');
+Route::post('/images-delete', 'uploadImagesController@destroy');
 
 //page Management
 Route::get('/about','settingController@about');
