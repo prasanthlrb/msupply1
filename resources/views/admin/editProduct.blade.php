@@ -143,7 +143,7 @@
                                             <label class="col-md-3 label-control" for="Select category">Select Product Group</label>
                                             <div class="col-md-9">
                                                 <select name="group" id="group" class="form-control">
-                                                    <option value="" selected="" disabled="">Select Product Group</option>
+                                                    <option value="" selected="">Select Product Group</option>
                                                     @foreach($group as $group)
                                                     <option value="{{$group->id}}" {{$group->id == $product_find->group ? 'selected' : ''}}>{{$group->group}}</option>
                                                     @endforeach
