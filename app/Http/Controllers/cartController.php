@@ -386,11 +386,34 @@ echo $output;
     }
 
     public function cartUpdateValue($id,$values){
-           Cart::update($id, array(
-        'quantity' => array(
-            'relative' => false,
-            'value' => $values
-  ),
-    ));
+        $checkValue = Cart::get($id);
+        if(isset($checkValue->attribute['color'])){
+
+        }else{
+            $product_data = product::find($id);
+        }
+        if($product_data->order_limit != null){
+            if($product_data->order_limit <= $values){
+    
+                Cart::update($id, array(
+             'quantity' => array(
+                 'relative' => false,
+                 'value' => $values
+       ),
+         ));
+         return response()->json("OK");
+            }else{
+                return response()->json($product_data->order_limit);
+            }
+
+        }else{
+              Cart::update($id, array(
+             'quantity' => array(
+                 'relative' => false,
+                 'value' => $values
+       ),
+         )); 
+         return response()->json("OK");
+        }
     }
 }

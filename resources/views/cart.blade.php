@@ -56,8 +56,13 @@ var cartQty = $('#cartQty'+id).val();
         type: "GET",
         success: function(data)
         {
+            if(data =="OK"){
             getCartPage();
             CartMenuUpdate();
+
+            }else{
+                toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
+            }
         }
     });
 }
