@@ -209,7 +209,7 @@
 									<!-- - - - - - - - - - - - - - Search form - - - - - - - - - - - - - - - - -->
 
 
-									<form action="/filter" method="post" class="clearfix search type_2">
+									<form action="javascript:void(null)" method="post" class="clearfix search type_2">
 
 										<input value="{{old('search')}}" type="text" id="search_box" name="search_box" tabindex="1" placeholder="Search..." class="alignleft">
 										{{ csrf_field() }}

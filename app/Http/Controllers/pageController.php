@@ -85,7 +85,7 @@ class pageController extends Controller
             // $category = category::all();
             $product = product::all();
             $adModel = adModel::all();
-            $brand_slider = brand::where('status',0)->where('brand_image','!=',null)->get();
+            $brand_slider = brand::where('status',0)->where('thumbnail','!=',null)->get();
            // return response()->json($brands);
             if(Session::get('locations') == 'Madurai'){
 

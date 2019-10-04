@@ -436,7 +436,7 @@
 									@foreach($brand_slider as $brand)
 									<!--Brand-->
 									<a href="javascript:void(null)">
-									<img src="upload_brand/{{$brand->brand_image}}" alt="">
+									<img src="brand_thumbnail/{{$brand->thumbnail}}" alt="">
 									</a>
 									<!--End brand-->
 

@@ -370,7 +370,7 @@
 
                                     <button class="theme_button" type="button" data-direction="minus">-</button>
                                     @endif
-                                    <input type="text" name="button_qty" value="<?php echo $product1->order_limit !=null ? $product1->order_limit : 1?>" id="button_qty">
+                                    <input type="text" name="button_qty" value="<?php echo $product1->order_limit !=null ? $product1->order_limit : 1?>" id="button_qty" onchange="checkOrderLimitInInput({{$product1->order_limit}})">
                                     <button class="theme_button" type="button" data-direction="plus">+</button>
 
                                 </div>
@@ -780,6 +780,16 @@ function addCart(id){
 
         function checkOrderLimit(data){
             var button_qty = $('#button_qty').val();
+            if(button_qty <= button_qty){
+
+                toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
+                setTimeout(()=>{
+                    $('#button_qty').val(data);
+                },0)
+            }
+        }
+        function checkOrderLimitInInput(data){
+          var button_qty = $('#button_qty').val();
             if(button_qty <= button_qty){
 
                 toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
