@@ -329,6 +329,7 @@ function getProduct(id){
   $('select[name=price_type]').val("");
   $('select[name=value_type]').val("");
   $('select[name=second_sub_category]').val("");
+  $('select[name=third_sub_category]').val("");
   $('#amount').val('');
        $.ajax({
         url : '/admin/get-single-tiles-product/'+id,

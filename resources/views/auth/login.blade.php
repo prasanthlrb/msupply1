@@ -36,14 +36,14 @@
                                 <li class="row">
 
                                     <div class="col-xs-12">
-                            <label for="email" class="required">{{ __('E-Mail Address') }}</label>
+                            <label for="phone" class="required">{{ __('E-Mail Address') }}</label>
 
                            
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                                <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone') }}" required autofocus>
 
-                                @if ($errors->has('email'))
+                                @if ($errors->has('phone'))
                                     <span class="invalid-feedback text-danger" style="color:#ff4557" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('phone') }}</strong>
                                     </span>
                                 @endif
                             </div>

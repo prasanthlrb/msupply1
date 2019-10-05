@@ -1425,7 +1425,7 @@ public function getProduct(){
 
     public function productSubCategoryGet($id){
         $category = category::where('parent_id',$id)->get();
-        $output ='';
+        $output ='<option selected="" value="" disabled >Select </option>';
         foreach($category as $row){
             $output .='<option value="'.$row->id.'">'.$row->category_name.'</option>';
         }
