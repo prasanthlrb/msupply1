@@ -10,7 +10,7 @@ class oneTimePasswordController extends Controller
 {
     public function otpLogin()
     {
-        return view('Auth.otp');
+        return view('auth.otp');
     }
 
     public function SendLoginOtp(Request $request)
