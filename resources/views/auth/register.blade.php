@@ -24,7 +24,7 @@
                                 <section>
 
                                     <h4>Customer Register</h4>
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" id="register_form">
                         @csrf
 
                          <ul>
@@ -40,7 +40,7 @@
                                  
                                   </select>
                                 @if ($errors->has('user_type'))
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback error" role="alert">
                                         <strong>{{ $errors->first('user_type') }}</strong>
                                     </span>
                                 @endif
@@ -56,7 +56,7 @@
                             <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
 
                             @if ($errors->has('name'))
-                                <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback error" role="alert">
                                     <strong>{{ $errors->first('name') }}</strong>
                                 </span>
                             @endif
@@ -73,7 +73,7 @@
                                 <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback error" role="alert">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
@@ -89,7 +89,7 @@
                                 <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone') }}" required>
 
                                 @if ($errors->has('phone'))
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback error" role="alert">
                                         <strong>{{ $errors->first('phone') }}</strong>
                                     </span>
                                 @endif
@@ -105,7 +105,7 @@
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback error" role="alert">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
@@ -150,13 +150,13 @@
                                             <div class="on_the_sides">
 
                                                     <div class="left_side">
-                                <button type="submit" class="button_blue middle_btn">
+                                <button type="button" class="button_blue middle_btn" onclick="submitRegistration()">
                                     {{ __('Register') }}
                                 </button>
                             </div>
                             <div class="">
 
-                                    <a href="/login" >Go to Login</span></a>
+                                    <a href="/login" class="button_grey middle_btn">Go to Login</span></a>
         
                                 </div>
                             </div>
@@ -183,3 +183,45 @@
 </div>
 
 @endsection
+@section('extra-js')
+<script>
+    var token;
+function submitRegistration(){
+    var phone = $('#phone').val();
+   if(phone.length == 10 || phone.length == 11 && Number.isInteger(phone)){
+     var formData = new FormData($('#register_form')[0]);
+    $.ajax({
+          url : '/send-register-otp',
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          dataType: "JSON",
+          success: function(data)
+          {
+            token = data.otp;
+            $.arcticmodal({
+                        url : '/view-register-otp'
+                    });
+             
+          },error: function (data) {
+            toastr.error("This Mobile Number is Not Register","Invalid Mobile Number");
+        }
+      });
+   }else{
+        toastr.error("Invalid Mobile Number");
+    }
+   
+}
+function submitOTP(){
+    var otp_number = $('#otp_number').val();
+    if(otp_number == token){
+    toastr.success("OTP Verified");
+    event.preventDefault();
+	document.getElementById('register_form').submit();
+    }else{
+       toastr.error("Invalid OTP"); 
+    }
+}
+</script>
+@endsection 

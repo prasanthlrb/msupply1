@@ -4,6 +4,9 @@
         section.section_offset {
             padding: 50px;
         }
+        .otp_show_field{
+            display: none;
+        }
     </style>
 <div class="secondary_page_wrapper">
     	<div class="container">
@@ -36,7 +39,7 @@
                                 <li class="row">
 
                                     <div class="col-xs-12">
-                            <label for="phone" class="required">{{ __('E-Mail Address') }}</label>
+                            <label for="phone" class="required">{{ __('Mobile Number') }}</label>
 
                            
                                 <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone') }}" required autofocus>
@@ -86,7 +89,7 @@
                                     <div class="on_the_sides">
 
                                         <div class="left_side">
-                        <a class="btn btn-link" href="{{ route('password.request') }}">
+                        <a class="btn btn-link" href="javascript:void(null)" data-modal-url="/show_otp_login">
                                 {{ __('Forgot Your Password?') }}
                             </a>
                         </div>
@@ -103,11 +106,19 @@
                 </div>
 
             </li>
+            <br>
             <li class="row">
                     <div class="col-sm-6">
                                 <button type="submit" class="button_blue middle_btn">
                                     {{ __('Login') }}
                                 </button>
+
+                                
+                            </div>
+                    <div class="col-sm-6">
+                                <a href="javascript:void(null)" class="button_grey middle_btn" data-modal-url="/show_otp_login">
+                                    {{ __('Login With OTP') }}
+                                </a>
 
                                 
                             </div>
@@ -132,3 +143,64 @@
 
 @endsection
 
+@section('extra-js')
+<script>
+function generateOTP(){
+    var number = $('#phone_number').val();
+    if(number.length == 10 || number.length == 11 && Number.isInteger(number)){
+        var formData = new FormData($('#otp_form')[0]);
+    $.ajax({
+          url : '/send-login-otp',
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          dataType: "JSON",
+          success: function(data)
+          {
+            console.log(data);
+            toastr.success(data.message);
+            $('.before_form').each(function(){
+                $('.before_form').addClass('otp_show_field');
+            })
+            $('.after_form').each(function(){
+                $('.after_form').removeClass('otp_show_field');
+            })
+          },error: function (data) {
+            toastr.error("This Mobile Number is Not Register","Invalid Mobile Number");
+        }
+      });
+    }else{
+        toastr.error("Invalid Mobile Number");
+    }
+}
+function sendOTP(){
+    var otp_number = $('#otp_number').val();
+    console.log(otp_number)
+    
+var formData = new FormData($('#otp_form')[0]);
+    $.ajax({
+          url : '/received-login-otp',
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          dataType: "JSON",
+          success: function(data)
+          {
+            //console.log(data);
+            toastr.success(data.message);
+           window.location.href = "/account/dashboard";
+          },error: function (data) {
+            toastr.error("Please Enter Valid OTP","Invalid OTP");
+        }
+      });
+}
+function sendPasswordReset(){
+
+}
+function resetPassword(){
+
+}
+</script>
+@endsection
