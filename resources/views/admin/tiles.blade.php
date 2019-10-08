@@ -2,6 +2,9 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/file-uploaders/dropzone.min.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/prism.min.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/file-uploaders/dropzone.css">
   <style>
   .deleteIcon{
     cursor: pointer;
@@ -29,7 +32,7 @@
                     <th>Product Name</th>
                     <th>Image</th>
                     <th>Category</th>
-                    <th>Delete</th>
+                    <th>Action</th>
                    
                   </tr>
                 </thead>
@@ -42,7 +45,7 @@
                         <th>Product Name</th>
                         <th>Image</th>
                       <th>Category</th>
-                        <th>Delete</th>
+                        <th>Action</th>
                         
                   </tr>
                 </tfoot>
@@ -269,6 +272,51 @@
       </div>
     </div>
   </div>
+</div>
+  <div class="modal fade text-left" id="gallery_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel8"
+  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-primary white">
+          <h4 class="modal-title white" id="myModalLabel8">Upload Tiles Gallery</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+    
+             <div class="card">
+                              <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <p class="card-text">maximum file size<code>1 MB</code> number of files<code>5</code>.</p>
+                                      <button style="display:none" id="testSubmit" class="btn btn-primary mb-1"><i class="ft-trash"></i>Clear All Image</button>
+                                      <form method="post" action="{{ url('/admin/tiles-galley-save') }}"
+                                      enctype="multipart/form-data" class="dropzone" id="my-dropzone">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="product_get_id" id="product_get_id">
+                                    <div class="dz-message">
+                                        <div class="col-xs-8">
+                                            <div class="message">
+                                                <p>Drop files here or Click to Upload</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fallback">
+                                        <input type="file" name="file" id="productGallery" multiple>
+                                    </div>
+
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-primary" onclick="saveBrand()" id="saveCat">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
 @endsection
 @section('extra-js')
@@ -279,7 +327,8 @@
 
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
-
+<script src="{{ url('/dropzone/dropzone.js') }}"></script>
+    <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
   <script>
       var status_id = null;
       $('.tiles').addClass('active');
@@ -507,27 +556,10 @@ $('#sub_category').change(function(){
         }
     })
 })
+function uploadGallery(id){
+$('#gallery_modal').modal('show');
+}
 
-// function getCategoryById(cat){
-//   var cat_name;
-//   var id;
-//    if(cat == 1){
-//     cat_name ='second_sub_category';
-//     id = $('#sub_category').val();
-//   }else{
-//      cat_name ='third_sub_category';
-//     id = $('#second_sub_category').val();
-//   }
-//   $.ajax({
-//       url : '/admin/product-subcategory-get/'+id,
-//       type: "GET",
-//       success: function(data)
-//       {
-//         console.log(data)
-//          $('#'+cat_name).html(data);
-//       }
-//  });
-// }
 </script>
 
 

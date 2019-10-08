@@ -340,7 +340,9 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/product-log', 'reportController@productLog');
     Route::get('/get-product-log', 'reportController@getProductLog');
+    Route::get('/get-login-log', 'reportController@getLoginLog');
     Route::get('/search-product-log/{date1}/{date2}', 'reportController@searchProductLog');
+    Route::get('/logs/login', 'reportController@loginLogs');
 
     //Units
     Route::get('/units', 'productController@viewUnit');
@@ -390,7 +392,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/update-tiles-sub_category', 'productController@updateTilesSubCategory');
     //product category based process
     Route::get('/product-subcategory-get/{id}', 'productController@productSubCategoryGet');
+
     Route::get('/delete_brand_image/{id}/{type}', 'productController@deleteBrandImage');
+    //discount update
+    Route::post('/tiles-discount-update', 'productController@tilesDiscountUpdate');
 });
 
 Auth::routes();

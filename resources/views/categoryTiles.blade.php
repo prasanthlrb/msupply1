@@ -30,53 +30,7 @@
 
                     <h3>Categories</h3>
 						
-								
-                    <div id='cssmenu'>
-                            <ul>
-                                    <!-- First Menu start -->
-                                    @foreach(App\category::with('childs')->where('parent_id',0)->get() as $item)
-                                    @if($item->childs->count() > 0)
-                                    <li class='active has-sub has-new-sub'><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a>
-                                        <!-- second Menu start -->
-                                        <ul class="first-child">
-                                        @foreach($item->childs as $item2)
-                                            @if($item2->childs->count() > 0)
-                                            <li class='has-sub has-new-sub'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a>
-                                                <ul class="second-child">
-                                                @foreach($item2->childs as $item3)
-                                                @if($item3->childs->count() > 0)
-                                                <li class="has-sub has-new-sub"><a href='/category/{{$item3->id}}'class='has-sub has-new-sub'><span>{{$item3->category_name}}</span></a>
-                                                    <ul class="second-child">
-                                                    @foreach($item3->childs as $item4)
-                                                    @if($item4->childs->count() > 0)
-                                                    <li class='has-sub has-new-sub'><a href='/category/{{$item4->id}}' class='has-sub has-new-sub'><span>{{$item4->category_name}}</span></a>
-                                                    @else
-                                                    <li class='last'><a href='/category/{{$item4->id}}'><span>{{$item4->category_name}}</span></a></li>
-                                                    @endif
-                                                    @endforeach
-                                                </ul>
-                                                </li>
-                                                @else
-                                                <li class='last'><a href='/category/{{$item3->id}}'><span>{{$item3->category_name}}</span></a></li>
-                                                @endif
-                                                @endforeach
-                                            </ul>
-                                                </li>
-                                            @else
-                                            <li class='last'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a></li>
-                                            @endif
-                                            @endforeach
-                                        </ul>
-                                        <!-- second Menu end -->
-                                    </li>
-                                    @else
-                            <li><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a></li>
-                                    @endif
-                               
-                                 @endforeach
-                                 <!-- First Menu End -->
-                            </ul>
-                        </div>
+					@include('include.category')
                 </section><!--/ .animated.transparent-->
 
                 <!-- - - - - - - - - - - - - - End of categories - - - - - - - - - - - - - - - - -->
@@ -429,11 +383,6 @@
 
 
 <?php $i++; } ?>
-
-
-
-
-</div>
 
 
                         

@@ -118,6 +118,83 @@
 
 
                   <div class="col-lg-12 col-md-12">
+                     <h3 class="content-header-title">Product Discount / Increase via Category</h3>
+                    <div class="card" >
+                      <div class="card-header">
+                        <form method="post" id="discountUpdateForm">
+                      <div class="card-content collapse show">
+                        <div class="card-body">
+                        {{csrf_field()}}
+                          <div class="row">
+
+                        <div class="form-group col-sm-12 col-md-12">
+                                    <label for="projectinput6">Select Category</label>
+                                      <select name="sub_category" id="sub_category" class="form-control" onchange="getCategoryById(1)">
+                                          <option value="" selected disabled>Select...</option>
+                                            <option value="2">Wall Tiles</option>
+                                            <option value="3">Floor Tiles</option>
+                                      </select>
+                                </div>
+
+                        <div class="form-group col-sm-12 col-md-12">
+                                    <label for="projectinput6">Select Category</label>
+                                      <select name="second_sub_category" id="second_sub_category" class="form-control" onchange="getCategoryById(2)">
+                                          <option value="" selected disabled>Select...</option>
+                                        
+                                      </select>
+                                </div>
+
+                        <div class="form-group col-sm-12 col-md-12">
+                                    <label for="projectinput6">Select Category</label>
+                                      <select name="third_sub_category" id="third_sub_category" class="form-control">
+                                          <option value="" selected disabled>Select...</option>
+                                       
+                                      </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12">
+                                  <label for="projectinput6">Discount / High</label>
+                                  <select name="price_type" id="price_type" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                          <option value="discount">Discount </option>
+                                          <option value="high">High </option>
+                                        </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12">
+                                  <label for="projectinput6">Value Type</label>
+                                  <select name="value_type" id="value_type" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                          <option value="percentage">Percentage </option>
+                                          <option value="amount">Amount </option>
+                                        </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12">
+                                   <label for="projectinput1">Value</label>
+                                  <input type="text" class="form-control" name="amount" id="amount">
+                                </div>
+                            
+                         </div>
+                        </div>
+                          <div class="row">
+                            <div class="form-group col-sm-12 col-md-12">
+
+                            <button type="button" class="btn btn-primary" onclick="submitDiscount()">
+                                    <i class="ft-plus"></i> SUBMIT
+                            </button>
+                            </div>
+                      </div>
+                      </div>
+                      
+                    </div>
+                    
+                  </form>
+                  </div>
+                  </div>
+
+
+
+
+
+                   <div class="col-lg-12 col-md-12">
                     <div class="card" >
                       <div class="card-header">
                         <form method="post" action="/admin/tiles-tax">
@@ -160,7 +237,6 @@
                   </form>
                   </div>
                   </div>
-
 
 
 
@@ -291,6 +367,68 @@ $('#update-details').click(()=>{
     toastr.error("Please Paste Tiles Details Json Data");
   }
 });
+function getCategoryById(cat){
+  var cat_name;
+  var id;
+   if(cat == 1){
+    cat_name ='second_sub_category';
+    id = $('#sub_category').val();
+  }else{
+     cat_name ='third_sub_category';
+    id = $('#second_sub_category').val();
+  }
+  $.ajax({
+      url : '/admin/product-subcategory-get/'+id,
+      type: "GET",
+      success: function(data)
+      {
+        console.log(data)
+         $('#'+cat_name).html(data);
+      }
+ });
+}
+function submitDiscount(){
+  var cat1 = $('#sub_category').val();
+  var cat2 = $('#second_sub_category').val();
+  var cat3 = $('#third_sub_category').val();
+  var price_type = $('#price_type').val();
+  var value_type = $('#value_type').val();
+  var amount = $('#amount').val();
+  if(cat1 !=null && cat2 !=null && cat3 !=null){
+    if(price_type !=null){
+      if(value_type !=null){
+        if(amount !=''){
+          
+      var formData = new FormData($('#discountUpdateForm')[0]);
+        $.ajax({
+                url : '/admin/tiles-discount-update',
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {
+                    $("#discountUpdateForm")[0].reset();
+                     toastr.success(data.message);
+                     //console.log(data)
+                },error: function (data) {
+                  toastr.error('Not Update this Process');
+              }
+            });
 
+        }else{
+          toastr.error("Please Enter Value");
+        }
+      }else{
+        toastr.error("Please Select Value Type");
+      }
+    }else{
+      toastr.error("Please Select Discount / High");
+    }
+  }else{
+     toastr.error("Please Select All Category");
+  }
+}
 </script>
 @endsection

@@ -79,7 +79,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault();
                   document.getElementById('logout-form').submit();"><i class="ft-power"></i> Logout</a>
 
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                     @csrf
                   </form>
                 </div>
@@ -366,6 +366,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
 
                   <li class="log-product"><a class="menu-item" href="/admin/product-log"> Product Log</a></li>
+                  <li class="log-product"><a class="menu-item" href="/admin/logs/login"> Login & Logout Logs</a></li>
 
                 </ul>
               </li>

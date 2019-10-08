@@ -38,7 +38,7 @@
 		<ul>
 
 		<li class="v_centered before_form" style="float:left">
-				<button class="button_blue middle_btn" onclick="generateOTP()">GERERATE OTP</button>
+				<button class="button_blue middle_btn" onclick="generateOTP()">GENERATE OTP</button>
 				
 			</li>
 		<li class="v_centered otp_show_field after_form" style="float:right">

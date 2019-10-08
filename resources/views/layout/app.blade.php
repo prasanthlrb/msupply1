@@ -30,14 +30,14 @@
 		============================================ -->
 		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/extensions/toastr.css')}}">
   		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/toastr.css')}}">
-
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 		<!-- Theme CSS
 		============================================ -->
 		<link rel="stylesheet" href="{{ asset('js/rs-plugin/css/settings.css')}}">
 		<link rel="stylesheet" href="{{ asset('js/owlcarousel/owl.carousel.css')}}">
 		<link rel="stylesheet" href="{{ asset('js/arcticmodal/jquery.arcticmodal.css')}}">
 		<link rel="stylesheet" href="{{ asset('css/style.css')}}">
-
+			 <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 		<!-- JS Libs
 		============================================ -->
 		<script src="{{ asset('js/modernizr.js')}}"></script>
@@ -46,9 +46,200 @@
 		============================================ -->
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" type="text/css" href="{{ asset('css/oldie.css')}}">
-        <![endif]-->
+		<![endif]-->
+		
 
-        @yield('extra-css')
+		@yield('extra-css')
+		<style>
+		
+   /* .sidebar ul.group-list li {
+    padding-right: 17px;
+} */
+
+	.sidebar input[type="radio"] + label, input[type="checkbox"] + label{
+	position: relative;
+    width: auto !important;
+    margin: 0 0px 0 0 !important;
+    padding-left: 32px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+	}
+    
+    
+    .sidebar ol,
+    ul {
+      list-style: none
+    }
+
+    .sidebar blockquote,
+    q {
+      quotes: none
+    }
+
+    blockquote:before,
+    blockquote:after,
+    .sidebar q:before,
+    q:after {
+      content: '';
+      content: none
+    }
+
+    .sidebar table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    .sidebar {
+      font: 100% "roboto", "Trebuchet MS", sans-serif;
+      /* background-color: #EF476F; */
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /**
+ * Hidden fallback
+ */
+
+
+    /**
+ * Styling navigation
+ */
+ .sidebar input[type="radio"] + label::before, input[type="checkbox"] + label::before{
+	 display: none;
+ }
+
+    header .sidebar {
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 22.5rem;
+      margin-top: 150px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    /**
+ * Styling top level items
+ */
+
+    .nav a,
+    .nav label {
+      display: block;
+      padding: 1.25rem;
+      color: #151515;
+      background-color: #fff;
+      /* box-shadow: inset 0 -1px #eaeaea; */
+      -webkit-transition: all .25s ease-in;
+      transition: all .25s ease-in;
+	  border : 1px solid #eaeaea;
+    }
+
+    .nav a:focus,
+    .nav a:hover,
+    .nav label:focus,
+    .nav label:hover {
+       background: #eaeaea;
+	  color: #151515;
+    }
+
+    .nav label {
+      cursor: pointer;
+    }
+
+    /**
+ * Styling first level lists items
+ */
+
+    .group-list a,
+    .group-list label {
+      padding-left: 2rem;
+    background: #fff;
+    /* box-shadow: inset 0 -1px #eaeaea; */
+    }
+
+    .group-list a:focus,
+    .group-list a:hover,
+    .group-list label:focus,
+    .group-list label:hover {
+      background: #eaeaea;
+	  color: #151515;
+    }
+
+    /**
+ * Styling second level list items
+ */
+
+    .sub-group-list a,
+    .sub-group-list label {
+      padding-left: 4rem;
+   background: #fff;
+    /* box-shadow: inset 0 -1px #eaeaea; */
+    }
+
+    .sub-group-list a:focus,
+    .sub-group-list a:hover,
+    .sub-group-list label:focus,
+    .sub-group-list label:hover {
+       background: #eaeaea;
+	  color: #151515;
+    }
+
+    /**
+ * Styling third level list items
+ */
+
+    .sub-sub-group-list a,
+    .sub-sub-group-list label {
+      padding-left: 6rem;
+      background: #fff;
+    /* box-shadow: inset 0 -1px #eaeaea; */
+    }
+
+    .sub-sub-group-list a:focus,
+    .sub-sub-group-list a:hover,
+    .sub-sub-group-list label:focus,
+    .sub-sub-group-list label:hover {
+      background: #eaeaea;
+	  color: #151515;
+    }
+
+    /**
+ * Hide nested lists
+ */
+
+    .group-list,
+    .sub-group-list,
+    .sub-sub-group-list {
+      height: 100%;
+      max-height: 0;
+      overflow: hidden;
+      -webkit-transition: max-height .5s ease-in-out;
+      transition: max-height .5s ease-in-out;
+    }
+
+    .nav__list input[type=checkbox]:checked+label+ul {
+      /* reset the height when checkbox is checked */
+      max-height: 1000px;
+    }
+
+    /**
+ * Rotating chevron icon
+ */
+
+    label>span {
+      float: right;
+      -webkit-transition: -webkit-transform .65s ease;
+      transition: transform .65s ease;
+    }
+
+    .nav__list input[type=checkbox]:checked+label>span {
+      -webkit-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+  </style>
 	</head>
 	<body class="front_page promo_popup">
 
@@ -275,6 +466,7 @@
 												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
 
 												<div id='cssmenu' class="animated_item">
+													
 
 														<ul>
 																<!-- First Menu start -->

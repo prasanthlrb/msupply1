@@ -30,53 +30,7 @@
 
                     <h3>Categories</h3>
 						
-								
-                    <div id='cssmenu'>
-                            <ul>
-                                    <!-- First Menu start -->
-                                    @foreach(App\category::with('childs')->where('parent_id',0)->get() as $item)
-                                    @if($item->childs->count() > 0)
-                                    <li class='active has-sub has-new-sub'><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a>
-                                        <!-- second Menu start -->
-                                        <ul class="first-child">
-                                        @foreach($item->childs as $item2)
-                                            @if($item2->childs->count() > 0)
-                                            <li class='has-sub has-new-sub'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a>
-                                                <ul class="second-child">
-                                                @foreach($item2->childs as $item3)
-                                                @if($item3->childs->count() > 0)
-                                                <li class="has-sub has-new-sub"><a href='/category/{{$item3->id}}'class='has-sub has-new-sub'><span>{{$item3->category_name}}</span></a>
-                                                    <ul class="second-child">
-                                                    @foreach($item3->childs as $item4)
-                                                    @if($item4->childs->count() > 0)
-                                                    <li class='has-sub has-new-sub'><a href='/category/{{$item4->id}}' class='has-sub has-new-sub'><span>{{$item4->category_name}}</span></a>
-                                                    @else
-                                                    <li class='last'><a href='/category/{{$item4->id}}'><span>{{$item4->category_name}}</span></a></li>
-                                                    @endif
-                                                    @endforeach
-                                                </ul>
-                                                </li>
-                                                @else
-                                                <li class='last'><a href='/category/{{$item3->id}}'><span>{{$item3->category_name}}</span></a></li>
-                                                @endif
-                                                @endforeach
-                                            </ul>
-                                                </li>
-                                            @else
-                                            <li class='last'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a></li>
-                                            @endif
-                                            @endforeach
-                                        </ul>
-                                        <!-- second Menu end -->
-                                    </li>
-                                    @else
-                            <li><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a></li>
-                                    @endif
-                               
-                                 @endforeach
-                                 <!-- First Menu End -->
-                            </ul>
-                        </div>
+					@include('include.category')
                 </section><!--/ .animated.transparent-->
 
                 <!-- - - - - - - - - - - - - - End of categories - - - - - - - - - - - - - - - - -->
@@ -118,64 +72,7 @@
                     </a>
         
                 </div>
-                <!-- - - - - - - - - - - - - - End of banner - - - - - - - - - - - - - - - - -->
-
-                 <!-- - - - - - - - - - - - - - Filter - - - - - - - - - - - - - - - - -->
-
-
-{{-- 
-                 <section class="section_offset">
-
-                    <h3>Already Viewed Products</h3>
-
-                    <ul class="products_list_widget">
-
-                        <!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-                        <li>
-                            
-                            <a href="#" class="product_thumb">
-                                
-                                <img src="images/product_thumb_4.jpg" alt="">
-
-                            </a>
-
-                            <div class="wrapper">
-
-                                <a href="#" class="product_title">Aenean auctor wisi et urna...</a>
-
-                                <div class="clearfix product_info">
-
-                                    <p class="product_price alignleft"><b>₹5.99</b></p>
-
-                                    <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
-
-                                    <ul class="rating alignright">
-
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li></li>
-
-                                    </ul>
-                                    
-                                    <!-- - - - - - - - - - - - - - End of product rating - - - - - - - - - - - - - - - - -->
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                        <!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-                    </ul><!--/ .list_of_products-->
-
-                </section> --}}
-
-                <!-- - - - - - - - - - - - - - End of already viewed products - - - - - - - - - - - - - - - - -->
-
+               
 
             </aside>
 
@@ -317,15 +214,14 @@
 
                                                
 
-                                            </div>
-
+                                            </div>{{-- centered_buttons     --}}
                                             <a href="javascript:void(null)" onclick="addWishlist({{$product1->id}})" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
 
                                             <a href="javascript:void(null)" onclick="addCompare({{$product1->id}})" class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
 
-                                        </div>
-
-                                    </div>
+                                        </div>{{-- actions_wrap --}}
+                                            
+                                    </div>{{-- image_wrap --}}
                                     		@if($product1->regular_price != null && $product1->category != 7)
 
 												<div class="label_offer percentage">
@@ -409,7 +305,7 @@
 
                                         </ul>
 
-                                    </div>
+                                    </div><!-- action -->
 
 
                                 </div>
@@ -422,13 +318,7 @@
 
 
 
-</div>
-
-
-                        
-
-
-                    </div><!--/ .table_layout -->
+   </div>
 
                     <footer class="bottom_box" style="padding-bottom:38px">
 @if ($product->lastPage() > 1)
@@ -446,25 +336,9 @@
     </li>
 </ul>
 @endif
-                        <div class="left_side">
+                       
 
-                            <!-- <p>Showing 1 to 3 of 45 (15 Pages)</p> -->
-
-                        </div>
-
-                        <div class="right_side">
-                        
-                            <!-- <ul class="pags">
-
-                                <li><a href="#"></a></li>
-                                <li class="active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#"></a></li>
-
-                            </ul> -->
-
-                        </div>
+                     
 
                     </footer>
 
