@@ -634,7 +634,6 @@
 <script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
 <script src="{{ url('/dropzone/dropzone.js') }}"></script>
     <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
-
 <script>
 
 var distance_price_data = [];

@@ -29,7 +29,12 @@ p.productdesc{
 						<li><a href="index.html">Home</a></li>
 						<li><a href="/category/1">Tiles</a></li>
 					<li><a href="/category/{{$subCategoty->id}}">{{$subCategoty->category_name}}</a></li>
-	
+					@if(isset($second_sub_category->id))
+					<li><a href="/category/{{$second_sub_category->id}}">{{$second_sub_category->category_name}}</a></li>
+					@endif
+					@if(isset($third_sub_category->id))
+					<li><a href="/category/{{$third_sub_category->id}}">{{$third_sub_category->category_name}}</a></li>
+						@endif
 						<li>{{$product1->product_name}}</li>
 					<input type="hidden" id="product_id" value="{{$product1->id}}">
 					</ul>
@@ -355,24 +360,22 @@ p.productdesc{
 					</div><!--/ .row-->
 
 					<div class="row">
-
-						{{-- <div class="more-detail-btn" style="margin-top:100px;margin-bottom:100px;text-align:center"> 
+						@if(count($Upload) >0)
+						<div class="more-detail-btn" style="margin-top:100px;margin-bottom:100px;text-align:center"> 
 							<button class="button_blue middle_btn" style="position:absolute;right:40%" id="more-detail-btn">
 								More Details About this Product
 								
 							</button>
 							<img src="{{asset('/riva/riva0.png')}}" alt="" width="75%" style="max-height:100px;over-flow:hidden">
-						</div> --}}
+						</div> 
 
-						{{-- <div style="text-align:center;margin-top:100px;margin-bottom:100px" class="more-tiles-details hide-details">
-							<img src="{{asset('/riva/riva0.png')}}" alt="" width="75%">
-							<img src="{{asset('/riva/riva1.png')}}" alt="" width="75%">
-							<img src="{{asset('/riva/riva2.png')}}" alt="" width="75%">
-							<img src="{{asset('/riva/riva3.png')}}" alt="" width="75%">
-							<img src="{{asset('/riva/riva4.png')}}" alt="" width="75%">
-						</div> --}}
+						<div style="text-align:center;margin-top:100px;margin-bottom:100px" class="more-tiles-details hide-details">
+							@foreach($Upload as $gallery)
+							<img src="{{asset("/product_gallery/$gallery->filename")}}" alt="" width="75%">
+							@endforeach
+						</div>
 							
-						
+						@endif
 
 							<!-- - - - - - - - - - - - - - Related products - - - - - - - - - - - - - - - - -->
 							@if(count($relatedProducts) >0)

@@ -390,6 +390,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/update-length', 'productController@updateLength');
     Route::get('/update-tiles-brands', 'productController@updateTilesBrands');
     Route::get('/update-tiles-sub_category', 'productController@updateTilesSubCategory');
+    Route::get('/update-tiles-related_product', 'productController@updateTilesRelatedProduct');
+    Route::get('/tiles-gallery/{id}', 'productController@tilesGallery');
     //product category based process
     Route::get('/product-subcategory-get/{id}', 'productController@productSubCategoryGet');
 

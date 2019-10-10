@@ -1310,6 +1310,7 @@ class productController extends Controller
         $brand = brand::all();
         $subcategory = category::whereIn('parent_id', $data)->get();
         //return response()->json($data);
+
         return view('admin.tiles', compact('category', 'subcategory', 'brand'));
     }
 
@@ -1361,7 +1362,7 @@ class productController extends Controller
             ->addColumn('delete', function ($product) {
                 return '<td class="text-center">
                 <i class="ft-trash-2 deleteIcon" onclick="Delete(' . $product->id . ')"></i>
-                <i class="ft-folder" onclick="uploadGallery(' . $product->id . ')" style="padding-left:30px;cursor: pointer;"></i>
+                <a href="/admin/tiles-gallery/' . $product->id . '" target="_blank"><i class="ft-folder" style="padding-left:30px;cursor: pointer;"></i></a>
                 </td>';
             })
             ->addIndexColumn()
@@ -1406,7 +1407,26 @@ class productController extends Controller
                                     <td class="font-weight-bold">No Stock</td>
                                 </tr>';
         }
-        return response()->json(array($product, $output, $subcategory, $thirdSubcategory));
+        $relatedpro = product::where('category', 1)->get();
+
+        $related = '<select onChange="relatedFunction()" style="width:100%" placeholder="search for product" id="related_product" name="related_product[]" class="select2 form-control col-md-12" multiple="multiple">
+                                          <optgroup label="Related Product">';
+        //$product_related = 
+        foreach (explode(',', $product->related_product) as $row) {
+            $related_product[] = $row;
+        }
+        foreach ($relatedpro as $rp) {
+            if (in_array($rp->id, $related_product)) {
+                $related .= '<option value="' . $rp->id . '" selected="true">' . $rp->product_name . '</option>';
+            } else {
+                $related .= '
+              <option value="' . $rp->id . '">' . $rp->product_name . '</option>
+            ';
+            }
+        }
+        $related .= ' </optgroup></select>';
+
+        return response()->json(array($product, $output, $subcategory, $thirdSubcategory, $related));
     }
 
     //tiles price update
@@ -1488,5 +1508,19 @@ class productController extends Controller
         );
         product::where('sub_category', $request->sub_category)->where('second_sub_category', $request->second_sub_category)->where('third_sub_category', $request->third_sub_category)->update($values);
         return response()->json(['message' => $request->price_type . " Update Successfully"], 200);
+    }
+
+    public function updateTilesRelatedProduct(Request $request)
+    {
+        $product = product::find($request->product_id);
+        $product->related_product = collect($request->data)->implode(',');
+        $product->save();
+        return response()->json(['message' => 'update Successfully'], 200);
+    }
+
+    public function tilesGallery($id)
+    {
+        $product = product::find($id);
+        return view('admin.tilesGallery', compact('product'));
     }
 }

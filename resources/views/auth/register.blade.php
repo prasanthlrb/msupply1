@@ -33,7 +33,7 @@
 
                                     <div class="col-xs-12">
                             <label for="user_type" class="required">{{ __('Profile Type') }}</label>
-                            <select name="user_type" class="form-control {{ $errors->has('user_type') ? ' is-invalid' : '' }}" required>
+                            <select id="user_type" name="user_type" class="form-control {{ $errors->has('user_type') ? ' is-invalid' : '' }}" required>
                                     <option selected="" disabled>select Profile Type</option>
                                     <option value="user">individual Person</option>
                                     <option value="company">Company</option>
@@ -118,7 +118,7 @@
                             <label for="password-confirm" class="required">{{ __('Confirm Password') }}</label>
 
                             
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
                             </li>
 
                             <li class="row">
@@ -188,6 +188,23 @@
     var token;
 function submitRegistration(){
     var phone = $('#phone').val();
+    if($('#password').val() != $('#password_confirmation').val()){
+        toastr.error("Password Not Match"); 
+        return false;
+    }
+    if($('#user_type').val() == null){
+        toastr.error("Please Select Profile Type"); 
+        return false;
+    }
+    if($('#name') ==''){
+       toastr.error("Name Field is Required"); 
+        return false; 
+    }
+    if($('#email') == ''){
+        toastr.error("Email field is required"); 
+        return false; 
+    }
+
    if(phone.length == 10 || phone.length == 11 && Number.isInteger(phone)){
      var formData = new FormData($('#register_form')[0]);
     $.ajax({

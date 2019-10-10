@@ -20,23 +20,23 @@ Dropzone.options.myDropzone = {
         var myDropzone = this;
         var product_page_id = $('#product_page_id').val();
 
-        $.get('/admin/server-images/'+product_page_id, function(data) {
+        $.get('/admin/server-images/' + product_page_id, function (data) {
             console.log(data);
             $.each(data.images, function (key, value) {
 
-                var file = {name: value.original, size: value.size};
+                var file = { name: value.original, size: value.size };
                 myDropzone.options.addedfile.call(myDropzone, file);
                 myDropzone.options.thumbnail.call(myDropzone, file, '/product_gallery/' + value.server);
                 myDropzone.emit("complete", file);
                 total_photos_counter++;
-                $("#counter").text( "(" + total_photos_counter + ")");
+                $("#counter").text("(" + total_photos_counter + ")");
             });
         });
         this.on("removedfile", function (file) {
-           
+
             $.post({
                 url: '/admin/images-delete',
-                data: {id: file.name, _token: $('[name="_token"]').val()},
+                data: { id: file.name, _token: $('[name="_token"]').val() },
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
@@ -46,19 +46,19 @@ Dropzone.options.myDropzone = {
             });
         });
         var submitButton = document.querySelector("#testSubmit");
-    submitButton.addEventListener("click", function() {
-        
-      _this.processQueue(); 
-      setTimeout(function(){
-          if(total_photos_counter == 0){
-            emptyRedirect();
-          }
-       
-      }, 2000);      
-    });
+        submitButton.addEventListener("click", function () {
+
+            _this.processQueue();
+            setTimeout(function () {
+                if (total_photos_counter == 0) {
+                    emptyRedirect();
+                }
+
+            }, 2000);
+        });
     },
     success: function (file, done) {
-    
+
         total_photos_counter++;
         $("#counter").text("# " + total_photos_counter);
         file["customName"] = name;
@@ -83,9 +83,9 @@ Dropzone.options.myDropzone = {
 //       myDropzone.processQueue(); 
 //     });
 
-    
+
 //     this.on("addedfile", function() {
-     
+
 //     });
 
 //   }
@@ -100,12 +100,12 @@ Dropzone.options.myDropzone = {
 //       dictRemoveFile: 'Remove file',
 //       dictFileTooBig: 'Image is larger than 16MB',
 //       timeout: 10000,
-  
+
 //     init: function() {
 //       var _this = this;
 //       $("#clear-product").on("click", function() {
 //           _this.removeAllFiles();
-  
+
 //       });
 //       var submitButton = document.querySelector("#testSubmit");
 //       submitButton.addEventListener("click", function() {
@@ -113,7 +113,7 @@ Dropzone.options.myDropzone = {
 //       });
 //   }
 //   };
-function emptyRedirect(){
+function emptyRedirect() {
     toastr.success('Product Image Successfully', 'Successfully Save');
     window.location.href = "/admin/viewProduct";
 }

@@ -48,7 +48,7 @@ class LoginController extends Controller
         $log->ip_address = $request->getClientIp();
         $log->save();
         $msg = Auth::guard('admin')->user()->emp_name . " is Logout Now, Using IP for " . $request->getClientIp();
-        $this->sendMessage($msg);
+        //$this->sendMessage($msg);
         Auth::guard('admin')->logout();
         $request->session()->flush();
         $request->session()->regenerate();
@@ -73,7 +73,7 @@ class LoginController extends Controller
         $log->ip_address = $request->getClientIp();
         $log->save();
         $msg = $user->emp_name . " is Login Now, Using IP for " . $request->getClientIp();
-        $this->sendMessage($msg);
+        //$this->sendMessage($msg);
     }
     public function username()
     {

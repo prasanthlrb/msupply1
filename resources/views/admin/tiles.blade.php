@@ -1,10 +1,9 @@
 @extends('admin.app')
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
-  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/file-uploaders/dropzone.min.css">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/prism.min.css">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/file-uploaders/dropzone.css">
+ 
   <style>
   .deleteIcon{
     cursor: pointer;
@@ -137,7 +136,7 @@
                                     </tr> --}}
                             <tr>
                                 <td colspan="2" class="text-center" style="border:0px !important;padding:2px;">
-                                <img src="" class="prodimg">
+                                <img src="" class="prodimg" style="width:435px">
                                 </td>
                             </tr>
 
@@ -260,6 +259,14 @@
                                 <td>Value</td>
                                 <td><input type="text" style="width:100%" name="amount" id="amount"></td>
                               </tr>
+                              <tbody id="location-stock"></tbody>
+
+                                <tr>
+                                <td>Related Product</td>
+                                <td> 
+                                  <div id="related"></div>
+                                      </td>
+                              </tr>
                         </table>
                        
                 </div>
@@ -273,49 +280,7 @@
     </div>
   </div>
 </div>
-  <div class="modal fade text-left" id="gallery_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel8"
-  aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-primary white">
-          <h4 class="modal-title white" id="myModalLabel8">Upload Tiles Gallery</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-    
-             <div class="card">
-                              <div class="card-content collapse show">
-                                <div class="card-body">
-                                    <p class="card-text">maximum file size<code>1 MB</code> number of files<code>5</code>.</p>
-                                      <button style="display:none" id="testSubmit" class="btn btn-primary mb-1"><i class="ft-trash"></i>Clear All Image</button>
-                                      <form method="post" action="{{ url('/admin/tiles-galley-save') }}"
-                                      enctype="multipart/form-data" class="dropzone" id="my-dropzone">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="product_get_id" id="product_get_id">
-                                    <div class="dz-message">
-                                        <div class="col-xs-8">
-                                            <div class="message">
-                                                <p>Drop files here or Click to Upload</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fallback">
-                                        <input type="file" name="file" id="productGallery" multiple>
-                                    </div>
-
-                                </form>
-                                </div>
-                              </div>
-                            </div>
-        <div class="modal-footer">
-          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-primary" onclick="saveBrand()" id="saveCat">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  
 
 
 @endsection
@@ -323,12 +288,12 @@
 
 
 <script src="../../../app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-
+<script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
+<script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
 
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
-<script src="{{ url('/dropzone/dropzone.js') }}"></script>
-    <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
+
   <script>
       var status_id = null;
       $('.tiles').addClass('active');
@@ -379,6 +344,7 @@ function getProduct(id){
   $('select[name=value_type]').val("");
   $('select[name=second_sub_category]').val("");
   $('select[name=third_sub_category]').val("");
+  // $('#related_product').val('').change();
   $('#amount').val('');
        $.ajax({
         url : '/admin/get-single-tiles-product/'+id,
@@ -386,7 +352,7 @@ function getProduct(id){
         dataType: "JSON",
         success: function(data)
         {
-            console.log(data);
+            // console.log(data);
             $('.prodimg').attr('src','http://www.kagtech.net/KAGAPP/Partsupload/'+data[0].product_image);
             $('#width').text(data[0].width);
             $('#weight').text(data[0].weight);
@@ -415,13 +381,14 @@ function getProduct(id){
             $('#sales_price').text(data[0].sales_price ? "Rs : "+data[0].sales_price : data[0].sales_price);
             $('#location-stock').html(data[1]);
             $('#tilesProductShow').modal('show');
+            $('#related').html(data[4]);
+            setTimeout( function(){
+              $('.select2').select2();
+            },0)
         }
       });
 }
-// function applySecondCategory(id){
-//    $('input[name=subcategoryProduct_id]').val(id);
-// $('#updateTile2Cat').modal('show');
-// }
+
 $('#second_sub_category').on('change',function(){
     let subcategory = $('#second_sub_category').val();
   $.ajax({
@@ -555,10 +522,31 @@ $('#sub_category').change(function(){
  });
         }
     })
-})
-function uploadGallery(id){
-$('#gallery_modal').modal('show');
+});
+function relatedFunction(){
+  var r_p = $('#related_product').val();
+
+  $.ajax({
+        url: '/admin/update-tiles-related_product',
+        method: "GET",
+        data: { product_id: product_id, data: r_p },
+        dataType: "JSON",
+        success: function (data) {
+          toastr.success(data.message);
+        }
+  });
+ 
+  
 }
+function uploadGallery(pro_id){
+    $('#product_page_id').val(pro_id);
+    $('#product_get_id').val(pro_id);
+$('#gallery_modal').modal('show');
+
+}
+
+
+
 
 </script>
 
