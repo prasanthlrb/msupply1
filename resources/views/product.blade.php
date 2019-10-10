@@ -212,13 +212,13 @@
                                 @if($product1->regular_price !="")
                                     <p class="product_price"><s>₹{{$product1->regular_price}}</s> <b class="theme_color">₹{{$product1->sales_price}}</b>
                                       @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
-                                    / <small>{{$product1->default_unit_type}}</small>
+                                    / {{$product1->default_unit_type}}
                                     @endif
                                 </p>
                                 @else
                                     <p class="product_price"><b class="theme_color">₹{{$product1->sales_price}}</b> 
                                     @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
-                                    / <small>{{$product1->default_unit_type}}</small>
+                                    / {{$product1->default_unit_type}}
                                     @endif
                                     </p>
                                 @endif

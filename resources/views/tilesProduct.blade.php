@@ -135,7 +135,7 @@ p.productdesc{
                             <hr>
 									
 
-                                    <p class="product_price">Rs : <b class="theme_color">{{$product1->sales_price}} </b>/ <small>Per Box</small></p>
+                                    <p class="product_price">Rs : <b class="theme_color">{{$product1->sales_price}} </b>/ Per Box</p>
 
 
 								   <ul class="specifications">
