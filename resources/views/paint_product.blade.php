@@ -306,7 +306,9 @@ p.productdesc{
 
 										<a href="/product/{{$relate->id}}">{{$relate->product_name}}</a>
 
-										
+										                <div class="clearfix product_info">
+														<p class="product_price alignleft"><b id="rep_pro{{$relate->id}}"></b></p>
+														</div>
 
 										</div>
 
@@ -337,21 +339,25 @@ p.productdesc{
 								<h3> Calculate your required paint</h3>
 
 								<div class="theme_box">
-								<p class="seller_category">Enter the height(m) and length(m) of the area you want to paint.</p>
+										{{-- <div class="row">
+										<div class="col-md-6">
+											 <button type="button" class="button_blue mini_btn" id="iknow">I Know Exact Area For Painting </button>
+										</div>
+										<div class="col-md-6">
+											 <button type="button" class="button_grey mini_btn" id="idontknow">I Don't Know Exact Area For Painting </button>
+										</div>
+									</div> --}}
+								<p class="seller_category">Enter the height(ft) and length(ft) of the area you want to paint.</p>
 									<br>
-								
-
 									<div class="v_centered">
 
 									<div class="col-xs-12">
+
 										<div class="row">
 											<div class="col-md-5">
 												<label for="input_2">Height(ft)</label>
-
 													<div class="form_el">
-
 														<input type="text" name="height" id="height">
-
 													</div>
 											</div>
 											<div class="col-md-2">
@@ -359,11 +365,8 @@ p.productdesc{
 											</div>
 											<div class="col-md-5">
 												<label for="input_2">Length(ft)</label>
-
 													<div class="form_el">
-
 														<input type="text" name="length" id="length">
-
 													</div>
 											</div>
 										</div>
@@ -530,7 +533,7 @@ function addCart(id){
 			getPrice();
         }
 		function getPrice(){
-		
+		$('.related_price_tag').remove();
 			// console.log(lit)
 			// console.log(colors_id)
 if(lit !=0 && colors_id !=0){
@@ -543,13 +546,21 @@ if(lit !=0 && colors_id !=0){
                 success:function(result){
                     //console.log(result);
                     //$('#inputColor').remove();
-					if(result ==0){
+					if(result[0] ==0){
                     $(".product_price .theme_color").text("Not Available");
 					$('#addToCardPaint').prop('disabled',true);
 					}else{
-						paint_price = Math.ceil(result.price);
-                    $(".product_price .theme_color").text("Rs : "+ Math.ceil(result.price));
+						//relatedProductPriceSet(product_id);
+						paint_price = Math.ceil(result[0].price);
+					console.log("related",result)
+                    $(".product_price .theme_color").text("Rs : "+ Math.ceil(result[0].price));
 					$('#addToCardPaint').prop('disabled',false);
+					if(result[1].length >0){
+						console.log(result[1])
+					for(let i=0;i<result[1].length;i++){
+						$('#rep_pro'+result[1][i].product_id).html('<span class="related_price_tag"><i class="fa fa-inr" aria-hidden="true"></i> '+result[1][i].price+'</span>')
+					}
+					}
 					}
                     //$('#colorButtonModule').append('<input type="hidden" name="inputColor" id="inputColor" value="'+result.id+'">')
                 }
@@ -609,5 +620,22 @@ if(lit !=0 && colors_id !=0){
               }
             });
 		})
+		calculate_formula =1;
+			$('#iknow').click(function(){
+			$(this).addClass('button_blue');
+			$('#idontknow').addClass('button_grey');
+			$('#idontknow').removeClass('button_blue');
+			$('.iknow').removeClass('hideCalcField');
+			$('.idontknow').addClass('hideCalcField');
+			calculate_formula =1;
+		})
+		$('#idontknow').click(function(){
+			$(this).addClass('button_blue');
+			$('#iknow').addClass('button_grey');
+			$('#iknow').removeClass('button_blue');
+			$('.idontknow').removeClass('hideCalcField');
+			$('.iknow').addClass('hideCalcField');
+			calculate_formula =2;
+		});
     </script>
 @endsection

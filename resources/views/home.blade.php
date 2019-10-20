@@ -275,7 +275,7 @@
 						
 								<!-- - - - - - - - - - - - - - Banner - - - - - - - - - - - - - - - - -->
 						
-								<div class="section_offset animated transparent" data-animation="fadeInDown" id="stricky-sideimg">
+								<div class="section_offset animated transparent" data-animation="fadeInDown">
 						<?php if(count($adModel) > 0){?>
 									<a href="{{$adModel[2]->url}}">
 										
@@ -366,6 +366,7 @@
 
 							<!-- - - - - - - - - - - - - - End of banners - - - - - - - - - - - - - - - - -->
 							<?php echo $output ?>
+						
 
 						
 

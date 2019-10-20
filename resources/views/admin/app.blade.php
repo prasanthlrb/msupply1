@@ -208,7 +208,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             @if($role->catalog == 1)
             <li class="catalog-menu"><a class="menu-item" href="/admin/viewProduct/">Catalog</a></li>
             @endif
-
+              <li class="contact_info">
+              <a class="menu-item" href="/admin/product-price-location">Price & Location Management</a>
+            </li>
             {{-- <li class="colors-menu"><a class="menu-item" href="/admin/colors-category/">Colors</a></li> --}}
           </ul>
         </li>
@@ -279,9 +281,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
            <li class="contact_info">
               <a class="menu-item" href="/admin/color-products">Products</a>
             </li>
-           {{-- <li class="contact_info">
-              <a class="menu-item" href="/admin/color-price">Price Management</a>
-            </li> --}}
+         
          </ul>
         </li>
 
@@ -321,9 +321,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <a class="menu-item" href="/admin/social-details/">Social Media Management</a>
             </li>
             @endif
-            {{-- <li class="update-tiles">
-                <a class="menu-item" href="/admin/tiles-upload/">Update Tiles</a>
-              </li> --}}
+            <li class="location-menu">
+                <a class="menu-item" href="/admin/location_list/">Location Management</a>
+              </li>
 
               <!-- <ul class="menu-content">
                 <li>

@@ -42,7 +42,7 @@
 <div class="content-body">
         <section id="search-website" class="card overflow-hidden">
           <div class="card-header">
-            <h4 class="card-title">Select Your District</h4>
+            
             <a class="heading-elements-toggle" href="javascript:void(null)"><i class="la la-ellipsis-v font-medium-3"></i></a>
             <div class="heading-elements">
               <ul class="list-inline mb-0">
@@ -52,13 +52,7 @@
           </div>
           <div class="card-content">
             <div class="card-body pb-0">
-              <fieldset class="form-group position-relative mb-0">
-                {{-- <input type="text" class="form-control form-control-xl input-xl" id="searchColor" onkeyup="searchResult()" placeholder="Search ...">
-              <input type="hidden" id="product_id" value="">
-                <div class="form-control-position" onclick="refreshData()">
-                  {{-- <i class="ft-refresh-ccw font-medium-4"></i> --}}
-                {{-- </div>  --}}
-              </fieldset>
+                <h1 class="card-title" style="font-size: 23px;text-align: center;">Select Your District</h1>
             </div>
             
             <div id="search-results" class="card-body">

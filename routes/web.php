@@ -398,6 +398,17 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/delete_brand_image/{id}/{type}', 'productController@deleteBrandImage');
     //discount update
     Route::post('/tiles-discount-update', 'productController@tilesDiscountUpdate');
+
+
+    //location management
+    Route::get('/delete_location/{id}', 'locationController@deleteLocation');
+    Route::get('/edit_location/{id}', 'locationController@editLocation');
+    Route::get('/location_list', 'locationController@locationList');
+    Route::post('/add-location', 'locationController@createLocation');
+    Route::post('/update-location', 'locationController@updateLocation');
+
+    Route::get('/location-management_list', 'locationController@showLocationManagement');
+    Route::get('/create-location-management', 'locationController@createLocationManagement');
 });
 
 Auth::routes();

@@ -14,6 +14,16 @@ p.productdesc{
 .hide-details{
 	display: none;
 }
+.hideCalcField{
+	display: none;
+}
+.border-len-bread{
+	border: #b1abab solid 1px;
+    padding: 10px;
+}
+.calculatoreBox {
+    padding-top: 120px;
+}
 </style>
 @endsection
 @section('content')
@@ -263,22 +273,124 @@ p.productdesc{
 								<h3> Calculate your required Tiles</h3>
 
 								<div class="theme_box">
-								<p class="seller_category">Enter the Length(ft) and Breadth(ft) of the area you want to Tile.</p>
+									<div class="row">
+										<div class="col-md-6">
+											 <button type="button" class="button_blue mini_btn" id="iknow">I Know Exact Area For Tiling </button>
+										</div>
+										<div class="col-md-6">
+											 <button type="button" class="button_grey mini_btn" id="idontknow">I Don't Know Exact Area For Tiling </button>
+										</div>
+									</div>
 									<br>
-								
-
-									<div class="v_centered">
+					<div class="iknow">
+								<p class="seller_category">Enter the Specify Area(Sq.ft.)</p>
+								<div class="v_centered">
 
 									<div class="col-xs-12">
-                                        {{-- <div style="float:right">
-
-                                            <button type="button" class="button_blue mini_btn">Add </button>
-                                        </div> --}}
+                                       
 										<div class="row" style="padding-top:30px">
+											<div class="col-md-6">
+												<label for="input_2">Specify Area(Sq.ft.)</label>
+													<div class="form_el">
+														<input type="text" name="input_sqft" id="input_sqft">
+													</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+					</div>
+						<div class="idontknow hideCalcField">
+								<p class="seller_category">Enter the Length(ft) and Breadth(ft) of the area you want to Tile.</p>
+								<div class="v_centered">
+
+									<div class="col-xs-12">
+
+										@if($product1->sub_category == 2)
+
+                                       	 <div style="float:right">
+
+                                            <button type="button" class="button_blue mini_btn" onclick="addOneMore1()">Add </button>
+										</div>
+										<div class="row" style="padding-top:30px">
+											<div class="col-md-12 border-len-bread">
+										<div class="col-md-12">
+											<p>Wall</p>
+											<div class="col-md-5">
+												<label for="input_2">Length(ft)</label>
+													<div class="form_el">
+														<input type="text" name="wall_length" id="wall_length1">
+													</div>
+											</div>
+											<div class="col-md-1">
+												<p style="text-align:center;margin-top: 30px;">X</p>
+											</div>
+											<div class="col-md-5">
+												<label for="input_2">Breadth(ft)</label>
+													<div class="form_el">
+														<input type="text" name="wall_breadth" id="wall_breadth1">
+													</div>
+											</div>
+										 </div>
+
+										<div class="col-md-12" style="padding-top:20px">
+											<p>Door</p>
+											<div class="col-md-5">
+												<label for="input_2">Length(ft)</label>
+													<div class="form_el">
+														<input type="text" name="door_length" id="door_length1">
+													</div>
+											</div>
+											<div class="col-md-1">
+												<p style="text-align:center;margin-top: 30px;">X</p>
+											</div>
+											<div class="col-md-5">
+												<label for="input_2">Breadth(ft)</label>
+													<div class="form_el">
+														<input type="text" name="door_breadth" id="door_breadth1">
+													</div>
+											</div>
+										 </div>
+
+										<div class="col-md-12" style="padding-top:20px">
+											<p>Window</p>
+											<div class="col-md-5">
+												<label for="input_2">Length(ft)</label>
+													<div class="form_el">
+														<input type="text" name="window_length" id="window_length1">
+													</div>
+											</div>
+											<div class="col-md-1">
+												<p style="text-align:center;margin-top: 30px;">X</p>
+											</div>
+											<div class="col-md-5">
+												<label for="input_2">Breadth(ft)</label>
+													<div class="form_el">
+														<input type="text" name="window_breadth" id="window_breadth1">
+													</div>
+											</div>
+										</div>
+										 </div>
+										 
+										 
+
+										</div>
+									
+										@else
+										 <div style="float:right">
+
+                                            <button type="button" class="button_blue mini_btn" onclick="addOneMore()">Add </button>
+										</div>
+										
+
+
+										<div class="row" style="padding-top:30px">
+
 											<div class="col-md-4">
 												<label for="input_2">Length(ft)</label>
 													<div class="form_el">
-														<input type="text" name="length" id="length">
+														<input type="text" name="length[]" id="length1">
 													</div>
 											</div>
 											<div class="col-md-1">
@@ -287,27 +399,38 @@ p.productdesc{
 											<div class="col-md-4">
 												<label for="input_2">Breadth(ft)</label>
 													<div class="form_el">
-														<input type="text" name="breadth" id="breadth">
+														<input type="text" name="breadth[]" id="breadth1">
 													</div>
                                             </div>
-                                            {{-- <div class="col-md-2" style="margin-top:25px">
-                                                <button type="button" class="button_blue mini_btn">Remove</button>
-                                            </div> --}}
+                                         
 										</div>
+										@endif
+										
+										<div id="calboxPlace"></div>
+
+									</div>
+								</div>
 										<br>
 													
-																<div class="after-calculatore" style="display:none">
-
-														<p style="text-align: center;font-weight: 600">Tile Caculator Result:</p>	
-														<ul class="specifications">
+										
+						</div>
+						<br>
+						<div class="after-calculatore" style="display:none">
+														<div class="calculatoreBox">
+															<ul class="specifications">
+																	
 													   
+                                                       <li style="text-align: center;font-weight: 600">
+														 
+														   Tile Caculator Result:
+														  </li>
                                                        <li>
 														   <div class="row">
 															   <div class="col-md-6">
-																   Total Area :	 
+																   Total Area 	 
 															   </div>
 															   <div class="col-md-6">
-																: <span id="total-area"></span>
+																:  <span id="total-area"></span>
 															   </div>
 														   </div>
 														   
@@ -318,7 +441,7 @@ p.productdesc{
 																   No of Boxes Required 
 															   </div>
 															   <div class="col-md-6">
-																: <span id="noofboxes"></span>
+																:  <span id="noofboxes"></span>
 															   </div>
 														   </div>
 
@@ -329,28 +452,25 @@ p.productdesc{
 																   No of Tiles 
 															   </div>
 															   <div class="col-md-6">
-																: <span id="nooftiles"></span>
+																:  <span id="nooftiles"></span>
 															   </div>
 														   </div>
 
 														  </li>
                                                      
 														</ul>
-
-													</div>		
-
-										</div>
-
-								
-
-									</div>
-
+													</div>
+											</div>	
 								</div><!--/ .theme_box -->
 
-								<footer class="bottom_box" style="text-align:center">
+								
 									
-									<a href="#" class="button_grey middle_btn" id="calculate">CALCULATE</a>
-
+								<footer class="bottom_box" style="text-align:center">
+									@if($subCategoty->id ==2)
+									<a href="javascript:void(null)" class="button_grey middle_btn" id="calculate1">CALCULATE</a>
+									@else
+									<a href="javascript:void(null)" class="button_grey middle_btn" id="calculate">CALCULATE</a>
+									@endif
 								</footer>
 
 							</section>
@@ -467,6 +587,7 @@ p.productdesc{
     <script>
 		var lit=0;
 		var colors_id =0;
+		var calculate_formula = 1;
 function setLitre(lits){
 lit = lits;
 $('.litBtn').each(function(index){
@@ -566,39 +687,9 @@ function addCart(id){
 
     }
     //end of function
-        function getColorModal(id){
-            $.arcticmodal({
-                        url : '/get-color-modal/'+id
-                    });
-        }
-        function getColors(data){
-			$('.arcticmodal-close').trigger('click');
-			$('#colorButtonModule').css('background-color',data.shade_code)
-            $('#colorButtonModule').text(data.code_name)
-			//console.log(data);
-			colors_id = data.id;
-			getPrice();
-        }
-		function getPrice(){
+      
+    
 		
-			console.log(lit)
-			console.log(colors_id)
-if(lit !=0 && colors_id !=0){
-	let product_id = $('#product_id').val();
-	console.log(product_id)
-	     $.ajax({
-				url:'/selected-color',
-                method:'GET',
-				data:{product_id:product_id,lit:lit,colors_id:colors_id},
-                success:function(result){
-                    console.log(result);
-                    //$('#inputColor').remove();
-                    $(".product_price .theme_color").text("Rs : "+result.price);
-                    //$('#colorButtonModule').append('<input type="hidden" name="inputColor" id="inputColor" value="'+result.id+'">')
-                }
-            });
-}
-		}
         function checkOrderLimit(data){
             var button_qty = $('#button_qty').val();
             if(button_qty <= button_qty){
@@ -611,21 +702,53 @@ if(lit !=0 && colors_id !=0){
         }
 
 		$('#calculate').on('click', function(){
-			let length = $('#length').val();
-			let breadth = $('#breadth').val();
+				var totalSqft=0;
+			if(calculate_formula == 1){
+				totalSqft = $('#input_sqft').val();
+			}else{
+				
+				for(let i=0; i < calBoxCollection.length; i++){
+					let totSqft = parseInt($('#length'+calBoxCollection[i]).val() * $('#breadth'+calBoxCollection[i]).val());
+					totalSqft +=totSqft;
+				}
+			}
+			
 			let sqft = $('#sqft').val();
 			let noitem = $('#noitem').val();
-			if(breadth !='' && length != ''){
-			let total = parseInt(length * breadth / sqft);
+			//if(breadth !='' && length != ''){
+			let total = parseInt(totalSqft / sqft);
 			let totalnoitem = parseInt(noitem) * total;
 			$('.after-calculatore').css("display","block");
-			$('#total-area').text(length * breadth)
+			$('#total-area').text(totalSqft)
 			$('#noofboxes').text(Math.ceil(total))
 			$('#nooftiles').text(Math.ceil(totalnoitem))
+			// }else{
+			// 	toastr.error("breadth and Length", "Field is required")
+			// }
+			
+		});
+		$('#calculate1').on('click', function(){
+				var totalSqft=0;
+			if(calculate_formula == 1){
+				totalSqft = $('#input_sqft').val();
 			}else{
-				toastr.error("breadth and Length", "Field is required")
+				
+				for(let i=0; i < calBoxCollection.length; i++){
+					let totSqft = parseInt($('#wall_length'+calBoxCollection[i]).val() * $('#wall_breadth'+calBoxCollection[i]).val());
+					let totSqft1 = parseInt($('#door_length'+calBoxCollection[i]).val() * $('#door_breadth'+calBoxCollection[i]).val());
+					let totSqft2 = parseInt($('#window_length'+calBoxCollection[i]).val() * $('#window_breadth'+calBoxCollection[i]).val());
+					let subTotalSqft = parseInt(totSqft) - parseInt(parseInt(totSqft1) + parseInt(totSqft2))
+					totalSqft +=subTotalSqft;
+				}
 			}
-			// alert(total);
+			let sqft = $('#sqft').val();
+			let noitem = $('#noitem').val();
+			let total = parseInt(totalSqft / sqft);
+			let totalnoitem = parseInt(noitem) * total;
+			$('.after-calculatore').css("display","block");
+			$('#total-area').text(totalSqft)
+			$('#noofboxes').text(Math.ceil(total))
+			$('#nooftiles').text(Math.ceil(totalnoitem))
 		});
 		function tileAddtoCart(){
 			var formData = new FormData($('#tilesFormProduct')[0]);
@@ -652,6 +775,85 @@ if(lit !=0 && colors_id !=0){
 			}else{
 				 toastr.error(" Available Stock","Please Enter Less Rather than");
 			}
+		}
+		$('#iknow').click(function(){
+			$(this).addClass('button_blue');
+			$('#idontknow').addClass('button_grey');
+			$('#idontknow').removeClass('button_blue');
+			$('.iknow').removeClass('hideCalcField');
+			$('.idontknow').addClass('hideCalcField');
+			calculate_formula =1;
+		})
+		$('#idontknow').click(function(){
+			$(this).addClass('button_blue');
+			$('#iknow').addClass('button_grey');
+			$('#iknow').removeClass('button_blue');
+			$('.idontknow').removeClass('hideCalcField');
+			$('.iknow').addClass('hideCalcField');
+			calculate_formula =2;
+		});
+		calBox =2;
+		calBoxCollection =[1];
+		function addOneMore(){
+			let table = '<div class="row" style="padding-top:30px" id="calbox'+calBox+'"><div class="col-md-12">'+
+						'<div class="col-md-4"><label for="input_2">Length(ft)</label>'+
+						'<div class="form_el"><input type="text" name="length[]" id="length'+calBox+'">'+
+						'</div></div><div class="col-md-1">'+
+						'<p style="text-align:center;margin-top: 30px;">X</p>'+
+						'</div><div class="col-md-4"><label for="input_2">Breadth(ft)</label>'+
+						'<div class="form_el"><input type="text" name="breadth[]" id="breadth'+calBox+'">'+
+						'</div></div><div class="col-md-2" style="margin-top:25px;margin-left: -12px;">'+
+                        '<button type="button" class="button_blue mini_btn" onclick="removeCalBox('+calBox+')">Remove</button>'+
+                        '</div></div></div>';
+						calBoxCollection.push(calBox);
+						calBox++;
+			$('#calboxPlace').after(table);
+		}
+		function addOneMore1(){
+			let table = '<div class="row" style="padding-top:30px" id="calbox'+calBox+'">'+
+			'<button type="button" class="button_blue mini_btn" onclick="removeCalBox('+calBox+')">Remove</button>'+
+						'<div class="col-md-12 border-len-bread">'+
+						'<div class="col-md-12"><p>Wall</p>'+
+						'<div class="col-md-5"><label for="input_2">Length(ft)</label>'+
+						'<div class="form_el"><input type="text" name="wall_length" id="wall_length'+calBox+'">'+
+						'</div></div><div class="col-md-1">'+
+						'<p style="text-align:center;margin-top: 30px;">X</p>'+
+						'</div><div class="col-md-5"><label for="input_2">Breadth(ft)</label>'+
+						'<div class="form_el"><input type="text" name="wall_breadth" id="wall_breadth'+calBox+'">'+
+						'</div></div><div class="col-md-2" style="margin-top:25px;margin-left: -12px;">'+
+                        '</div></div>'+
+						'<div class="col-md-12"><p>Door</p>'+
+						'<div class="col-md-5"><label for="input_2">Length(ft)</label>'+
+						'<div class="form_el"><input type="text" name="door_length" id="door_length'+calBox+'">'+
+						'</div></div><div class="col-md-1">'+
+						'<p style="text-align:center;margin-top: 30px;">X</p>'+
+						'</div><div class="col-md-5"><label for="input_2">Breadth(ft)</label>'+
+						'<div class="form_el"><input type="text" name="door_breadth" id="door_breadth'+calBox+'">'+
+						'</div></div><div class="col-md-2" style="margin-top:25px;margin-left: -12px;">'+
+                        '</div></div>'+
+						'<div class="col-md-12"><p>Window</p>'+
+						'<div class="col-md-5"><label for="input_2">Length(ft)</label>'+
+						'<div class="form_el"><input type="text" name="window_length" id="window_length'+calBox+'">'+
+						'</div></div><div class="col-md-1">'+
+						'<p style="text-align:center;margin-top: 30px;">X</p>'+
+						'</div><div class="col-md-5"><label for="input_2">Breadth(ft)</label>'+
+						'<div class="form_el"><input type="text" name="window_breadth" id="window_breadth'+calBox+'">'+
+						'</div></div><div class="col-md-2" style="margin-top:25px;margin-left: -12px;">'+
+                        '</div></div>'+
+						'</div></div>';
+						calBoxCollection.push(calBox);
+						calBox++;
+			$('#calboxPlace').after(table);
+		}
+
+function removeCalBox(id){
+if(confirm('Are you sure delete this row?'))
+  {
+    calBoxCollection = jQuery.grep(calBoxCollection, function(value) {
+      return value != id;
+    });
+    $('#calbox'+id).remove();
+  }	
 		}
     </script>
 @endsection
