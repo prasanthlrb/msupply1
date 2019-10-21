@@ -208,8 +208,8 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             @if($role->catalog == 1)
             <li class="catalog-menu"><a class="menu-item" href="/admin/viewProduct/">Catalog</a></li>
             @endif
-              <li class="contact_info">
-              <a class="menu-item" href="/admin/product-price-location">Price & Location Management</a>
+              <li class="location-management">
+              <a class="menu-item" href="/admin/location-management_list">Price & Location Management</a>
             </li>
             {{-- <li class="colors-menu"><a class="menu-item" href="/admin/colors-category/">Colors</a></li> --}}
           </ul>

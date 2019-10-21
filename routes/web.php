@@ -409,6 +409,10 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/location-management_list', 'locationController@showLocationManagement');
     Route::get('/create-location-management', 'locationController@createLocationManagement');
+    Route::get('/edit-location-management/{id}', 'locationController@editLocationManagement');
+    Route::get('/delete-assign-location/{id}', 'locationController@DeleteLocationManagement');
+    Route::post('/assign-price-based-location', 'locationController@assignPriceBasedLocation');
+    Route::post('/edit-price-based-location', 'locationController@editPriceBasedLocation');
 });
 
 Auth::routes();

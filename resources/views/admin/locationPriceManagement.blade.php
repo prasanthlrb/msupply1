@@ -37,10 +37,10 @@
                   @foreach($lm as $row)
                   <tr>
                     <td>{{$x}}</td>
-                    <td>{{$row->location_name}}</td>
+                    <td>{{$row->product_name}}</td>
                     <td class="text-center" >
-                      <i class="ft-edit" onclick="editCat({{$row->id}})"></i>
-                    <i class="ft-trash-2" onclick="deleteCat({{$row->id}})"></i>
+                    <a href="/admin/edit-location-management/{{$row->product_id}}"><i class="ft-edit"></i></a>
+                  
                     </td>
                   </tr>
                   <?php $x++?>
@@ -67,23 +67,8 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
-    $('.location-menu').addClass('active');
+    $('.location-management').addClass('active');
  
-     function deleteCat(id){
-      var r = confirm("Are you sure");
-      if (r == true) {
-      $.ajax({
-        url : '/admin/delete_location/'+id,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data)
-        {
-          toastr.success(data.message);
-          $('.zero-configuration').load(location.href+' .zero-configuration');
-        }
-      });
-    }
-     }
      
 </script>
 @endsection
