@@ -33,6 +33,18 @@
     margin-top: -25px;
     margin-left: 50px;
 }
+input[type="radio"] + label,
+		input[type="checkbox"] + label{
+			position: relative;
+			width: auto !important;
+			margin:0 -20px 0 0 !important;
+			padding-left: 32px;
+
+			-webkit-user-select: none;
+			 -khtml-user-select: none;
+			   -moz-user-select: none;
+			   		user-select: none;
+		}
 
 </style>
 @endsection
@@ -130,8 +142,26 @@
                         <div class="single_product_description col-md-7">
 
                             <h3 class="offset_title"><a href="#">{{$brands->brand}}</a></h3>
+                            <div class="description_section v_centered">
 
-                            <br>
+							 <table class="product_info">
+
+                                    <tbody>
+
+                      
+                                        	@if($brands->free_shipping !=null)
+										<tr>
+											<td>Free Delivery on order over : </td>
+										<td><span class="in_stock">  {{$brands->free_shipping}} KG on <span> {{$brands->brand}} Brand Product</td>
+										</tr>
+										@endif
+
+                                    </tbody>
+
+                                </table>
+
+										</div>
+
 
                             <div class="table_wrap">
 
@@ -162,8 +192,8 @@
                                               
                                                 <div class="form_el">
 
-														<input type="radio" name="radio_{{$pro->id}}" id="radio_{{$data->id}}">
-                                                        <label for="radio_{{$data->id}}">{{$data->unit_price}} / {{$data->unit_name}} 
+														<input type="radio" name="radio_{{$pro->id}}" id="radio_{{$data->id}}" style="margin: 0 -20px 0 0 !important;">
+                                                        <label for="radio_{{$data->id}}"><p><small><i class="fas fa-rupee-sign" style="margin-top:5px"></i></small> {{$data->unit_price}} / {{$data->unit_name}} </p>
                                                         
                                                                 
                                                             
@@ -176,7 +206,7 @@
                                             </td>
                                             @endforeach
 												<td>
-                                                <input type="text" onkeyup="qtyBox({{$pro->id}})" id="qtybox{{$pro->id}}">
+                                                <input type="number" onkeyup="qtyBox({{$pro->id}})" id="qtybox{{$pro->id}}">
                                                 </td>
                                             <td id="total_price{{$pro->id}}">0</td>
 											</tr>

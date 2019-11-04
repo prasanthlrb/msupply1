@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocationManagementsTable extends Migration
+class CreateDealAttributesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateLocationManagementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('location_managements', function (Blueprint $table) {
+        Schema::create('deal_attributes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('location')->nullable();
+            $table->string('deal_id')->nullable();
             $table->string('product_id')->nullable();
-            $table->string('regular_price')->nullable();
-            $table->string('sales_price')->nullable();
-            $table->string('lat')->nullable();
-            $table->string('lng')->nullable();
-            $table->string('status')->nullable();
+            $table->string('attribute1')->nullable();
+            $table->string('attribute2')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ class CreateLocationManagementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('location_managements');
+        Schema::dropIfExists('deal_attributes');
     }
 }

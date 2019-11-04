@@ -39,8 +39,9 @@ class productController extends Controller
     {
         $data = brand::all();
         // return response()->json($data);
+        $units = unit::all();
         $role = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.brand', compact('data', 'role'));
+        return view('admin.brand', compact('data', 'role', 'units'));
     }
 
     public function brandStore(Request $request)
@@ -66,6 +67,17 @@ class productController extends Controller
         $brand->brand = $request->brand;
         $brand->brand_image = $fileName;
         $brand->thumbnail = $thumbnail;
+        $brand->order_limit = $request->order_limit;
+        $brand->order_type = $request->order_type;
+        if (isset($request->order_unit_type)) {
+
+            $brand->order_unit_type = $request->order_unit_type;
+        }
+        $brand->free_shipping = $request->free_shipping;
+        $brand->paid_base = $request->paid_base;
+        $brand->paid_type = $request->paid_type;
+        $brand->paid_value = $request->paid_value;
+        $brand->description = $request->description;
         $brand->status = $request->status;
         $brand->save();
         return response()->json(['message' => 'Successfully Store'], 200);
@@ -109,7 +121,17 @@ class productController extends Controller
             $brand->thumbnail = $thumbnail;
         }
 
+        $brand->order_limit = $request->order_limit;
+        $brand->order_type = $request->order_type;
+        if (isset($request->order_unit_type)) {
 
+            $brand->order_unit_type = $request->order_unit_type;
+        }
+        $brand->free_shipping = $request->free_shipping;
+        $brand->paid_base = $request->paid_base;
+        $brand->paid_type = $request->paid_type;
+        $brand->paid_value = $request->paid_value;
+        $brand->description = $request->description;
         $brand->status = $request->status;
         $brand->save();
         return response()->json(['message' => 'Successfully Update'], 200);
@@ -1239,19 +1261,21 @@ class productController extends Controller
             foreach ($getData as $row) {
                 $product = product::where('product_name', $row->Product)->get();
                 if (count($product) > 0) {
-                    $change_product = product::find($product[0]->id);
-                    $change_product->sales_price = $row->Price;
-                    // $change_product->stock_quantity = $row->ClosingBalance;
-                    $change_product->save();
-                    $location = tiles_stock_location::where('location', $request->location)->where('product_id', $change_product->id)->first();
+                    // $change_product = product::find($product[0]->id);
+                    // $change_product->sales_price = $row->Price;
+                    // // $change_product->stock_quantity = $row->ClosingBalance;
+                    // $change_product->save();
+                    $location = tiles_stock_location::where('location', $request->location)->where('product_id', $product[0]->id)->first();
                     if (isset($location)) {
                         $loc = tiles_stock_location::find($location->id);
                         $loc->stock = $row->ClosingBalance;
+                        $loc->price = $row->Price;
                         $loc->save();
                     } else {
                         $loc = new tiles_stock_location;
-                        $loc->product_id = $change_product->id;
+                        $loc->product_id = $product[0]->id;
                         $loc->location = $request->location;
+                        $loc->price = $row->Price;
                         $loc->stock = $row->ClosingBalance;
                         $loc->save();
                     }
@@ -1398,8 +1422,8 @@ class productController extends Controller
         if (count($stock) > 0) {
             foreach ($stock as $row) {
                 $output .= ' <tr>
-                             <td>Stock Of ' . $row->location . '</td>
-                                    <td class="font-weight-bold">' . $row->stock . '</td>
+                             <td>' . $row->location . '</td>
+                                    <td class="font-weight-bold">' . $row->stock . ' Stock  |  Rs: ' . $row->price . ' </td>
                                 </tr>';
             }
         } else {

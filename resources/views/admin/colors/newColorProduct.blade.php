@@ -154,27 +154,9 @@
                 
                 
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="card">
-                      <div class="card-header">
-                        
-                        <h4 class="card-title">Product Feature</h4>
-                        
-                      </div>
-                      <div class="card-content collpase show">
-                        <div class="card-body">
-                          <button class="btn btn-primary" type="button" id="addFeature"> Add Feature</button>
-                          <hr class="pb-2">
-                          
-                          <div id="featurePlace"></div>
-                          
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                
 
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                         <div class="card">
                       <div class="card-header">
                         
@@ -204,6 +186,25 @@
   </form>
 
                     <div class="row">
+                        <div class="col-md-6">
+                    <div class="card">
+                      <div class="card-header">
+                        
+                        <h4 class="card-title">Product Feature</h4>
+                        
+                      </div>
+                      <div class="card-content collpase show">
+                        <div class="card-body">
+                          <button class="btn btn-primary" type="button" id="addFeature"> Add Feature</button>
+                          <hr class="pb-2">
+                          
+                          <div id="featurePlace"></div>
+                          
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header">

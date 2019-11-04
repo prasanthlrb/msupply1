@@ -18,6 +18,7 @@ class CreateTilesStockLocationsTable extends Migration
             $table->string('stock');
             $table->string('location');
             $table->string('product_id');
+            $table->string('price');
             $table->timestamps();
         });
     }

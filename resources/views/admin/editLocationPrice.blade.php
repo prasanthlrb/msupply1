@@ -42,7 +42,7 @@
 
                           
                          
-@foreach($lm as $loc)
+@foreach($lm as $index => $loc)
                                     <div class="row">
 
                                         <div class="col-md-2">
@@ -51,12 +51,27 @@
 
                                           <div class="col-md-3">
                                              <div class="form-group">
-                                                 <label class="label-control" for="projectinput1">Price</label>
+                                                 <label class="label-control" for="projectinput1">Regular Price 
+                                                     @if($index == 0)
+                                                   <a href="javascript:void(null)" onclick="applyRegular({{$loc->id}})">Apply to All</a>
+                                                   @endif
+                                                 </label>
                                                
-                                             <input type="text" name="price{{$loc->id}}" class="form-control" value="{{$loc->price}}">
+                                             <input type="text" id="regular_price{{$loc->id}}" name="regular_price{{$loc->id}}" class="form-control regular_price" value="{{$loc->regular_price}}">
                                                 </div>
                                             </div>
-                                          <div class="col-md-2">
+                                          <div class="col-md-3">
+                                             <div class="form-group">
+                                                 <label class="label-control" for="projectinput1">Sales Price 
+                                                        @if($index == 0)
+                                                   <a href="javascript:void(null)" onclick="applySales({{$loc->id}})">Apply to All</a>
+                                                   @endif
+                                                 </label>
+                                               
+                                             <input type="text" id="sales_price{{$loc->id}}" name="sales_price{{$loc->id}}" class="form-control sales_price" value="{{$loc->sales_price}}">
+                                                </div>
+                                            </div>
+                                          {{-- <div class="col-md-2">
                                              <div class="form-group">
                                                  <label class="label-control" for="projectinput1">Lat</label>
                                                
@@ -69,7 +84,7 @@
                                                
                                                   <input type="text" name="lng{{$loc->id}}" class="form-control" value="{{$loc->lng}}">
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                         <div class="col-md-3"> 
                                             <div class="form-group">
@@ -132,8 +147,7 @@
 
 @endsection
 @section('extra-js')
-<script src="../../../app-assets/vendors/js/editors/tinymce/tinymce.js" type="text/javascript"></script>
-<script src="../../../app-assets/js/scripts/editors/editor-tinymce.js" type="text/javascript"></script>
+
 <script src="../../../custom/color.js" type="text/javascript"></script>
 
 <script>

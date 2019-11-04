@@ -134,8 +134,13 @@ p.productdesc{
                                             <td><span style="color:red;">Out of Stock</span></td>
                                         @endif
 
-                                        </tr>
-
+										</tr>
+										@if($brand->free_shipping !=null)
+										<tr>
+											<td>Free Delivery on order over : </td>
+										<td><span class="in_stock"> <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i> {{$brand->free_shipping}}, {{$brand->brand}} Brand Product<span> </td>
+										</tr>
+										@endif
                                     </tbody>
 
                                 </table>
@@ -145,7 +150,7 @@ p.productdesc{
                             <hr>
 									
 
-                                    <p class="product_price">Rs : <b class="theme_color">{{$product1->sales_price}} </b>/ Per Box</p>
+                                    <p class="product_price">Rs : <b class="theme_color">{{$stock->sales_price}} </b>/ Per Box</p>
 
 
 								   <ul class="specifications">
@@ -225,7 +230,7 @@ p.productdesc{
 								<input type="hidden" name="product_name" id="product_name" value="{{$product1->product_name}}">
 								<input type="hidden" name="product_id" id="product_id" value="{{$product1->id}}">
 								<input type="hidden" name="stocks" id="stocks" value="{{$stock->stocks}}">
-								<input type="hidden" name="sales_price" id="sales_price" value="{{$product1->sales_price}}">
+								<input type="hidden" name="sales_price" id="sales_price" value="{{$stock->sales_price}}">
 					  <div class="description_section_2 v_centered">
 
                                 <span class="title">Qty:</span>

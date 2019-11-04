@@ -167,10 +167,10 @@
                                     <td>Name</td>
                                 <td class="font-weight-bold" id="product_name"></td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <td>Price </td>
                                 <td class="font-weight-bold" id="sales_price"></td>
-                                </tr>
+                                </tr> --}}
                                 <tr>
                                     <td>Description</td>
                                     <td class="font-weight-bold" id="product_description"> </td>

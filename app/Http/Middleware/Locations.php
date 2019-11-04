@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
+
 class Locations
 {
     /**
@@ -15,7 +16,7 @@ class Locations
      */
     public function handle($request, Closure $next)
     {
-        if(!Session::has('locations')){
+        if (!Session::has('locations')) {
             return redirect('/get-location-page');
         }
         return $next($request);

@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\contactinfo;
 use App\paintOrderDetails;
+use App\project;
+use App\location;
+
 class accountController extends Controller
 {
     public function __construct()
@@ -263,86 +266,90 @@ class accountController extends Controller
 
     public function checkout()
     {
-        try{
-        $shipping = shipping::where('customer_id', Auth::user()->id)->get();
-        if ($shipping->count() > 0) {
-            $billing = billing::where('customer_id', Auth::user()->id)->get();
-            $getCart = Cart::getContent();
-                        $result = '';
-                           $exTax = 0;
-            $totalPrice = 0;
-            $transport_Price = 0;
-            foreach ($getCart as $item) {
-                //$product_id[] = $item->id;
-            
-            //$row = product::find($item->id);
-            if(isset($item['attributes']['color'])){
-            $row = product::find($item['attributes']->product_id);
-           // return response()->json($row);
-           }else{
-               $row = product::find($item->id);
-           }
-        //    // foreach ($products as $row) {
-                $result .= '<tr>';
-                $result .= '<td colspan="2" data-title="Product Name"><a href="#" class="product_title">'.$item->name.'</a>';
-                $product_attribute = product_attribute::where('product_id', $row->id)->get();
-            //    // $cart_qty = Cart::get($row->id);
-                $result .= '	<ul class="sc_product_info">';
-               if(!isset($item['attributes']['color'])){
-        if(!isset($item['attributes']['steel'])){
-        if(!isset($item['attributes']['tiles'])){
-        if(count($item['attributes'])>0){
-            foreach($item['attributes'] as $key=>$value) {
-                foreach($value as $field => $rows) {
-                    $result .='<li>'.$field.' : '.$rows.'</li>';
-                }
-            }
-           // $result .="I'm Not Paint Steel";
-          }
-          }
-          }
-          }
-          if(isset($item['attributes']['steel'])){
-              $result .='<li>Unit Type : '.$item['attributes']['unit_name'].'</li>';
-          }
-           if(isset($item['attributes']['color'])){
-             $result .=' <li>Color Code : '.$item['attributes']['color_id'].'</li>
-                    <li>Litreage : '.$item['attributes']['lit'].'</li>';
-           }
-                $result .= '</ul>';
-                $result .= '<td data-title="Price" class="subtotal">₹ ' . $item->price . '</td>
+
+        try {
+
+            $location = location::where('location_name', Session::get('locations'))->first();
+            //return response()->json($location);
+            $shipping = shipping::where('customer_id', Auth::user()->id)->get();
+            if ($shipping->count() > 0) {
+                $billing = billing::where('customer_id', Auth::user()->id)->get();
+                $getCart = Cart::getContent();
+                $result = '';
+                $exTax = 0;
+                $totalPrice = 0;
+                $transport_Price = 0;
+                foreach ($getCart as $item) {
+                    //$product_id[] = $item->id;
+
+                    //$row = product::find($item->id);
+                    if (isset($item['attributes']['color'])) {
+                        $row = product::find($item['attributes']->product_id);
+                        // return response()->json($row);
+                    } else {
+                        $row = product::find($item->id);
+                    }
+                    //    // foreach ($products as $row) {
+                    $result .= '<tr>';
+                    $result .= '<td colspan="2" data-title="Product Name"><a href="#" class="product_title">' . $item->name . '</a>';
+                    $product_attribute = product_attribute::where('product_id', $row->id)->get();
+                    //    // $cart_qty = Cart::get($row->id);
+                    $result .= '	<ul class="sc_product_info">';
+                    if (!isset($item['attributes']['color'])) {
+                        if (!isset($item['attributes']['steel'])) {
+                            if (!isset($item['attributes']['tiles'])) {
+                                if (count($item['attributes']) > 0) {
+                                    foreach ($item['attributes'] as $key => $value) {
+                                        foreach ($value as $field => $rows) {
+                                            $result .= '<li>' . $field . ' : ' . $rows . '</li>';
+                                        }
+                                    }
+                                    // $result .="I'm Not Paint Steel";
+                                }
+                            }
+                        }
+                    }
+                    if (isset($item['attributes']['steel'])) {
+                        $result .= '<li>Unit Type : ' . $item['attributes']['unit_name'] . '</li>';
+                    }
+                    if (isset($item['attributes']['color'])) {
+                        $result .= ' <li>Color Code : ' . $item['attributes']['color_id'] . '</li>
+                    <li>Litreage : ' . $item['attributes']['lit'] . '</li>';
+                    }
+                    $result .= '</ul>';
+                    $result .= '<td data-title="Price" class="subtotal">₹ ' . $item->price . '</td>
 
                     <td data-title="Quantity" style="text-align:center">' . $item->quantity . '</td>';
-                $item_total = $item->quantity * $item->price;
-                //return response()->json($row);
-                if($row->tax_type == "in"){
-                    $tax = round($item_total * $row->tax / (100 + $row->tax), 2);
-                    //$subTotal =  $item_total - $tax;
-                    $result .= '<td data-title="TAX">Inclusive Tax <br>₹ ' . $tax . '(' . $row->tax . ' %)</td>';
-                    $result .= '<td data-title="Total" class="total" style="text-align:center">₹ ' . $item_total . '</td>';
-                    $totalPrice += $item_total;
-                }else{
-                    $tax = $item_total * $row->tax / 100;
-                    $total = $item_total + $tax;
-                    $result .= '<td data-title="TAX"> Exclusive Tax <br>₹ ' . $tax . '(' . $row->tax . ' %)</td>';
-                    $result .= '<td data-title="Total" class="total" style="text-align:center">₹ ' . $total . '</td>';
-                    $exTax += $tax;
-                    $totalPrice += $total;
+                    $item_total = $item->quantity * $item->price;
+                    //return response()->json($row);
+                    if ($row->tax_type == "in") {
+                        $tax = round($item_total * $row->tax / (100 + $row->tax), 2);
+                        //$subTotal =  $item_total - $tax;
+                        $result .= '<td data-title="TAX">Inclusive Tax <br>₹ ' . $tax . '(' . $row->tax . ' %)</td>';
+                        $result .= '<td data-title="Total" class="total" style="text-align:center">₹ ' . $item_total . '</td>';
+                        $totalPrice += $item_total;
+                    } else {
+                        $tax = $item_total * $row->tax / 100;
+                        $total = $item_total + $tax;
+                        $result .= '<td data-title="TAX"> Exclusive Tax <br>₹ ' . $tax . '(' . $row->tax . ' %)</td>';
+                        $result .= '<td data-title="Total" class="total" style="text-align:center">₹ ' . $total . '</td>';
+                        $exTax += $tax;
+                        $totalPrice += $total;
+                    }
+
+
+                    $result .= '</tr>';
+                    // }
+                    // $resultData[]=$result;
                 }
-
-
-                $result .= '</tr>';
-           // }
-          // $resultData[]=$result;
-        }
-        // return response()->json($totalPrice);
-            $product_data = product::all();
-            if (Session::has('transport')) {
-                $output = '<ul class="simple_vertical_list row">';
-                $transport_exits = Session::get('transport');
-                foreach ($transport_exits[0] as $row) {
-                    $transport = transport::find($row['selected_data']['transport_id']);
-                    $output .= '<div class="col-sm-3 transport_style">
+                // return response()->json($totalPrice);
+                $product_data = product::all();
+                if (Session::has('transport')) {
+                    $output = '<ul class="simple_vertical_list row">';
+                    $transport_exits = Session::get('transport');
+                    foreach ($transport_exits[0] as $row) {
+                        $transport = transport::find($row['selected_data']['transport_id']);
+                        $output .= '<div class="col-sm-3 transport_style">
                         <div class="row">
                         <li><div class="col-sm-6">Vehicle Name </div><div class="col-sm-6">: ' . $transport->vehicle_name . '</div></li>
                         <li><div class="col-sm-6">Km Price </div><div class="col-sm-6">: ₹' . $row['selected_data']['price'] . '</div></li>
@@ -351,32 +358,32 @@ class accountController extends Controller
                         <li><div class="col-sm-6">Total Price </div><div class="col-sm-6">: ₹ ' . $row['selected_data']['total'] . '</div></li>
                         </div>
                         ';
-                    $transport_Price += $row['selected_data']['total'];
-                    $product = product::whereIn('id', $row['selected_data']['cart_item'])->get();
-                    $output .= '<br>';
-                    $output .= '<h5>Product List</h5>';
+                        $transport_Price += $row['selected_data']['total'];
+                        $product = product::whereIn('id', $row['selected_data']['cart_item'])->get();
+                        $output .= '<br>';
+                        $output .= '<h5>Product List</h5>';
 
-                    $x = 1;
-                    foreach ($product as $data) {
-                        $output .= '<li>' . $x . ' ' . $data->product_name . '</li>';
-                        $x++;
+                        $x = 1;
+                        foreach ($product as $data) {
+                            $output .= '<li>' . $x . ' ' . $data->product_name . '</li>';
+                            $x++;
+                        }
+                        $output .= '</div>';
                     }
-                    $output .= '</div>';
+                    $output .= '</ul>';
+                } else {
+                    $output = '<h5 class="button_grey">Own Transport</h5>';
                 }
-                $output .= '</ul>';
+                return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing', 'output', 'result', 'totalPrice', 'transport_Price', 'location'));
+                //return response()->json($result);
+                //print $result;
             } else {
-                $output = '<h5 class="button_grey">Own Transport</h5>';
+                return redirect('/shipping');
             }
-            return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing', 'output', 'result', 'totalPrice', 'transport_Price'));
-            //return response()->json($result);
-            //print $result;
-        } else {
-            return redirect('/shipping');
+        } catch (\Exception $e) {
+            //return response()->json($row);
+            return $e->getMessage();
         }
-    }catch (\Exception $e) {
-        //return response()->json($row);
-    return $e->getMessage();
-}
     }
 
     public function transport()
@@ -407,19 +414,19 @@ class accountController extends Controller
     //order to be placed
     public function orderPlaced($id, $ship, $bill)
     {
-        $payTotal =0;
-        $orderIDdetails=array();
+        $payTotal = 0;
+        $orderIDdetails = array();
         $getCart = Cart::getContent();
         foreach ($getCart as $item) {
-        //     $product_id[] = $item->id;
-        // }
-        //$products = product::find($product_id);
-       // foreach ($products as $row) {
-              if(isset($item['attributes']['color'])){
-            $row = product::find($item['attributes']->product_id);
-           }else{
-               $row = product::find($item->id);
-           }
+            //     $product_id[] = $item->id;
+            // }
+            //$products = product::find($product_id);
+            // foreach ($products as $row) {
+            if (isset($item['attributes']['color'])) {
+                $row = product::find($item['attributes']->product_id);
+            } else {
+                $row = product::find($item->id);
+            }
             $order = new order; //order create
             $order_item = new order_item; //order item create
             //$cart_qty = Cart::get($row->id);
@@ -432,7 +439,7 @@ class accountController extends Controller
                 $order_item->tax_percent = $row->tax;
                 $order_item->total_price = $item_total;
                 $order->total_amount = $item_total;
-                $payTotal+=$item_total;
+                $payTotal += $item_total;
             } else {
                 $tax = $item_total * $row->tax / 100;
                 $total = $item_total + $tax;
@@ -441,7 +448,7 @@ class accountController extends Controller
                 $order_item->tax_percent = $row->tax;
                 $order_item->total_price = $total;
                 $order->total_amount = $total;
-                $payTotal+=$total;
+                $payTotal += $total;
             }
 
             if (Session::has('transport')) {
@@ -473,9 +480,9 @@ class accountController extends Controller
             $order_item->product_id = $row->id;
             $order_item->order_id = $order->id;
             $order_item->qty = $item->quantity;
-             if(isset($item['attributes']['steel'])){
+            if (isset($item['attributes']['steel'])) {
                 $order_item->unit_type = $item['attributes']['unit_name'];
-             }
+            }
             $order_item->user_id = Auth::user()->id;
             $order_item->save();
             //product Attribute
@@ -490,13 +497,13 @@ class accountController extends Controller
                     $order_attribute->save();
                 }
             }
-            if(isset($item['attributes']['color'])){
+            if (isset($item['attributes']['color'])) {
                 $paint_order = new paintOrderDetails;
                 $paint_order->order_id = $order->id;
                 $paint_order->order_item_id = $order_item->id;
                 $paint_order->price = $item->price;
                 $paint_order->lit = $item['attributes']['lit'];
-                $paint_order->color_id =$item['attributes']['color_id'];
+                $paint_order->color_id = $item['attributes']['color_id'];
                 $paint_order->save();
             }
         }
@@ -527,34 +534,35 @@ class accountController extends Controller
             config('services.instamojo.url')
         );
 
-    try {
-        $response = $api->paymentRequestCreate(array(
-            "purpose" => "Online SHOPING",
-            "amount" => $payTotal,
-            "buyer_name" => Auth::user()->name,
-            "send_email" => true,
-            "email" => Auth::user()->email,
-            "phone" => Auth::user()->phone,
-            "redirect_url" => "https://msupply.net/account/orders"
+        try {
+            $response = $api->paymentRequestCreate(array(
+                "purpose" => "Online SHOPING",
+                "amount" => $payTotal,
+                "buyer_name" => Auth::user()->name,
+                "send_email" => true,
+                "email" => Auth::user()->email,
+                "phone" => Auth::user()->phone,
+                "redirect_url" => "https://msupply.net/account/orders"
             ));
 
             header('Location: ' . $response['longurl']);
             exit();
-    }catch (Exception $e) {
-        print('Error: ' . $e->getMessage());
-    }
+        } catch (Exception $e) {
+            print('Error: ' . $e->getMessage());
+        }
         //return redirect('account/dashboard');
     }
 
-    public function orders(){
+    public function orders()
+    {
         // $orders =DB::table('orders as o')
         // ->join('shippings as s','o.shipping','=','s.id')
         // ->select('o.id','o.created_at','o.order_status','o.total_amount','s.first_name','s.last_name','s.email','s.telephone','s.address','s.zip')
         // ->orderBy('o.id','desc')->paginate(1);
-         $orders = DB::table('orders as o')
+        $orders = DB::table('orders as o')
             ->where('o.user_id', Auth::user()->id)
             ->join('shippings as s', 'o.shipping', '=', 's.id')
-            ->select('o.*','s.first_name','s.last_name','s.email','s.address','s.city','s.state','s.zip','s.country','s.telephone')
+            ->select('o.*', 's.first_name', 's.last_name', 's.email', 's.address', 's.city', 's.state', 's.zip', 's.country', 's.telephone')
             ->orderBy('o.id', 'desc')
             ->paginate(3);
         //return response()->json($orders);
@@ -576,23 +584,23 @@ class accountController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(6);
         //return response($product);
-             if(count($product) > 0){
-               foreach($product as $row){
-                       if($row->amount != null){
-                if($row->price_type == "discount"){
-                    if($row->value_type == "percentage"){
-                      $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
-                    }else{
-                        $row->sales_price = $row->sales_price - $row->amount;;
-                    }
-                }else{
-                     if($row->value_type == "percentage"){
-                 $row->sales_price = $row->sales_price + ($row->sales_price * ($row->amount / 100));
-                    }else{
-                        $row->sales_price = $row->sales_price + $row->amount; 
+        if (count($product) > 0) {
+            foreach ($product as $row) {
+                if ($row->amount != null) {
+                    if ($row->price_type == "discount") {
+                        if ($row->value_type == "percentage") {
+                            $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
+                        } else {
+                            $row->sales_price = $row->sales_price - $row->amount;;
+                        }
+                    } else {
+                        if ($row->value_type == "percentage") {
+                            $row->sales_price = $row->sales_price + ($row->sales_price * ($row->amount / 100));
+                        } else {
+                            $row->sales_price = $row->sales_price + $row->amount;
+                        }
                     }
                 }
-            }
             }
         }
         return view('customer.wishlist', compact('product'));
@@ -607,7 +615,7 @@ class accountController extends Controller
     public function addWishlist($id)
     {
         $pAlready = 0;
-        
+
         $data = wishlist::where('product_id', $id)->where('user', Auth::user()->id)->get();
         if (count($data) == 0) {
             $wish = new wishlist;
@@ -868,31 +876,34 @@ class accountController extends Controller
         return response()->json("200");
     }
 
-    public function vieworders($id){
+    public function vieworders($id)
+    {
         $order = order::find($id);
         $order_items = order_item::where('order_id', $id)->get();
         $shipping = shipping::where('id', $order->shipping)->get();
         $billing = billing::where('id', $order->billing)->get();
         $product = product::find($order_items[0]->product_id);
-        $review = review::where('user_id',Auth::user()->id)->where('order_item_id',$order_items[0]->id)->first();
-        $rating = rating::where('user_id',Auth::user()->id)->where('order_item_id',$order_items[0]->id)->first();
-        $ifPaint =  paintOrderDetails::where('order_id',$order->id)->get();
+        $review = review::where('user_id', Auth::user()->id)->where('order_item_id', $order_items[0]->id)->first();
+        $rating = rating::where('user_id', Auth::user()->id)->where('order_item_id', $order_items[0]->id)->first();
+        $ifPaint =  paintOrderDetails::where('order_id', $order->id)->get();
         //return response()->json($order_items);
-        return view('customer.singleOrder',compact('order','order_items','billing','shipping','product','review','rating','ifPaint'));
+        return view('customer.singleOrder', compact('order', 'order_items', 'billing', 'shipping', 'product', 'review', 'rating', 'ifPaint'));
     }
 
     //review
-    public function review(){
-        $id=Auth::user()->id;
+    public function review()
+    {
+        $id = Auth::user()->id;
         $review = DB::table('reviews')
-            ->where('customer_id','=',$id)
+            ->where('customer_id', '=', $id)
             ->join('products', 'products.id', '=', 'reviews.product_id')
-            ->select('reviews.*','products.product_image')
+            ->select('reviews.*', 'products.product_image')
             ->get();
-        return view('customer.review',compact('review'));
+        return view('customer.review', compact('review'));
     }
 
-    public function addReview(Request $request){
+    public function addReview(Request $request)
+    {
 
         $review = new review;
         $review->item_id = $request->item_id;
@@ -911,57 +922,62 @@ class accountController extends Controller
         $rating->save();
         return response()->json($request);
     }
-    public function reReview(Request $request){
+    public function reReview(Request $request)
+    {
         $review = review::find($request->review_old);
         $review->review = $request->reviews;
         $review->save();
-        if($request->rating !=0){
+        if ($request->rating != 0) {
             $rating = rating::find($request->rating_old);
             $rating->rating = $request->rating;
             $rating->save();
         }
         return response()->json($request);
     }
-    public function orderMail(){
+    public function orderMail()
+    {
         //$all = $request->all();
         // Mail::send('mail',compact('all'),function($message) use($all){
         //     $message->to('prasanthbca7@gmail.com','To LRB')->subject($all['cf_order_number']);
         //     $message->from('prasanthats@gmail.com','To Prasanth');
         // });
-          $orderData = array(
-              'email'=>'prasanthats@gmail.com',
-              'name'=>'prasanth',
-              'product_name'=>'Tiles',
-              'status'=>'Order Placed'
-          );
-       Mail::to('prasanthats@gmail.com')->send(new OrderMailable($orderData));
+        $orderData = array(
+            'email' => 'prasanthats@gmail.com',
+            'name' => 'prasanth',
+            'product_name' => 'Tiles',
+            'status' => 'Order Placed'
+        );
+        Mail::to('prasanthats@gmail.com')->send(new OrderMailable($orderData));
         return 'Email was sent';
         // return response()->json(['message'=>'Successfully Send'],200);
         //return response()->json($orderData);
     }
 
-    public function orderCancel($id){
+    public function orderCancel($id)
+    {
         $order = order::find($id);
         $order->order_status = 5;
         $order->save();
         return redirect('/account/orders');
     }
 
-    public function orderPrint($id){
+    public function orderPrint($id)
+    {
         $order = order::find($id);
         $billing = billing::find($order->billing);
         $info = contactInfo::find(1);
-        $item = order_item::where('order_id',$order->id)->get();
-        $pdf = PDF::loadView('customer.printOrder', compact('order','billing','info','item'));
+        $item = order_item::where('order_id', $order->id)->get();
+        $pdf = PDF::loadView('customer.printOrder', compact('order', 'billing', 'info', 'item'));
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('order.pdf');
         // return view('customer.printOrder',compact('order','billing'));
     }
 
-    public function verifyOrder(){
-        try{
+    public function verifyOrder()
+    {
+        try {
             $six_digit_random_number = mt_rand(100000, 999999);
-            $msg = 'Your Checkout Verification code is '.$six_digit_random_number;
+            $msg = 'Your Checkout Verification code is ' . $six_digit_random_number;
             $requestParams = array(
                 'route' => '3',
                 'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
@@ -971,8 +987,8 @@ class accountController extends Controller
             );
             //merge API url and parameters
             $apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
-            foreach($requestParams as $key => $val){
-                $apiUrl .= $key.'='.urlencode($val).'&';
+            foreach ($requestParams as $key => $val) {
+                $apiUrl .= $key . '=' . urlencode($val) . '&';
             }
             $apiUrl = rtrim($apiUrl, "&");
 
@@ -983,20 +999,55 @@ class accountController extends Controller
             curl_exec($ch);
             curl_close($ch);
             return response()->json($six_digit_random_number);
-               }
-               catch(Exception  $e){
-                   return response()->json($e->getMessage());
-               }
-
+        } catch (Exception  $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
-    public function deals(){
+    public function deals()
+    {
         return view('customer.deals');
     }
 
-    public function orderTransport(){
-        $orders = order_transport::where('user_id',Auth::user()->id)->paginate(3);
-        return view('customer.transport',compact('orders'));
+    public function orderTransport()
+    {
+        $orders = order_transport::where('user_id', Auth::user()->id)->paginate(3);
+        return view('customer.transport', compact('orders'));
     }
 
+    public function project()
+    {
+        $project = project::where('user_id', Auth::user()->id)->get();
+        return view('customer.project', compact('project'));
+    }
+
+    public function createProject()
+    {
+        return view('modal.create_project');
+    }
+    public function editProject($id)
+    {
+        $project = project::find($id);
+        return view('modal.edit_project', compact('project'));
+    }
+    public function saveProject(Request $request)
+    {
+        $project = new project;
+        $project->project_name = $request->project_name;
+        $project->user_id = Auth::user()->id;
+        $project->save();
+        return response()->json(['message' => "Successfully Create"], 200);
+    }
+    public function updateProject(Request $request)
+    {
+        $project = project::find($request->id);
+        $project->project_name = $request->project_name;
+        $project->save();
+        return response()->json(['message' => "Successfully Update"], 200);
+    }
+    public function deleteProject($id)
+    {
+        project::find($id)->delete();
+        return response()->json(['message' => "Successfully Delete"], 200);
+    }
 }

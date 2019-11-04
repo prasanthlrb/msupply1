@@ -378,16 +378,20 @@ $('#addLitPriceBox').on('click', function () {
         '<option value="20">20 Lit </option>' +
         '<option value="10">10 Lit </option>' +
         '</select></div></div > ' +
-        '<div class="col-md-3" > <div class="form-group">' +
+        '<div class="col-md-2" > <div class="form-group">' +
         '<label class="label-control" for="projectinput1">Type</label>' +
         '<select name="value_type[]" class="form-control">' +
         '<option value="" selected="" disabled="">Select </option>' +
         '<option value="percentage">Percentage </option>' +
         '<option value="amount">Amount </option>' +
         '</select></div></div > ' +
-        '<div class="col-md-3" > <div class="form-group">' +
-        '<label class="label-control" for="projectinput1">Value</label> <i class="ft-minus-circle text-danger remove_btn" onclick="removeLitAndPrice(' + lApC + ')" style="float:right"></i>' +
-        '<input type="text" name="amount[]" class="form-control" placeholder="Enter Value"></div></div></div>';
+        '<div class="col-md-2" > <div class="form-group">' +
+        '<label class="label-control" for="projectinput1">Value</label> ' +
+        '<input type="text" name="amount[]" class="form-control" placeholder="Enter Value"></div></div>' +
+        '<div class="col-md-2" > <div class="form-group">' +
+        '<label class="label-control" for="projectinput1">Price</label> <i class="ft-minus-circle text-danger remove_btn" onclick="removeLitAndPrice(' + lApC + ')" style="float:right"></i>' +
+        '<input type="text" name="price[]" class="form-control" placeholder="Enter Non Color Price"></div></div>' +
+        '</div>';
     litANDpriceData.push(lApC);
     $('#litandpricePlace').append(tableValue);
     lApC++;
@@ -430,4 +434,17 @@ function paint_lit_change(classes, id) {
         }
     })
 
+}
+
+function applyRegular(id) {
+    var prices = $('#regular_price' + id).val();
+    $('.regular_price').each(function () {
+        $('.regular_price').val(prices)
+    })
+}
+function applySales(id) {
+    var prices = $('#sales_price' + id).val();
+    $('.sales_price').each(function () {
+        $('.sales_price').val(prices)
+    })
 }

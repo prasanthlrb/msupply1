@@ -18,6 +18,14 @@ class CreateBrandsTable extends Migration
             $table->string('brand');
             $table->string('brand_image')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->string('order_type')->nullable();
+            $table->string('order_unit_type')->nullable();
+            $table->string('order_limit')->nullable();
+            $table->string('free_shipping')->nullable();
+            $table->string('paid_base')->nullable();
+            $table->string('paid_type')->nullable();
+            $table->string('paid_value')->nullable();
+            $table->string('description', 5000)->nullable();
             $table->string('status');
             $table->string('active')->default(0);
             $table->timestamps();

@@ -28,6 +28,9 @@ use App\paint_price;
 use App\tiles_stock_location;
 use App\paint_lit;
 use App\painting_guides;
+use App\location_management;
+//use File;
+use Storage;
 
 class pageController extends Controller
 {
@@ -36,6 +39,47 @@ class pageController extends Controller
         // $this->middleware('location');
     }
 
+    public function testTiles()
+    {
+        //$product = product::select('product_name')->where('category', 1)->where('length', null)->get();
+        // //return response()->json($product);
+        // //$data = json_encode(['Element 1', 'Element 2', 'Element 3', 'Element 4', 'Element 5']);
+        // foreach ($product as $row) {
+        //     $data[] = $row->product_name . '<br>';
+        // }
+        // $file = time() . rand() . '_file.json';
+        // $destinationPath = public_path() . "/public/modals/";
+        // if (!is_dir($destinationPath)) {
+        //     mkdir($destinationPath, 0777, true);
+        // }
+        // File::put($destinationPath . $file, $data);
+        // return response()->download($destinationPath . $file);
+        //$price = paint_price::select('product_id')->where('price', '<', 100)->groupBy('product_id')->get();
+        $price = paint_price::where('price', '<', 100)->where('product_id', 3962)->get();
+        return response()->json($price);
+        // $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
+        // return response()->json($product);
+        //$product = product::where('category', 1)->where('sales_price', null)->get();
+        try {
+            // foreach ($product as $row) {
+            //     $pro = product::find($row->id);
+            //     $pro->brand_name = 1;
+            //     $pro->save();
+            // }
+
+            //     return response()->json($product);
+            // foreach ($product as $row) {
+            //     $url = "http://www.kagtech.net/KAGAPP/Partsupload/" . str_replace(' ', '%20', $row->product_image);
+            //     $url1 = "http://www.kagtech.net/KAGAPP/Partsupload/" . $row->product_image;
+            //     $contents = file_get_contents($url);
+            //     $name = $row->product_image;
+            //     Storage::put($name, $contents);
+            // }
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
+    }
 
     public function about()
     {
@@ -72,6 +116,11 @@ class pageController extends Controller
         return view('contact', compact('contact_info'));
     }
 
+    public function locationManagement($id)
+    {
+        $location = Session::get('locations');
+        return $lm = location_management::where('location', $location)->where('product_id', $id)->first();
+    }
 
     public function home()
     {
@@ -149,6 +198,11 @@ class pageController extends Controller
                             if ($product_data[0]->group_product == null) {
                                 if (count($product_data) > 0 && $product_data[0]->category != 1) {
                                     foreach ($product_data as $row) {
+                                        $lm = $this->locationManagement($row->id);
+                                        if (isset($lm) && $lm->status == 0) {
+                                            $row->sales_price = $lm->sales_price;
+                                            $row->regular_price = $lm->regular_price;
+                                        }
                                         if ($row->amount != null) {
                                             if ($row->price_type == "discount") {
                                                 if ($row->value_type == "percentage") {
@@ -324,6 +378,11 @@ class pageController extends Controller
                         $row = product::find($product_id);
 
                         if (isset($row)) {
+                            $lm = $this->locationManagement($row->id);
+                            if (isset($lm) && $lm->status == 0) {
+                                $row->sales_price = $lm->sales_price;
+                                $row->regular_price = $lm->regular_price;
+                            }
                             if ($row->amount != null) {
                                 if ($row->price_type == "discount") {
                                     if ($row->value_type == "percentage") {
@@ -342,6 +401,7 @@ class pageController extends Controller
                         }
                         if ($row->category == 1) {
                             $row = $this->tilesSingleLocation($row->id);
+                            //return response()->json($row);
                         }
 
                         $output .= '
@@ -354,8 +414,19 @@ class pageController extends Controller
                         }
 
                         $output .= '<div class="actions_wrap">
-                            <div class="centered_buttons">
-                            <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/' . $row->id . '">Quick View</a>
+                            <div class="centered_buttons">';
+                        if ($row->category == 1) {
+                            $output .= '
+            <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/' . $row->id . '">Quick View</a>';
+                        } else if ($row->category == 21) {
+                            $output .= '
+            <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-model-paint/' . $row->id . '">Quick View</a>';
+                        } else if ($row->category == 7) { } else {
+
+                            $output .= '
+                <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/' . $row->id . '">Quick View</a>';
+                        }
+                        $output .= '
                             </div>
                         </div>
                     </div>';
@@ -427,9 +498,9 @@ class pageController extends Controller
                         $output .= ' </div>
                     </div>
                 <div class="buttons_row">
-                    <a href="/product/' . $row->id . '" class="button_blue middle_btn">See Product Details</a>
-                    <button class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
-
+                    <a href="/product/' . $row->id . '" class="button_blue middle_btn">See Details</a>
+                    <button onclick="addWishlist(' . $row->id . ')" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
+			<a href="javascript:void(null)" onclick="addCompare(' . $row->id . ')" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></a>
                 </div>
             </div>';
                     }
@@ -460,9 +531,14 @@ class pageController extends Controller
             // $floor = $this->tilesLocationBasedData('sub_category',3);
             // $wall = $this->tilesLocationBasedData('sub_category',2);
             //return response()->json($datas);
-            $paint = product::where('category', 21)->get();
+            //  $paint = product::where('category', 21)->get();
             if (count($product_today) > 0) {
                 foreach ($product_today as $row) {
+                    $lm = $this->locationManagement($row->id);
+                    if (isset($lm) && $lm->status == 0) {
+                        $row->sales_price = $lm->sales_price;
+                        $row->regular_price = $lm->regular_price;
+                    }
                     if ($row->amount != null) {
                         if ($row->price_type == "discount") {
                             if ($row->value_type == "percentage") {
@@ -481,7 +557,7 @@ class pageController extends Controller
                 }
             }
 
-            return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel', 'paint', 'brand_slider'));
+            return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel', 'brand_slider'));
 
             //  foreach($product_today as $row){
             //     return response()->json($row);
@@ -496,6 +572,11 @@ class pageController extends Controller
     {
         $upload = upload::where('product_id', $id)->get();
         $product = product::find($id);
+        $lm = $this->locationManagement($id);
+        if (isset($lm) && $lm->status == 0) {
+            $product->sales_price = $lm->sales_price;
+            $product->regular_price = $lm->regular_price;
+        }
         if ($product->amount != null) {
             if ($product->price_type == "discount") {
                 if ($product->value_type == "percentage") {
@@ -1228,6 +1309,7 @@ class pageController extends Controller
         $color = paint_price::select('price')->where("product_id", $request->product_id)->where("lit", $request->lit)->where("colors_id", $request->colors_id)->first();
         $pro = product::find($request->product_id);
         $product = product::where('sub_category', $pro->sub_category)->get();
+        $totalColor[] = [];
         if (isset($color)) {
             $lit = paint_lit::where('product_id', $request->product_id)->where('paint_lit', $request->lit)->first();
             if (isset($lit)) {
@@ -1299,7 +1381,7 @@ class pageController extends Controller
         $location = Session::get('locations');
         //$location = 'Salem';
         $stock = DB::table('tiles_stock_locations as tsl')
-            ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price,p.sales_price'))
+            ->select(DB::raw('sum(tsl.stock) as stocks,max(tsl.price) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price'))
             ->whereIn('tsl.location', $this->locationFullData()[$location])
             ->where('p.sales_price', '!=', null)
             ->where($where, $where_value)
@@ -1341,7 +1423,7 @@ class pageController extends Controller
     {
         $location = Session::get('locations');
         $stock = DB::table('tiles_stock_locations as tsl')
-            ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price,p.sales_price,p.width,p.weight,p.length,p.items,p.product_description,p.map_location'))
+            ->select(DB::raw('sum(tsl.stock) as stocks,max(tsl.price) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price,p.width,p.weight,p.length,p.items,p.product_description,p.map_location'))
             ->whereIn('tsl.location', $this->locationFullData()[$location])
             ->where('p.id', $id)
             ->join('products as p', 'p.id', '=', 'tsl.product_id')

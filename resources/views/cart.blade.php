@@ -2,7 +2,11 @@
 @section('extra-css')
 
 <style>
-  
+  .error_layout{
+    border-width: 2px;
+    border-style: solid;
+    border-color: #dd4b45;
+  }
 </style>
 @endsection
 @section('content')

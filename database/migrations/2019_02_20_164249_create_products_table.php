@@ -55,6 +55,7 @@ class CreateProductsTable extends Migration
             $table->string('active')->default(0);
             $table->string('map_location')->nullable();
             $table->string('default_unit_type')->nullable();
+
             $table->timestamps();
         });
     }

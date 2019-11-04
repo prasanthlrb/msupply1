@@ -3,7 +3,12 @@
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
 
+<style>
+.not_available{
+  display: none !important;
+}
 
+</style>
 @endsection
 @section('section')
 <div class="content-wrapper">
@@ -135,6 +140,75 @@
             
             </div>
           </div>
+            <div class="form-group row">
+                <label class="col-md-3 label-control" for="projectinput6">Order type</label>
+                <div class="col-md-9">
+                  <select name="order_type" class="form-control" id="order_type">
+                    <option selected="" disabled>Select </option>
+                    <option value="0">Price</option>
+                    <option value="1">QTY</option>
+                  </select>
+                </div>
+              </div>
+            <div class="form-group row not_available" id="order_unit_type">
+                <label class="col-md-3 label-control" for="projectinput6">Order Unit Type</label>
+                <div class="col-md-9">
+                  <select name="order_unit_type" class="form-control">
+                    <option selected="" disabled>Select </option>
+                  @foreach($units as $unit)
+                  <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
+                  @endforeach
+                  </select>
+                </div>
+              </div>
+              
+            <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Order Limit Value</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter Ordere Limit Value"
+              name="order_limit" id="order_limit">
+            </div>
+          </div>
+            <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Free Shipping</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter Ordere Limit Value"
+              name="free_shipping" id="free_shipping">
+            </div>
+          </div>
+            <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Paid Shipping Base Value</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter Ordere Limit Value"
+              name="paid_base" id="paid_base">
+            </div>
+          </div>
+              <div class="form-group row">
+                <label class="col-md-3 label-control" for="projectinput6">Paid Shipping Depand on</label>
+                <div class="col-md-9">
+                  <select name="paid_type" class="form-control" id="paid_type">
+                    <option selected="" disabled>Select </option>
+                    <option value="0">QTY</option>
+                    <option value="1">Weight</option>
+                    <option value="2">Price</option>
+                    <option value="3">LIT</option>
+                  </select>
+                </div>
+              </div>
+                  <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Paid Shipping Value</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter Ordere Limit Value"
+              name="paid_value" id="paid_value">
+            </div>
+          </div>
+            <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Description</label>
+            <div class="col-md-9">
+              <textarea name="description" class="form-control" id="description" cols="30" rows="10" ></textarea>
+            
+            </div>
+          </div>
           <div class="form-group row">
                 <label class="col-md-3 label-control" for="projectinput6">Brand Status</label>
                 <div class="col-md-9">
@@ -166,6 +240,7 @@
     $('.brand-menu').addClass('active');
   var action_type;
   $('#open_model').click(function(){
+     $('#order_unit_type').addClass('not_available');
     $('#brand_model').modal('show');
     $("#brand_form")[0].reset();
     $('#thumb_set').remove();
@@ -221,6 +296,7 @@
     }
 
     function editCat(id){
+       $('#order_unit_type').addClass('not_available');
 $('#thumb_set').remove();
 $('#brand_set').remove();
       $.ajax({
@@ -243,9 +319,20 @@ $('#brand_set').remove();
           $('#myModalLabel8').text('Update brand');
           $('#saveCat').text('Save Change');
           $('input[name=brand]').val(data.brand);
+          $('input[name=free_shipping]').val(data.free_shipping);
+          $('input[name=paid_base]').val(data.paid_base);
+          $('input[name=paid_value]').val(data.paid_value);
           $('input[name=brand_image1]').val(data.brand_image);
           $('input[name=id]').val(id);
+          $('input[name=order_limit]').val(data.order_limit);
+          $('#description').val(data.description);
           $('select[name=status]').val(data.status);
+          $('select[name=order_type]').val(data.order_type);
+          if(data.order_type == 1){
+             $('#order_unit_type').removeClass('not_available');
+          $('select[name=order_unit_type]').val(data.order_unit_type);
+          }
+          $('select[name=paid_type]').val(data.paid_type);
           $('#brand_model').modal('show');
           action_type = 2;
         }
@@ -294,5 +381,13 @@ $('#brand_set').remove();
         }
       });
 }
+$('#order_type').change(function(){
+  var types = $(this).val();
+  if(types == "1"){
+    $('#order_unit_type').removeClass('not_available');
+  }else{
+    $('#order_unit_type').addClass('not_available');
+  }
+})
 </script>
 @endsection

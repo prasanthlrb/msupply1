@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->string('total_amount')->nullable();
             $table->string('transport_type')->nullable();
             $table->string('transport_id')->nullable();
+            $table->string('project_id')->nullable();
             $table->timestamps();
         });
     }

@@ -298,6 +298,23 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
          
          </ul>
         </li>
+
+        <li class="nav-item"><a href="#">
+          <i class="fas fa-handshake"></i><span class="menu-title">Deals</span></a>
+         <ul class="menu-content">
+           <li class="update-tiles">
+              <a class="menu-item" href="/admin/tiles-upload/">Deal History</a>
+            </li>
+           <li class="tiles">
+              <a class="menu-item" href="/admin/tiles">New Deals</a>
+            </li>
+           <li class="tiles">
+              <a class="menu-item" href="/admin/tiles">Waiting Deals</a>
+            </li>
+        
+         
+         </ul>
+        </li>
        
 
         @if($role->transport == 1)

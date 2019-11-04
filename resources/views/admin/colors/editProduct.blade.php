@@ -141,36 +141,8 @@
 
 
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="card">
-                      <div class="card-header">
-                        
-                        <h4 class="card-title">Product Feature</h4>
-                        
-                      </div>
-                      <div class="card-content collpase show">
-
-                        <div class="card-body">
-                          <button class="btn btn-primary" type="button" id="addFeature"> Add Feature</button>
-                          <hr class="pb-2">
-
-                          @foreach($features as $row)
-                        <div class="form-group row" id="featureEditRow{{$row->id}}">
-                            <div class="col-11">
-                        <input type="text" class="form-control" name="features[]" value="{{$row->features}}">
-                            </div>
-        <div class="col-1"><i class="ft-minus-circle text-danger remove_btn" onclick="removeEditFeature({{$row->id}})"></i></div>
-        </div>
-                        @endforeach
-                          <div id="featurePlace"></div>
-                          
-                          
-                        </div>
-                      </div>
-                    </div>
-                        
-                  </div>
-                   <div class="col-md-6">
+                
+                   <div class="col-md-12">
                         <div class="card">
                       <div class="card-header">
                         
@@ -210,7 +182,7 @@
                                          
                                         </select>
                               </div></div>
-                            <div class="col-md-3">                            <div class="form-group">
+                            <div class="col-md-2">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Type</label>
                             <select name="value_type_edit" id="value_type_edit{{$data->id}}"  class="form-control" onchange="paint_lit_change('value_type_edit',{{$data->id}})">
                                     
@@ -221,15 +193,19 @@
                                    
                                         </select>
                               </div></div>
-                            <div class="col-md-3"><div class="form-group">
-                                <label class="label-control" for="projectinput1">Value</label><i class="ft-minus-circle text-danger remove_btn" onclick="removeLitAndPriceEdit({{$data->id}})" style="float:right"></i>
+                            <div class="col-md-2"><div class="form-group">
+                                <label class="label-control" for="projectinput1">Value</label>
                                  @if($data->amount == null)
                             <input type="text" class="form-control" id="amount_edit{{$data->id}}" name="amount_edit" onchange="paint_lit_change('amount_edit',{{$data->id}})">
                                 @else
                             <input type="text" id="amount_edit{{$data->id}}" class="form-control" name="amount_edit" value="{{$data->amount}}" onchange="paint_lit_change('amount_edit',{{$data->id}})">
                                 @endif
                               </div></div>
-                          </div>
+                              <div class="col-md-2"><div class="form-group">
+                                <label class="label-control" for="projectinput1">Price</label><i class="ft-minus-circle text-danger remove_btn" onclick="removeLitAndPriceEdit({{$data->id}})" style="float:right"></i>
+                                 <input type="text" class="form-control" id="price_edit{{$data->id}}" value="{{$data->price}}" name="price" onchange="paint_lit_change('price_edit',{{$data->id}})">
+                          </div></div>
+                                </div>
                           @endforeach
                           @endif
 
@@ -246,6 +222,35 @@
   </form>
 
                     <div class="row">
+                        <div class="col-md-6">
+                    <div class="card">
+                      <div class="card-header">
+                        
+                        <h4 class="card-title">Product Feature</h4>
+                        
+                      </div>
+                      <div class="card-content collpase show">
+
+                        <div class="card-body">
+                          <button class="btn btn-primary" type="button" id="addFeature"> Add Feature</button>
+                          <hr class="pb-2">
+
+                          @foreach($features as $row)
+                        <div class="form-group row" id="featureEditRow{{$row->id}}">
+                            <div class="col-11">
+                        <input type="text" class="form-control" name="features[]" value="{{$row->features}}">
+                            </div>
+        <div class="col-1"><i class="ft-minus-circle text-danger remove_btn" onclick="removeEditFeature({{$row->id}})"></i></div>
+        </div>
+                        @endforeach
+                          <div id="featurePlace"></div>
+                          
+                          
+                        </div>
+                      </div>
+                    </div>
+                        
+                  </div>
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header">

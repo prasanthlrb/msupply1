@@ -20,6 +20,7 @@ class CreatePaintLitsTable extends Migration
             $table->string('value_type')->nullable();
             $table->string('amount')->nullable();
             $table->string('product_id');
+            $table->string('price');
             $table->timestamps();
         });
     }

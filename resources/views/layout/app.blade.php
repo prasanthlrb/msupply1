@@ -8,7 +8,7 @@
 		<meta name="author" content="">
 		<meta name="description" content="">
 		<meta name="keywords" content="">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 		<!-- Mobile specific metas
 		============================================ -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -31,6 +31,7 @@
 		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/extensions/toastr.css')}}">
   		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/toastr.css')}}">
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 		<!-- Theme CSS
 		============================================ -->
 		<link rel="stylesheet" href="{{ asset('js/rs-plugin/css/settings.css')}}">
@@ -543,7 +544,7 @@
 												{{-- <li class="offer_menu"><a href="/offers">Offers</a></li> --}}
 												<li class="account_menu"><a href="/account/dashboard">My Account</a></li>
 												<li class="cart_menu"><a href="/cart">Shopping Cart</a></li>
-												<li class="checkout_menu"><a href="/transports">Checkout</a></li>
+												<li class="checkout_menu"><a href="/checkout">Checkout</a></li>
 												<li class="contact_menu"><a href="/contact">Contact Us</a></li>
 
 
@@ -901,9 +902,9 @@
 
 					<div class="animated_item">
 
-						{{-- <p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p> --}}
+<p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p> --}}
 
-						{{-- <form class="contactform" novalidate id="contact_side_form">
+ {{-- <form class="contactform" novalidate id="contact_side_form">
 								{{csrf_field()}}
 							<ul>
 
@@ -964,13 +965,13 @@
 
 				</section><!--/ .dropdown-->
 
-			</li> --}}
+			</li>
 
 			<!-- - - - - - - - - - - - - - End contact us - - - - - - - - - - - - - - - - -->
 
 			<!-- - - - - - - - - - - - - - Google map - - - - - - - - - - - - - - - - -->
 
-			{{-- <li>
+			<li>
 
 				<button class="icon_btn middle_btn social_gmap open_"><i class="icon-location-4"></i></button>
 
@@ -1016,8 +1017,8 @@
 
 				</section><!--/ .dropdown-->
 
-			</li> --}}
-
+			</li>
+		</ul> --}} 
 			<!-- - - - - - - - - - - - - - End google map - - - - - - - - - - - - - - - - -->
 
 		
@@ -1067,14 +1068,15 @@
 		});
 	});
 	$('#open_shopping_cart').on('click',function(){
-		$.ajax({
-			url : '/cart-menu/',
-			type: "GET",
-			success: function(data)
-			{
-			   $('#cart-menu').html(data);
-			}
-	   });
+		window.location.href = "/cart";
+	// 	$.ajax({
+	// 		url : '/cart-menu/',
+	// 		type: "GET",
+	// 		success: function(data)
+	// 		{
+	// 		   $('#cart-menu').html(data);
+	// 		}
+	//    });
 	});
 	function removeCartItem(id){
 	var route = $('#routes').val();

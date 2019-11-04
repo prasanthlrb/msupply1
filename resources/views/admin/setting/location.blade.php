@@ -29,6 +29,7 @@
                   <tr>
                     <th>S No</th>
                     <th>Location Name</th>
+                    <th>Cash on Delivery</th>
                   <th>Action</th>
                   </tr>
                 </thead>
@@ -37,6 +38,13 @@
                   <tr>
                     <td>{{$row->id}}</td>
                     <td>{{$row->location_name}}</td>
+                    <td>
+                      @if($row->cod == 0)
+                      Available
+                      @else
+                      Not Available
+                      @endif
+                    </td>
                     <td class="text-center" >
                       <i class="ft-edit" onclick="editCat({{$row->id}})"></i>
                     <i class="ft-trash-2" onclick="deleteCat({{$row->id}})"></i>
@@ -77,6 +85,15 @@
               name="location_name" id="location_name">
             </div>
           </div>
+                <div class="form-group row">
+                <label class="col-md-3 label-control" for="projectinput6">COD Available</label>
+                <div class="col-md-9">
+                  <select name="cod" class="form-control">
+                    <option selected="" value="0">Available</option>
+                    <option value="1">Not Available</option>
+                  </select>
+                </div>
+              </div>
 
         </div>
         </form>
@@ -163,6 +180,7 @@
           $('#saveCat').text('Save Change');
           $('input[name=location_name]').val(data.location_name);
           $('input[name=id]').val(id);
+           $('select[name=cod]').val(data.cod);
           $('#brand_model').modal('show');
           action_type = 2;
         }

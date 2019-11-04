@@ -20,6 +20,7 @@ class locationController extends Controller
     {
         $loc = new location;
         $loc->location_name = $request->location_name;
+        $loc->cod = $request->cod;
         $loc->save();
         return response()->json(['message' => 'Location Save Successfully'], 200);
     }
@@ -27,6 +28,7 @@ class locationController extends Controller
     {
         $loc = location::find($request->id);
         $loc->location_name = $request->location_name;
+        $loc->cod = $request->cod;
         $loc->save();
         return response()->json(['message' => 'Location Update Successfully'], 200);
     }
@@ -63,9 +65,10 @@ class locationController extends Controller
             $lm = new location_management;
             $lm->location = $loc->location_name;
             $lm->product_id = $request->product;
-            $lm->price = $request['price' . $loc->id];
-            $lm->lat = $request['lat' . $loc->id];
-            $lm->lng = $request['lng' . $loc->id];
+            $lm->regular_price = $request['regular_price' . $loc->id];
+            $lm->sales_price = $request['sales_price' . $loc->id];
+            // $lm->lat = $request['lat' . $loc->id];
+            // $lm->lng = $request['lng' . $loc->id];
             $lm->status = $request['status' . $loc->id];
             $lm->save();
         }
@@ -84,9 +87,10 @@ class locationController extends Controller
         $lm = location_management::where('product_id', $request->product)->get();
         foreach ($lm as $loc) {
             $lm = location_management::find($loc->id);
-            $lm->price = $request['price' . $loc->id];
-            $lm->lat = $request['lat' . $loc->id];
-            $lm->lng = $request['lng' . $loc->id];
+            $lm->regular_price = $request['regular_price' . $loc->id];
+            $lm->sales_price = $request['sales_price' . $loc->id];
+            // $lm->lat = $request['lat' . $loc->id];
+            // $lm->lng = $request['lng' . $loc->id];
             $lm->status = $request['status' . $loc->id];
             $lm->save();
         }

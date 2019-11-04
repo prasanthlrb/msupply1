@@ -16,6 +16,12 @@ use App\product;
 Route::get('/order-email', function () {
     return view('email.test');
 });
+
+Route::get('/make-payment', 'PayController@payment');
+Route::post('paysuccess', 'PayController@paysuccess');
+Route::post('razor-thank-you', 'PayController@thankYou');
+
+Route::get('/testTiles', 'pageController@testTiles');
 Route::group(['middleware' => ['location']], function () {
     Route::get('/', 'pageController@home');
     Route::get('/about', 'pageController@about');
@@ -466,6 +472,14 @@ Route::group(['prefix' => 'account'], function () {
 
     //transport
     Route::get('/transport', 'accountController@orderTransport');
+
+    //project
+    Route::get('/project', 'accountController@project');
+    Route::get('/create-project', 'accountController@createProject');
+    Route::post('/create-project', 'accountController@saveProject');
+    Route::get('/edit-project/{id}', 'accountController@editProject');
+    Route::get('/delete-project/{id}', 'accountController@deleteProject');
+    Route::post('/update-project', 'accountController@updateProject');
 });
 Route::post('/submit-company', 'accountController@submitCompany');
 Route::get('/get-compare', 'pageController@compare');

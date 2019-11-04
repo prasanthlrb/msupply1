@@ -97,7 +97,21 @@ p.productdesc{
 
 										<div class="description_section v_centered">
 
-							
+							 <table class="product_info">
+
+                                    <tbody>
+
+                      
+                                        	@if($brand->free_shipping !=null)
+										<tr>
+											<td>Free Delivery on order over : </td>
+										<td><span class="in_stock"> <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i> {{$brand->free_shipping}}, <span> {{$brand->brand}} Brand Product</td>
+										</tr>
+										@endif
+
+                                    </tbody>
+
+                                </table>
 
 										</div>
 

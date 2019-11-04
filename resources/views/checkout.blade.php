@@ -166,10 +166,10 @@
 									</div>
 							<br>
 
-							<h3>Transport </h3>
+							{{-- <h3>Transport </h3> --}}
 
-							<?php echo $output; ?>
-						<br>
+							<?//php echo $output; ?>
+						{{-- <br>
 						<br>
 						<div class="left_side v_centered">
 
@@ -177,25 +177,26 @@
 
 								<a href="/edit-transport" class="button_grey middle_btn">Edit Your Transport</a>
 
-							</div>
+							</div> --}}
 							<br>
 						<br>
 						<h3>Select Payment Type</h3>
 							<ul class="simple_vertical_list">
-
 									<li>
 
-										<input value="cod" type="radio" checked name="payment_type" id="radio_button_1">
-										<label for="radio_button_1">Cash on Delivery</label>
-
-									</li>
-
-									<li>
-
-										<input value="online" type="radio" name="payment_type" id="radio_button_2">
+										<input value="online" type="radio" checked name="payment_type" id="radio_button_2">
 										<label for="radio_button_2">Pay Online</label>
 
 									</li>
+									@if($location->cod == 0)
+									<li>
+
+										<input value="cod" type="radio" name="payment_type" id="radio_button_1">
+										<label for="radio_button_1">Cash on Delivery</label>
+
+									</li>
+									@endif
+								
 
 								</ul>
 
@@ -230,13 +231,13 @@
 								</tbody>
 
 								<tfoot>
-									@if(Session::has('transport'))
-								<tr>
+									{{-- @if(Session::has('transport')) --}}
+								{{-- <tr>
 										<td colspan="5" class="bold">Transport </td>
 								<td class="total" style="text-align:center">₹ {{$transport_Price}}</td>
-									</tr>
-									<?php $totalPrice+=$transport_Price?>
-									@endif
+									</tr> --}}
+									<?php //$totalPrice+=$transport_Price?>
+									{{-- @endif --}}
 									{{-- <tr>
 										<td colspan="5" class="bold"> Exclusive Tax (GST)</td>
 
@@ -282,6 +283,54 @@
 
 			</div><!--/ .page_wrapper-->
 			@section('extra-js')
+			<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      <script>
+         var SITEURL = '{{URL::to('')}}';
+         $.ajaxSetup({
+           headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           }
+         }); 
+         $('body').on('click', '#order_button', function(e){
+           var totalAmount = '{{$totalPrice}}';
+           var options = {
+           "key": "rzp_test_InZD6eAnToWcgk",
+           "amount": (totalAmount*100), // 2000 paise = INR 20
+           "name": "MSupply",
+           "description": "Payment",
+           //"image": "https://www.tutsmake.com/wp-content/uploads/2018/12/cropped-favicon-1024-1-180x180.png",
+           "handler": function (response){
+                 $.ajax({
+                   url: SITEURL + 'paysuccess',
+                   type: 'post',
+                   dataType: 'json',
+                   data: {
+                    razorpay_payment_id: response.razorpay_payment_id ,
+                   }, 
+                   success: function (msg) {
+          
+                       window.location.href = SITEURL + 'razor-thank-you';
+                   }
+               });
+             
+           },
+          "prefill": {
+               "contact": '9171035128',
+               "email":   'prasanthats@gmail.com',
+           },
+        //    "theme": {
+        //        "color": "#528FF0"
+        //    }
+         };
+         var rzp1 = new Razorpay(options);
+         rzp1.open();
+         e.preventDefault();
+         });
+         /*document.getElementsClass('buy_plan1').onclick = function(e){
+           rzp1.open();
+           e.preventDefault();
+         }*/
+      </script>
 			<script>
 				var pay_type = 1;
 			$('#radio_button_1').click(function(){
@@ -293,31 +342,31 @@
 				$('#order_button').text('PROCEED TO PAY')
 			});
             var otpValue = 666333;
-		$('#order_button').click(function(){
-            // if($('input[name=payment_type]:checked').val() == 'cod'){
-            //     $.ajax({
-            //         url:'/account/verify-order-sms',
-            //         method:'GET',
-            //         success:function(data){
-            //             $.arcticmodal({
-            //             url : 'modals/otp.html'
-            //         });
-            //         }
-            //     })
-            // }else{
-                var shipping = $('input[name=ship]:checked').val();
-			var billing = $('input[name=billing]:checked').val();
-      window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
-            // }
+	// 	$('#order_button').click(function(){
+    //         // if($('input[name=payment_type]:checked').val() == 'cod'){
+    //         //     $.ajax({
+    //         //         url:'/account/verify-order-sms',
+    //         //         method:'GET',
+    //         //         success:function(data){
+    //         //             $.arcticmodal({
+    //         //             url : 'modals/otp.html'
+    //         //         });
+    //         //         }
+    //         //     })
+    //         // }else{
+    //             var shipping = $('input[name=ship]:checked').val();
+	// 		var billing = $('input[name=billing]:checked').val();
+    //   window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
+    //         // }
 
 
-            })
+    //         })
 
-            function otpVerified(){
-        var shipping = $('input[name=ship]:checked').val();
-	    var billing = $('input[name=billing]:checked').val();
-      window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
-            }
+    //         function otpVerified(){
+    //     var shipping = $('input[name=ship]:checked').val();
+	//     var billing = $('input[name=billing]:checked').val();
+    //   window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
+    //         }
 
 			</script>
 			@endsection
