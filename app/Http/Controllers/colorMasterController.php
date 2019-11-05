@@ -218,6 +218,8 @@ class colorMasterController extends Controller
             $product->brand_name = 1;
             $product->sub_category = $request->sub_category;
             $product->tax_type = $request->tax_type;
+            $product->regular_price = $request->regular_price;
+            $product->sales_price = $request->sales_price;
             $product->tax = $request->tax;
             $product->product_description = $request->product_description;
             $product->save();
@@ -237,18 +239,20 @@ class colorMasterController extends Controller
             $guide->drying = $request->drying_time;
             $guide->coating = $request->coats;
             $guide->save();
+            if (isset($request->features)) {
 
-            foreach ($request->features as $index => $data) {
-                $features = product_feature::where('product_id', $request->product_id)->get();
-                if (count($features) > $index) {
-                    $feature = product_feature::find($features[$index]->id);
-                    $feature->features = $data;
-                    $feature->save();
-                } else {
-                    $feature = new product_feature;
-                    $feature->features = $data;
-                    $feature->product_id = $product->id;
-                    $feature->save();
+                foreach ($request->features as $index => $data) {
+                    $features = product_feature::where('product_id', $request->product_id)->get();
+                    if (count($features) > $index) {
+                        $feature = product_feature::find($features[$index]->id);
+                        $feature->features = $data;
+                        $feature->save();
+                    } else {
+                        $feature = new product_feature;
+                        $feature->features = $data;
+                        $feature->product_id = $product->id;
+                        $feature->save();
+                    }
                 }
             }
 
@@ -302,6 +306,8 @@ class colorMasterController extends Controller
             $product->sub_category = $request->sub_category;
             $product->tax_type = $request->tax_type;
             $product->tax = $request->tax;
+            $product->regular_price = $request->regular_price;
+            $product->sales_price = $request->sales_price;
             $product->product_description = $request->product_description;
             $product->product_image = $imageName;
             $product->save();

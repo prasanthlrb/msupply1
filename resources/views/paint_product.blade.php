@@ -88,6 +88,15 @@ p.productdesc{
 									<!-- - - - - - - - - - - - - - End of product image column - - - - - - - - - - - - - - - - -->
 
 									<!-- - - - - - - - - - - - - - Product description column - - - - - - - - - - - - - - - - -->
+    @if($product1->regular_price != null && $product1->category != 7)
+
+												<div class="label_offer percentage">
+													<?php $v1 = $product1->regular_price - $product1->sales_price;
+													$v2 = ceil($v1/$product1->regular_price*100); ?>
+													<div>{{$v2}}%</div>OFF
+		
+												</div>
+												@endif
 
 									<div class="single_product_description">
 
@@ -117,16 +126,35 @@ p.productdesc{
 
 
 										<hr>
-									
+									   @if($product1->regular_price !="")
+                                    <p class="product_price"><s>₹{{$product1->regular_price}}</s> <b class="theme_color">₹{{$product1->sales_price}}</b>
+                                      @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
+                                    / {{$product1->default_unit_type}}
+                                    @endif
+                                </p>
+                                @else
+                                    <p class="product_price"><b class="theme_color">₹{{$product1->sales_price}}</b> 
+                                    @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
+                                    / {{$product1->default_unit_type}}
+                                    @endif
+                                    </p>
+                                @endif
 
 										<p class="product_price"><b class="theme_color"></b></p>
 
-
-								   <div class="buttons_row">
+											@if(count($liter) > 0)
+											@if($liter[0]->price == null)
+			<div class="buttons_row">
                 <button type="button" class="button_blue middle_btn" onclick="getColorModal({{$product1->id}})" id="colorButtonModule"><i class="icon-sun"></i>Choose Colour</button>
-				</div>
+		   </div>
+		   @endif
+		   @endif
 				<br>
+				@if($product1->sales_price == null)
 			 <div class="row">
+
+
+
 
                         <div class="col-xs-12">
 
@@ -142,7 +170,10 @@ p.productdesc{
                         </div>
 
 					</div>
+
+
 					<br>
+					@endif
 					    <form id="paintFormProduct" method="post">
 							{{ csrf_field() }}
 								<input type="hidden" name="product_name" id="product_name" value="{{$product1->product_name}}">

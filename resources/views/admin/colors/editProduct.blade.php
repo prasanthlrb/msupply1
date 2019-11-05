@@ -62,6 +62,19 @@
                                       </div>
                                       </div>
 
+                              <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Regular Price</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="regular_price" class="form-control" value="{{$product->regular_price}}" name="regular_price">
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Sales Price</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="sales_price" class="form-control" value="{{$product->sales_price}}" name="sales_price">
+                                </div>
+                              </div>
+
 
                                      <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Finishers</label>

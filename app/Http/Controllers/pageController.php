@@ -55,30 +55,30 @@ class pageController extends Controller
         // File::put($destinationPath . $file, $data);
         // return response()->download($destinationPath . $file);
         //$price = paint_price::select('product_id')->where('price', '<', 100)->groupBy('product_id')->get();
-        $price = paint_price::where('price', '<', 100)->where('product_id', 3962)->get();
-        return response()->json($price);
+        // $price = paint_price::where('price', '<', 100)->where('product_id', 3962)->get();
+        // return response()->json($price);
         // $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
         // return response()->json($product);
-        //$product = product::where('category', 1)->where('sales_price', null)->get();
-        try {
-            // foreach ($product as $row) {
-            //     $pro = product::find($row->id);
-            //     $pro->brand_name = 1;
-            //     $pro->save();
-            // }
+        $product = product::where('category', 21)->get();
+        // try {
+        //     foreach ($product as $row) {
+        //         $pro = product::find($row->id);
+        //         $pro->brand_name = 1;
+        //         $pro->save();
+        //     }
 
-            //     return response()->json($product);
-            // foreach ($product as $row) {
-            //     $url = "http://www.kagtech.net/KAGAPP/Partsupload/" . str_replace(' ', '%20', $row->product_image);
-            //     $url1 = "http://www.kagtech.net/KAGAPP/Partsupload/" . $row->product_image;
-            //     $contents = file_get_contents($url);
-            //     $name = $row->product_image;
-            //     Storage::put($name, $contents);
-            // }
-        } catch (\Exception $e) {
+        //     return response()->json($product);
+        // foreach ($product as $row) {
+        //     $url = "http://www.kagtech.net/KAGAPP/Partsupload/" . str_replace(' ', '%20', $row->product_image);
+        //     $url1 = "http://www.kagtech.net/KAGAPP/Partsupload/" . $row->product_image;
+        //     $contents = file_get_contents($url);
+        //     $name = $row->product_image;
+        //     Storage::put($name, $contents);
+        // }
+        // } catch (\Exception $e) {
 
-            return $e->getMessage();
-        }
+        //     return $e->getMessage();
+        // }
     }
 
     public function about()

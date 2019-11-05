@@ -71,6 +71,20 @@
 
 
                               <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Regular Price</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="regular_price" class="form-control" placeholder="Enter only Non Color Product"
+                                  name="regular_price">
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Sales Price</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="sales_price" class="form-control" placeholder="Enter only Non Color Product"
+                                  name="sales_price">
+                                </div>
+                              </div>
+                              <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Finishers</label>
                                 <div class="col-md-9">
                                   <input type="text" id="finishers" class="form-control" placeholder="Product Name"
