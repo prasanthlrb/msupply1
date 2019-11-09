@@ -22,6 +22,7 @@ use App\paint_price;
 use App\product_unit;
 use Session;
 use App\location_management;
+use App\paint_lit;
 
 class categoryController extends Controller
 {
@@ -200,9 +201,10 @@ class categoryController extends Controller
             $guide = painting_guide::where('product_id', $product1->id)->first();
             $feature = product_feature::where('product_id', $product1->id)->get();
             //$paint_price = paint_price::where('product_id',$product1->id)->groupBy('lit')->get();
-            $liter = DB::table('paint_prices')->select('lit', DB::raw('count(*) as total'))->where('product_id', $id)->groupBy('lit')->get();
+            //$liter = DB::table('paint_prices')->select('lit', DB::raw('count(*) as total'))->where('product_id', $id)->groupBy('lit')->get();
+            $liter = paint_lit::where('product_id', $id)->get();
             $relatedProducts = product::where('sub_category', $product1->sub_category)->where('id', '!=', $product1->id)->get();
-            //return response()->json($relatedProducts);
+            //return response()->json($liter);
             $brand = brand::find($product1->brand_name);
             return view('paint_product', compact('product1', 'subCategoty', 'guide', 'feature', 'liter', 'relatedProducts', 'brand'));
         } else if ($product1->category == 1) {

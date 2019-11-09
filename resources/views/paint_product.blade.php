@@ -126,13 +126,13 @@ p.productdesc{
 
 
 										<hr>
-									   @if($product1->regular_price !="")
+								@if($product1->regular_price !="")
                                     <p class="product_price"><s>₹{{$product1->regular_price}}</s> <b class="theme_color">₹{{$product1->sales_price}}</b>
                                       @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
                                     / {{$product1->default_unit_type}}
                                     @endif
                                 </p>
-                                @else
+                                @elseif($product1->sales_price !="")
                                     <p class="product_price"><b class="theme_color">₹{{$product1->sales_price}}</b> 
                                     @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
                                     / {{$product1->default_unit_type}}
@@ -155,22 +155,32 @@ p.productdesc{
 
 
 
-
-                        <div class="col-xs-12">
+				 <div class="col-xs-12">
+						@if(count($liter) > 0)
 
                             <label>Litreage:</label>
 
                             <div class="form_el">
 									@foreach($liter as $lit)
-									<a href="javascript:void(null)" class="button_grey mini_btn litBtn" onclick="setLitre({{$lit->lit}})" id="lit{{$lit->lit}}">{{$lit->lit}} <?php echo $lit->lit == '500' ? 'ML' : 'Litre'?></a>
+									<a href="javascript:void(null)" class="button_grey mini_btn litBtn" onclick="setLitre({{$lit}})" id="lit{{$lit->paint_lit}}">{{$lit->paint_lit}} 
+										@if($lit->paint_lit == '500')
+										ML
+										@elseif($lit->paint_lit == '250')
+										
+										ML
+										@else
+										Litre
+										@endif
+									
+									</a>
                        
                                 @endforeach
                             </div>
 
+							@endif
                         </div>
 
 					</div>
-
 
 					<br>
 					@endif
@@ -178,6 +188,7 @@ p.productdesc{
 							{{ csrf_field() }}
 								<input type="hidden" name="product_name" id="product_name" value="{{$product1->product_name}}">
 								<input type="hidden" name="product_id" id="product_id" value="{{$product1->id}}">
+								<input type="hidden" name="sub_category_id" id="sub_category_id" value="{{$product1->sub_category}}">
 					  <div class="description_section_2 v_centered">
 
                                 <span class="title">Qty:</span>
@@ -362,8 +373,6 @@ p.productdesc{
 									</div><!--/ .product_item-->
 									@endforeach
 									
-									
-									
 									<!-- - - - - - - - - - - - - - End product - - - - - - - - - - - - - - - - -->
 
 								</div><!--/ .owl_carousel -->
@@ -470,14 +479,23 @@ p.productdesc{
 		var paint_price=0;
 		var code_name;
 function setLitre(lits){
-lit = lits;
+lit = lits.paint_lit;
+console.log(lits)
 $('.litBtn').each(function(index){
 	$(this).addClass("button_grey");
 	$(this).removeClass("button_blue");
 });
 $('#lit'+lit).addClass("button_blue");
+if(lits.price != null){
+$(".product_price .theme_color").text("Rs : "+ Math.ceil(lits.price));
+$('#addToCardPaint').prop('disabled',false);
+}else{
+
 getPrice();
 }
+}
+
+
 
 function addCart(id){
     var qty  = $('#button_qty').val();
