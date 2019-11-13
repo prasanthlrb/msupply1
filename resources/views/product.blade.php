@@ -191,7 +191,7 @@
                                         @endif
 
                                         </tr>
-                                        	@if($brand->free_shipping !=null)
+                                        @if($brand->free_shipping !=null)
 										<tr>
 											<td>Free Delivery on order over : </td>
 										<td><span class="in_stock">  {{$brand->free_shipping}} QTY, <span> {{$brand->brand}} Brand Product</td>

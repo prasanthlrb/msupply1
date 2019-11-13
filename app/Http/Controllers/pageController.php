@@ -61,11 +61,11 @@ class pageController extends Controller
         // return response()->json($product);
         $product = product::where('category', 21)->get();
         // try {
-        //     foreach ($product as $row) {
-        //         $pro = product::find($row->id);
-        //         $pro->brand_name = 1;
-        //         $pro->save();
-        //     }
+        foreach ($product as $row) {
+            $pro = product::find($row->id);
+            $pro->brand_name = 1;
+            $pro->save();
+        }
 
         //     return response()->json($product);
         // foreach ($product as $row) {
