@@ -15,6 +15,7 @@ use Session;
 use App\transport;
 use App\product_attribute;
 use App\attribute;
+use App\brand;
 use App\order;
 use App\order_item;
 use App\order_transport;
@@ -266,9 +267,7 @@ class accountController extends Controller
 
     public function checkout()
     {
-
         try {
-
             $location = location::where('location_name', Session::get('locations'))->first();
             //return response()->json($location);
             $shipping = shipping::where('customer_id', Auth::user()->id)->get();
@@ -281,7 +280,6 @@ class accountController extends Controller
                 $transport_Price = 0;
                 foreach ($getCart as $item) {
                     //$product_id[] = $item->id;
-
                     //$row = product::find($item->id);
                     if (isset($item['attributes']['color'])) {
                         $row = product::find($item['attributes']->product_id);
@@ -290,8 +288,10 @@ class accountController extends Controller
                         $row = product::find($item->id);
                     }
                     //    // foreach ($products as $row) {
+                    $brand = brand::find($row->brand_name);
                     $result .= '<tr>';
                     $result .= '<td colspan="2" data-title="Product Name"><a href="#" class="product_title">' . $item->name . '</a>';
+
                     $product_attribute = product_attribute::where('product_id', $row->id)->get();
                     //    // $cart_qty = Cart::get($row->id);
                     $result .= '	<ul class="sc_product_info">';
@@ -301,6 +301,7 @@ class accountController extends Controller
                                 if (count($item['attributes']) > 0) {
                                     foreach ($item['attributes'] as $key => $value) {
                                         foreach ($value as $field => $rows) {
+
                                             $result .= '<li>' . $field . ' : ' . $rows . '</li>';
                                         }
                                     }
@@ -313,10 +314,34 @@ class accountController extends Controller
                         $result .= '<li>Unit Type : ' . $item['attributes']['unit_name'] . '</li>';
                     }
                     if (isset($item['attributes']['color'])) {
-                        $result .= ' <li>Color Code : ' . $item['attributes']['color_id'] . '</li>
-                    <li>Litreage : ' . $item['attributes']['lit'] . '</li>';
+                        if ($item['attributes']['color_id'] != 0) {
+                            $result .= ' <li>Color Code : ' . $item['attributes']['color_id'] . '</li>';
+                        }
+                        if ($item['attributes']['lit'] != 0) {
+                            $result .= ' <li>Litreage : ' . $item['attributes']['lit'] . '</li>';
+                        }
                     }
                     $result .= '</ul>';
+                    if ($row->delivery_from != null) {
+                        $start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $row->delivery_from, date('Y')));
+                        $parts = explode('-', $start);
+                        $month_name = date("M", mktime(0, 0, 0, $parts[0]));
+
+                        if ($row->delivery_to != null) {
+                            $end = date('d', mktime(0, 0, 0, date('m'), date('d') + $row->delivery_to, date('Y')));
+                        }
+                        $result .= '<ul class="sc_product_info"><li> Delivery By : ' . $month_name . ' ' . $parts[1] . ' - ' . $end . '</li></ul>';
+                    } else if ($brand->delivery_from != null) {
+
+                        $start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_from, date('Y')));
+                        $parts = explode('-', $start);
+                        $month_name = date("M", mktime(0, 0, 0, $parts[0]));
+
+                        if ($brand->delivery_to != null) {
+                            $end = date('d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_to, date('Y')));
+                            $result .= '<ul class="sc_product_info"><li> Delivery By : ' . $month_name . ' ' . $parts[1] . ' - ' . $end . '</li></ul>';
+                        }
+                    }
                     $result .= '<td data-title="Price" class="subtotal">₹ ' . $item->price . '</td>
 
                     <td data-title="Quantity" style="text-align:center">' . $item->quantity . '</td>';
@@ -336,8 +361,6 @@ class accountController extends Controller
                         $exTax += $tax;
                         $totalPrice += $total;
                     }
-
-
                     $result .= '</tr>';
                     // }
                     // $resultData[]=$result;

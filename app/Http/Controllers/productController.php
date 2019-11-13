@@ -79,6 +79,9 @@ class productController extends Controller
         $brand->paid_value = $request->paid_value;
         $brand->description = $request->description;
         $brand->status = $request->status;
+        $brand->delivery_from = $request->delivery_from;
+        $brand->delivery_to = $request->delivery_to;
+        $brand->notes = $request->notes;
         $brand->save();
         return response()->json(['message' => 'Successfully Store'], 200);
     }
@@ -133,6 +136,9 @@ class productController extends Controller
         $brand->paid_value = $request->paid_value;
         $brand->description = $request->description;
         $brand->status = $request->status;
+        $brand->delivery_from = $request->delivery_from;
+        $brand->delivery_to = $request->delivery_to;
+        $brand->notes = $request->notes;
         $brand->save();
         return response()->json(['message' => 'Successfully Update'], 200);
     }
@@ -516,6 +522,9 @@ class productController extends Controller
         $product->order_limit = $request->order_limit;
         $product->map_location = $request->map_location;
         $product->default_unit_type = $request->default_unit_type;
+        $product->delivery_from = $request->delivery_from;
+        $product->delivery_to = $request->delivery_to;
+        $product->notes = $request->notes;
         $product->save();
 
         if (isset($request->attribute)) {
@@ -663,6 +672,9 @@ class productController extends Controller
         $product->order_limit = $request->order_limit;
         $product->map_location = $request->map_location;
         $product->default_unit_type = $request->default_unit_type;
+        $product->delivery_from = $request->delivery_from;
+        $product->delivery_to = $request->delivery_to;
+        $product->notes = $request->notes;
         $product->save();
 
         if (isset($request->attribute)) {
@@ -1547,5 +1559,13 @@ class productController extends Controller
     {
         $product = product::find($id);
         return view('admin.tilesGallery', compact('product'));
+    }
+
+    public function updateTilesNotes(Request $request)
+    {
+        $product = product::find($request->product_id);
+        $product->notes = $request->data;
+        $product->save();
+        return response()->json(['message' => 'update Successfully'], 200);
     }
 }

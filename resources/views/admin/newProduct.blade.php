@@ -279,6 +279,11 @@
                                     <label for="projectinput1">Default Unit Type</label>
                                     <input type="text" id="default_unit_type" class="form-control" name="default_unit_type">
                                   </div>
+                                <div class="form-group" style="padding-left:10px">
+                                    <label for="projectinput1">Important Notes *</label>
+                                    <textarea name="notes" id="" cols="30" rows="10" class="form-control"></textarea>
+                                  
+                                  </div>
                                   
                                 </div>
                                 <div class="tab-pane tap2" id="tabVerticalLeft22" aria-labelledby="baseVerticalLeft2-tab2">
@@ -333,6 +338,20 @@
                                         </div>
                                       </div>
 
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                <label for="projectinput1">Delivery Duration Min(Days)</label>
+                                                <input type="text" class="form-control" name="delivery_from" id="delivery_from">
+                                              </div>
+
+                                                <div class="col-md-6">
+
+                                                <label for="projectinput1">Delivery Duration Max(Days)</label>
+                                                <input type="text" class="form-control" name="delivery_to" id="delivery_to">
+                                              </div>
+
+                                        </div>
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft24" aria-labelledby="baseVerticalLeft2-tab4">
 

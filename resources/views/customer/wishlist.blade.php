@@ -116,7 +116,7 @@
 											<!-- - - - - - - - - - - - - - Product name & category - - - - - - - - - - - - - - - - -->
 
 											<td data-title="Product Name and Category">
-												<a href="/product-view/{{$product1->product_id}}" class="product_title">{{$product1->product_name}}</a>
+												<a href="/product/{{$product1->id}}" class="product_title">{{$product1->product_name}}</a>
 												<!-- <a href="#">Beauty Clearance</a> -->
 											</td>
 											@if($product1->category != 7)

@@ -244,7 +244,18 @@
 										<td class="total">₹ </td>
 									</tr> --}}
 
+									<tr>
+										
+										<td colspan="5" class="bold">Subtotal</td>
+										<td class="total">₹ {{$totalPrice}}</td>
 
+									</tr>
+									<tr>
+										
+										<td colspan="5" class="bold">Shipping &amp; Heading (Flat Rate - Fixed)</td>
+										<td class="total">₹ 5.00</td>
+
+									</tr>
 									<tr>
 										<td colspan="5" class="grandtotal">Grand Total</td>
 										<td class="grandtotal" style="text-align:center">₹ {{$totalPrice}}</td>

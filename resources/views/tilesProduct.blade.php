@@ -141,6 +141,39 @@ p.productdesc{
 										<td><span class="in_stock"> <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i> {{$brand->free_shipping}}, {{$brand->brand}} Brand Product<span> </td>
 										</tr>
 										@endif
+										
+										@if($brand->delivery_from !=null)
+										<tr>
+											<td>Delivery By : </td>
+										<td><span class="in_stock"><?php 
+										$start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_from, date('Y')));
+										$parts = explode('-', $start);
+										$month_name = date("M", mktime(0, 0, 0, $parts[0])); 
+										
+												if($brand->delivery_to !=null){
+										$end = date('d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_to, date('Y')));
+										echo $month_name.' '.$parts[1].' - '.$end;
+												}
+										?><span> </td>
+										</tr>
+										@endif
+
+
+
+										@if($product1->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$product1->notes}}</span></td>
+										</tr>
+										
+										@elseif($brand->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$brand->notes}}</span></td>
+										</tr>
+										@endif
+
+										<hr>
                                     </tbody>
 
                                 </table>
@@ -154,14 +187,16 @@ p.productdesc{
 
 
 								   <ul class="specifications">
-													   
-                                                       <li>
+									  <hr>
+									  <h5>Product Details</h5>
+									   <li>
 														   <div class="row">
 															   <div class="col-md-6 col-sm-6">
 																   Brand 
 															   </div>
 															   <div class="col-md-6 col-sm-6">
-																: KAG
+																   
+																: {{$brand->brand}}
 															   </div>
 														   </div>
 														  </li>

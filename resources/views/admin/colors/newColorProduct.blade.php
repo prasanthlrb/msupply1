@@ -122,11 +122,35 @@
                                   name="product_image">
                                 </div>
                               </div>
+
                                <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Description Image</label>
                                 <div class="col-md-9">
                                   <input type="file" id="description_image" class="form-control" placeholder="Product Name"
                                   name="description_image">
+                                </div>
+                              </div>
+
+
+                               <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Delivery Duration Min(Days)</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="delivery_from" class="form-control" placeholder="Enter Delivery Duration Min"
+                                  name="delivery_from">
+                                </div>
+                              </div>
+                               <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Delivery Duration Max(Days)</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="delivery_to" class="form-control" placeholder="Enter Delivery Duration Max"
+                                  name="delivery_to">
+                                </div>
+                              </div>
+                               <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Important Notes</label>
+                                <div class="col-md-9">
+                                  <textarea class="form-control" name="notes" id="notes" cols="30" rows="10"></textarea>
+                               
                                 </div>
                               </div>
 

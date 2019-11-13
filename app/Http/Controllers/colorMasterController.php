@@ -222,6 +222,9 @@ class colorMasterController extends Controller
             $product->sales_price = $request->sales_price;
             $product->tax = $request->tax;
             $product->product_description = $request->product_description;
+            $product->delivery_from = $request->delivery_from;
+            $product->delivery_to = $request->delivery_to;
+            $product->notes = $request->notes;
             $product->save();
 
             $guide = painting_guides::where('product_id', $request->product_id)->first();
@@ -310,6 +313,9 @@ class colorMasterController extends Controller
             $product->sales_price = $request->sales_price;
             $product->product_description = $request->product_description;
             $product->product_image = $imageName;
+            $product->delivery_from = $request->delivery_from;
+            $product->delivery_to = $request->delivery_to;
+            $product->notes = $request->notes;
             $product->save();
 
             $descImage = null;

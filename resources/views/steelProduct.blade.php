@@ -118,11 +118,12 @@ input[type="radio"] + label,
                                 </div>
 
                             </div>
+                           
                              <form id="steelFormProduct" method="post">
 							{{ csrf_field() }}
                             <div class="buttons_row buy_now_btn">
                                 <div id="total_price_place"></div>
-                                <button type="button" id="steelAddtoCart" class="button_blue middle_btn">Buy Now</button>
+                                <button type="button" id="steelAddtoCart" class="button_blue middle_btn">Add to Cart</button>
                                 @if($category->id == 14)
                                 <a href="javascript:void(null)" data-modal-url="/calculator/steel/{{$brands->id}}">
                                     <img src="{{asset('/images/calculator.png')}}" alt="" class="calculator_btn">
@@ -130,11 +131,16 @@ input[type="radio"] + label,
                                 </a>
                                 @endif
                             </div>
+
                             <!-- - - - - - - - - - - - - - End of share - - - - - - - - - - - - - - - - -->
-
+                            <div class="description_section v_centered">
+                                     <h5>Product Description :</h5><br>
+                            <p>{{$brands->description}}</p>
+                                 </div>
                         </div>
+                        
                     </form>
-
+                            
                         <!-- - - - - - - - - - - - - - End of product image column - - - - - - - - - - - - - - - - -->
 
                         <!-- - - - - - - - - - - - - - Product description column - - - - - - - - - - - - - - - - -->
@@ -142,6 +148,7 @@ input[type="radio"] + label,
                         <div class="single_product_description col-md-7">
 
                             <h3 class="offset_title"><a href="#">{{$brands->brand}}</a></h3>
+                            <hr>
                             <div class="description_section v_centered">
 
 							 <table class="product_info">
@@ -155,7 +162,31 @@ input[type="radio"] + label,
 										<td><span class="in_stock">  {{$brands->free_shipping}} KG on <span> {{$brands->brand}} Brand Product</td>
 										</tr>
 										@endif
+                                        @if($brands->delivery_from !=null)
+										<tr>
+											<td>Delivery By : </td>
+										<td><span class="in_stock"><?php 
+										$start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $brands->delivery_from, date('Y')));
+										$parts = explode('-', $start);
+										$month_name = date("M", mktime(0, 0, 0, $parts[0])); 
+										
+												if($brands->delivery_to !=null){
+										$end = date('d', mktime(0, 0, 0, date('m'), date('d') + $brands->delivery_to, date('Y')));
+										echo $month_name.' '.$parts[1].' - '.$end;
+												}
+										?><span> </td>
+										</tr>
+										@endif
 
+
+
+										
+										@if($brands->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$brands->notes}}</span></td>
+										</tr>
+										@endif
                                     </tbody>
 
                                 </table>

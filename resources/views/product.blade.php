@@ -196,6 +196,51 @@
 											<td>Free Delivery on order over : </td>
 										<td><span class="in_stock">  {{$brand->free_shipping}} QTY, <span> {{$brand->brand}} Brand Product</td>
 										</tr>
+                                        @endif
+                                        @if($product1->delivery_from !=null)
+										<tr>
+											<td>Delivery By : </td>
+										<td><span class="in_stock"><?php 
+										$start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $product1->delivery_from, date('Y')));
+										$parts = explode('-', $start);
+										$month_name = date("M", mktime(0, 0, 0, $parts[0])); 
+										
+												if($product1->delivery_to !=null){
+										$end = date('d', mktime(0, 0, 0, date('m'), date('d') + $product1->delivery_to, date('Y')));
+										echo $month_name.' '.$parts[1].' - '.$end;
+												}
+										?><span> </td>
+										</tr>
+
+										@elseif($brand->delivery_from !=null)
+										<tr>
+											<td>Delivery By : </td>
+										<td><span class="in_stock"><?php 
+										$start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_from, date('Y')));
+										$parts = explode('-', $start);
+										$month_name = date("M", mktime(0, 0, 0, $parts[0])); 
+										
+												if($brand->delivery_to !=null){
+										$end = date('d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_to, date('Y')));
+										echo $month_name.' '.$parts[1].' - '.$end;
+												}
+										?><span> </td>
+										</tr>
+										@endif
+
+
+
+										@if($product1->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$product1->notes}}</span></td>
+										</tr>
+										
+										@elseif($brand->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$brand->notes}}</span></td>
+										</tr>
 										@endif
 
                                     </tbody>

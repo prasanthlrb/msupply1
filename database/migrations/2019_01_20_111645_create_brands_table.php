@@ -26,6 +26,9 @@ class CreateBrandsTable extends Migration
             $table->string('paid_type')->nullable();
             $table->string('paid_value')->nullable();
             $table->string('description', 5000)->nullable();
+            $table->string('delivery_from')->nullable();
+            $table->string('delivery_to')->nullable();
+            $table->string('notes', 5120)->nullable();
             $table->string('status');
             $table->string('active')->default(0);
             $table->timestamps();

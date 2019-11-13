@@ -215,10 +215,12 @@ class categoryController extends Controller
             $third_sub_category = category::find($product1->third_sub_category);
             if ($product1->related_product == null) {
                 $divider = explode(' ', $product1->product_name, 2);
+                // $loc = $this->locationValues();
                 if (count($divider) > 1) {
                     $relatedProducts = product::where('third_sub_category', $product1->third_sub_category)
                         ->where('id', '!=', $product1->id)
                         ->where('product_name', 'like', substr($product1->product_name, 0, strlen($divider[0])) . '%')
+                        // ->whereIn('tsl.location', $data[$location])
                         ->where('stock_quantity', '>', 200)
                         ->take(20)->get();
                     if (count($relatedProducts) == 0) {
@@ -238,8 +240,8 @@ class categoryController extends Controller
                 $relatedProducts = product::whereIn('id', $related)->get();
             }
             //return response()->json($stock);
-            //return response()->json($relatedProducts);
             $brand = brand::find($product1->brand_name);
+            //return response()->json($brand);
             return view('tilesProduct', compact('product1', 'subCategoty', 'relatedProducts', 'stock', 'Upload', 'second_sub_category', 'third_sub_category', 'brand'));
         } else if ($product1->map_location == 'on') {
             // return response()->json($Upload);

@@ -95,7 +95,15 @@ class cartController extends Controller
 
     public function paintProductAddtoCart(Request $request)
     {
-        $optionName = $request->product_id . '0' . $request->lit . '0' . $request->colors_id;
+        if ($request->lit != 0 && $request->colors_code != "undefined") {
+            $optionName = $request->product_id . '0' . $request->lit . '0' . $request->colors_id;
+        } else {
+            if ($request->lit != 0) {
+                $optionName = $request->product_id . '0' . $request->lit;
+            } else {
+                $optionName = $request->product_id;
+            }
+        }
         //   $cart_qty = Cart::get($optionName);
         // $totalQty = $cart_qty['quantity'] + $request->button_qty;
         // $total_price = $request->paint_price * $totalQty;
@@ -125,7 +133,6 @@ class cartController extends Controller
         $orer_limit = array();
         foreach (Cart::getContent() as $pro) {
             if (isset($pro['attributes']['color'])) {
-
                 $limit = new Collection(
                     [
                         'id' => $pro['id'],
@@ -230,6 +237,7 @@ class cartController extends Controller
                 </thead>
 
                 <tbody>';
+            //return response()->json($cartCollection);
             foreach ($cartCollection as $cartData) {
 
                 $amount = ($cartData->quantity * $cartData->price);
@@ -285,8 +293,13 @@ class cartController extends Controller
 
         <ul class="sc_product_info">';
                     //$color = color::find($cartData['attributes']['color_id']);
-                    $output .= ' <li>Color Code : ' . $cartData['attributes']['color_code'] . '</li>
-                    <li>Litreage : ' . $cartData['attributes']['lit'] . '</li>';
+                    if ($cartData['attributes']['color_code'] != "undefined") {
+
+                        $output .= ' <li>Color Code : ' . $cartData['attributes']['color_code'] . '</li>';
+                    }
+                    if ($cartData['attributes']['lit'] != 0) {
+                        $output .= '<li>Litreage : ' . $cartData['attributes']['lit'] . '</li>';
+                    }
                 } else {
 
                     $output .= '</td>
@@ -482,9 +495,12 @@ class cartController extends Controller
     public function cartUpdateValue($id, $values)
     {
         $checkValue = Cart::get($id);
-        if (isset($checkValue->attribute['color'])) { } else {
+        if (isset($checkValue->attributes['color'])) {
+            $product_data = product::find($checkValue->attributes['product_id']);
+        } else {
             $product_data = product::find($id);
         }
+        //return response()->json($checkValue);
         if ($product_data->order_limit != null) {
             if ($product_data->order_limit <= $values) {
 
@@ -499,6 +515,7 @@ class cartController extends Controller
                 return response()->json($product_data->order_limit);
             }
         } else {
+
             Cart::update($id, array(
                 'quantity' => array(
                     'relative' => false,

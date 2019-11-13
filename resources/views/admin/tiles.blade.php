@@ -265,7 +265,12 @@
                                 <td>Related Product</td>
                                 <td> 
                                   <div id="related"></div>
-                                      </td>
+                                </td>
+
+                              </tr>
+                                <tr>
+                                <td>Important Notes</td>
+                                <td><textarea  name="notes" id="notes"cols="30" rows="10"></textarea> </td>
                               </tr>
                         </table>
                        
@@ -367,6 +372,7 @@ function getProduct(id){
             }
             $('#amount').val(data[0].amount);
             $('#product_description').text(data[0].product_description);
+            $('#notes').val(data[0].notes);
             $('#product_name').text(data[0].product_name);
             $('select[name=brands]').val(data[0].brand_name);
             $('select[name=sub_category]').val(data[0].sub_category);
@@ -545,7 +551,18 @@ $('#gallery_modal').modal('show');
 
 }
 
-
+$('#notes').on('change', function(){
+  let notes = $(this).val(); 
+  $.ajax({
+        url: '/admin/update-tiles-notes',
+        method: "GET",
+        data: { product_id: product_id, data: notes },
+        dataType: "JSON",
+        success: function (data) {
+          toastr.success(data.message);
+        }
+  });
+})
 
 
 </script>

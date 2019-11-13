@@ -122,6 +122,28 @@
                                 </div>
                               </div>
 
+                              <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Delivery Duration Min(Days)</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="delivery_from" class="form-control" value="{{$product->delivery_from}}"
+                                  name="delivery_from">
+                                </div>
+                              </div>
+                               <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Delivery Duration Max(Days)</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="delivery_to" class="form-control" value="{{$product->delivery_to}}"
+                                  name="delivery_to">
+                                </div>
+                              </div>
+                               <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput1">Important Notes</label>
+                                <div class="col-md-9">
+                               <textarea class="form-control" name="notes" id="notes" cols="30" rows="10">{{$product->notes}}</textarea>
+                               
+                                </div>
+                              </div>
+
                         </div>
                       </div>
                     </div>

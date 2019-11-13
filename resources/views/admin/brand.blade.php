@@ -140,6 +140,31 @@
             
             </div>
           </div>
+
+            <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Delivery Min</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter your Min Delivery Date"
+              name="delivery_from" id="delivery_from">
+            </div>
+          </div>
+
+            <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Delivery Max</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter your Max Delivery Date"
+              name="delivery_to" id="delivery_to">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Important Notes</label>
+            <div class="col-md-9">
+              <textarea name="notes" class="form-control" id="notes" cols="30" rows="10" ></textarea>
+            
+            </div>
+          </div>
+
             <div class="form-group row">
                 <label class="col-md-3 label-control" for="projectinput6">Order type</label>
                 <div class="col-md-9">
@@ -323,6 +348,9 @@ $('#brand_set').remove();
           $('input[name=paid_base]').val(data.paid_base);
           $('input[name=paid_value]').val(data.paid_value);
           $('input[name=brand_image1]').val(data.brand_image);
+          $('input[name=delivery_to]').val(data.delivery_to);
+          $('input[name=delivery_from]').val(data.delivery_from);
+          $('#notes').val(data.notes);
           $('input[name=id]').val(id);
           $('input[name=order_limit]').val(data.order_limit);
           $('#description').val(data.description);

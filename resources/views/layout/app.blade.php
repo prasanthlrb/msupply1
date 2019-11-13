@@ -682,7 +682,7 @@
 
 									<h4>About Us</h4>
 
-								<p class="about_us">{{$setting->described}}</p>
+								<p class="about_us"><?php echo html_entity_decode($setting->described)?></p>
 
 									<!-- - - - - - - - - - - - - - Social icons list - - - - - - - - - - - - - - - - -->
 									@if(isset($social))

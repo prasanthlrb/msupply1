@@ -103,7 +103,7 @@ p.productdesc{
 									<h3 class="offset_title"><a href="#">{{$product1->product_name}}</a></h3>
 									
 									
-
+										<hr>
 										<div class="description_section v_centered">
 
 							 <table class="product_info">
@@ -117,7 +117,51 @@ p.productdesc{
 										<td><span class="in_stock"> <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i> {{$brand->free_shipping}}, <span> {{$brand->brand}} Brand Product</td>
 										</tr>
 										@endif
+										@if($product1->delivery_from !=null)
+										<tr>
+											<td>Delivery By : </td>
+										<td><span class="in_stock"><?php 
+										$start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $product1->delivery_from, date('Y')));
+										$parts = explode('-', $start);
+										$month_name = date("M", mktime(0, 0, 0, $parts[0])); 
+										
+												if($product1->delivery_to !=null){
+										$end = date('d', mktime(0, 0, 0, date('m'), date('d') + $product1->delivery_to, date('Y')));
+										echo $month_name.' '.$parts[1].' - '.$end;
+												}
+										?><span> </td>
+										</tr>
 
+										@elseif($brand->delivery_from !=null)
+										<tr>
+											<td>Delivery By : </td>
+										<td><span class="in_stock"><?php 
+										$start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_from, date('Y')));
+										$parts = explode('-', $start);
+										$month_name = date("M", mktime(0, 0, 0, $parts[0])); 
+										
+												if($brand->delivery_to !=null){
+										$end = date('d', mktime(0, 0, 0, date('m'), date('d') + $brand->delivery_to, date('Y')));
+										echo $month_name.' '.$parts[1].' - '.$end;
+												}
+										?><span> </td>
+										</tr>
+										@endif
+
+
+
+										@if($product1->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$product1->notes}}</span></td>
+										</tr>
+										
+										@elseif($brand->notes !=null)
+										<tr>
+											<td>Important Note : </td>
+										<td> <span class="in_stock">{{$brand->notes}}</span></td>
+										</tr>
+										@endif
                                     </tbody>
 
                                 </table>
@@ -126,7 +170,7 @@ p.productdesc{
 
 
 										<hr>
-								@if($product1->regular_price !="")
+								@if($product1->regular_price !="" || $product1->regular_price !=null)
                                     <p class="product_price"><s>₹{{$product1->regular_price}}</s> <b class="theme_color">₹{{$product1->sales_price}}</b>
                                       @if($product1->default_unit_type !=null || $product1->default_unit_type !="")
                                     / {{$product1->default_unit_type}}
@@ -206,9 +250,12 @@ p.productdesc{
 										<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
 
 										<div class="buttons_row">
-
+											@if($product1->sales_price !="" || $product1->sales_price !=null)
+											<button type="button" class="button_blue middle_btn" id="addToCardPaint" onclick="nonLitProduct({{$product1->sales_price}})">Add to Cart</button>
+											@else
+											
 											<button type="button" class="button_blue middle_btn" id="addToCardPaint" disabled="true">Add to Cart</button>
-
+											@endif
 								<button type="button" onclick="addWishlist({{$product1->id}})"  class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
 
                                 <a href="javascript:void(null)" onclick="addCompare({{$product1->id}})"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button></a>
@@ -478,6 +525,10 @@ p.productdesc{
 		var colors_id =0;
 		var paint_price=0;
 		var code_name;
+		function nonLitProduct(lits){
+			paint_price = Math.ceil(lits);
+			
+		}
 function setLitre(lits){
 lit = lits.paint_lit;
 console.log(lits)
@@ -487,6 +538,7 @@ $('.litBtn').each(function(index){
 });
 $('#lit'+lit).addClass("button_blue");
 if(lits.price != null){
+	paint_price = Math.ceil(lits.price);
 $(".product_price .theme_color").text("Rs : "+ Math.ceil(lits.price));
 $('#addToCardPaint').prop('disabled',false);
 }else{
@@ -656,7 +708,7 @@ if(lit !=0 && colors_id !=0){
 			//alert(Math.ceil(avg));
 		})
 		$('#addToCardPaint').on('click', function(){
-		
+	
 			var formData = new FormData($('#paintFormProduct')[0]);
 			   formData.append("colors_id", colors_id);
 			   formData.append("colors_code", code_name);
