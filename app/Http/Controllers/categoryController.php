@@ -206,7 +206,7 @@ class categoryController extends Controller
             $relatedProducts = product::where('sub_category', $product1->sub_category)->where('id', '!=', $product1->id)->get();
             //return response()->json($liter);
             $brand = brand::find($product1->brand_name);
-            return response()->json($brand);
+            //return response()->json($brand);
             return view('paint_product', compact('product1', 'subCategoty', 'guide', 'feature', 'liter', 'relatedProducts', 'brand'));
         } else if ($product1->category == 1) {
 
