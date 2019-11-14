@@ -74,6 +74,7 @@ class productController extends Controller
             $brand->order_unit_type = $request->order_unit_type;
         }
         $brand->free_shipping = $request->free_shipping;
+        $brand->free_shipping_type = $request->free_shipping_type;
         $brand->paid_base = $request->paid_base;
         $brand->paid_type = $request->paid_type;
         $brand->paid_value = $request->paid_value;
@@ -131,6 +132,7 @@ class productController extends Controller
             $brand->order_unit_type = $request->order_unit_type;
         }
         $brand->free_shipping = $request->free_shipping;
+        $brand->free_shipping_type = $request->free_shipping_type;
         $brand->paid_base = $request->paid_base;
         $brand->paid_type = $request->paid_type;
         $brand->paid_value = $request->paid_value;

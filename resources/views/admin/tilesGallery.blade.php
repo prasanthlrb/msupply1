@@ -22,7 +22,7 @@
                         </div>
                         <div class="card-content collapse show">
                             <div class="card-body">
-                                <p class="card-text">maximum file size<code>1 MB</code> number of files<code>10</code>.</p>
+                                <p class="card-text">maximum file size<code>4 MB</code> number of files<code>10</code>.</p>
                                 <button style="display:none" id="testSubmit" class="btn btn-primary mb-1"><i class="ft-trash"></i>Clear All Image</button>
                                 <form method="post" action="{{ url('/admin/images-save') }}" enctype="multipart/form-data" class="dropzone" id="my-dropzone">
                                     {{ csrf_field() }}
@@ -71,7 +71,7 @@ Dropzone.options.myDropzone = {
     autoProcessQueue: false,
     uploadMultiple: true,
     parallelUploads: 10,
-    maxFilesize: 4,
+    maxFilesize: 5,
     //previewTemplate: document.querySelector('#preview').innerHTML,
     addRemoveLinks: true,
     dictRemoveFile: 'Remove file',

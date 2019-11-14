@@ -22,6 +22,7 @@ class CreateBrandsTable extends Migration
             $table->string('order_unit_type')->nullable();
             $table->string('order_limit')->nullable();
             $table->string('free_shipping')->nullable();
+            $table->string('free_shipping_type')->nullable();
             $table->string('paid_base')->nullable();
             $table->string('paid_type')->nullable();
             $table->string('paid_value')->nullable();

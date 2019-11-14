@@ -2,7 +2,7 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
-
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/editors/tinymce/tinymce.min.css">
 <style>
 .not_available{
   display: none !important;
@@ -102,7 +102,7 @@
 
   <div class="modal fade text-left" id="brand_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel8"
   aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header bg-primary white">
           <h4 class="modal-title white" id="myModalLabel8">Create brand</h4>
@@ -194,6 +194,18 @@
               name="order_limit" id="order_limit">
             </div>
           </div>
+              <div class="form-group row">
+                <label class="col-md-3 label-control" for="projectinput6">Free Shipping Type</label>
+                <div class="col-md-9">
+                  <select name="free_shipping_type" class="form-control" id="free_shipping_type">
+                    <option selected="" disabled>Select </option>
+                    <option value="0">QTY</option>
+                    <option value="1">Weight</option>
+                    <option value="2">Price</option>
+                    <option value="3">LIT</option>
+                  </select>
+                </div>
+              </div>
             <div class="form-group row">
             <label class="col-md-3 label-control" for="projectinput1">Free Shipping</label>
             <div class="col-md-9">
@@ -230,7 +242,7 @@
             <div class="form-group row">
             <label class="col-md-3 label-control" for="projectinput1">Description</label>
             <div class="col-md-9">
-              <textarea name="description" class="form-control" id="description" cols="30" rows="10" ></textarea>
+              <textarea name="description" class="form-control tinymce" id="description" cols="30" rows="10" ></textarea>
             
             </div>
           </div>
@@ -257,7 +269,8 @@
 @section('extra-js')
 
 <script src="../../../app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-
+<script src="../../../app-assets/vendors/js/editors/tinymce/tinymce.js" type="text/javascript"></script>
+<script src="../../../app-assets/js/scripts/editors/editor-tinymce.js" type="text/javascript"></script>
 
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
@@ -276,6 +289,8 @@
   })
     function saveBrand(){
       var formData = new FormData($('#brand_form')[0]);
+        var description = tinyMCE.activeEditor.getContent();
+        formData.append('description', description);
       if(action_type == 1){
 
         $.ajax({
@@ -353,8 +368,13 @@ $('#brand_set').remove();
           $('#notes').val(data.notes);
           $('input[name=id]').val(id);
           $('input[name=order_limit]').val(data.order_limit);
-          $('#description').val(data.description);
+          if(data.description){
+
+          tinyMCE.activeEditor.setContent(data.description);
+          }
+          //$('#description').val();
           $('select[name=status]').val(data.status);
+          $('select[name=free_shipping_type]').val(data.free_shipping_type);
           $('select[name=order_type]').val(data.order_type);
           if(data.order_type == 1){
              $('#order_unit_type').removeClass('not_available');
