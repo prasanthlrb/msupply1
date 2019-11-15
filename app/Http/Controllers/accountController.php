@@ -516,7 +516,7 @@ class accountController extends Controller
             $final_total = AppHelper::instance()->IND_money_format($final_total);
             $totalPrice = AppHelper::instance()->IND_money_format($totalPrice);
             $project = project::where('user_id', Auth::user()->id)->get();
-            return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing', 'output', 'result', 'totalPrice', 'location', 'shipping_price', 'final_total', 'project'));
+            return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing', 'result', 'totalPrice', 'location', 'shipping_price', 'final_total', 'project'));
             //return response()->json($result);
             //print $result;
         } else {
