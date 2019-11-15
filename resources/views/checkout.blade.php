@@ -325,7 +325,7 @@
          }); 
 		 if(pay_type ==2){
          $('body').on('click', '#order_button', function(e){
-           var totalAmount = '{{$final_total}}';
+           var totalAmount = '{{$online_total}}';
            var options = {
            "key": "rzp_test_InZD6eAnToWcgk",
            "amount": (totalAmount*100), // 2000 paise = INR 20
