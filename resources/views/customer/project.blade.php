@@ -120,55 +120,7 @@
 <script src="{{ asset('app-assets/js/scripts/extensions/toastr.js')}}" type="text/javascript"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js')}}" type="text/javascript"></script>
 <script>
-function saveProject(){
-      var formData = new FormData($('#project_form')[0]);
 
-        $.ajax({
-                url : '/account/create-project',
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType: "JSON",
-                success: function(data)
-                {
-
-					
-                     toastr.success(data.message);
-                     window.location.replace("/account/project");
-
-                },error: function (data) {
-                    console.log(data)
-                  toastr.error('Site Title Required', 'Required!');
-              }
-            });
-  
-
-    }
-	function updateProject(){
-      var formData = new FormData($('#project_form')[0]);
-
-        $.ajax({
-                url : '/account/update-project',
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType: "JSON",
-                success: function(data)
-                {
-
-					
-                     toastr.success(data.message);
-                      window.location.replace("/account/project");
-                },error: function (data) {
-                    console.log(data)
-                  toastr.error('Site Title Required', 'Required!');
-              }
-            });
-  
-
-    }
 	 
 
     function deleteProject(id){

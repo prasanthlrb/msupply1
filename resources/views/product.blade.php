@@ -486,11 +486,26 @@
 
                             <div id="tab-2" class="tab_container">
                                 <ul class="specifications">
-                                    <li><span>No of Items:</span>{{$product1->items}} </li>
-                                    <li><span>Weight:</span>{{$product1->weight}}</li>
-                                    <li><span>Length:</span>{{$product1->length}}</li>
-                                    <li><span>Width:</span>{{$product1->width}}</li>
-                                    <li><span>Height:</span>{{$product1->height}}</li>
+                                    
+                                   
+                                    @if(isset($product1->items))
+                                         <li><span>No of Items:</span>{{$product1->items}} </li>
+                                    @endif
+                                    @if(isset($product1->weight))
+                                        <li><span>Weight:</span>{{$product1->weight}}</li>
+                                    @endif
+                                    @if(isset($product1->length))
+                                        <li><span>Length:</span>{{$product1->length}}</li>
+                                   @endif
+                                    @if(isset($product1->width))
+                                        <li><span>Width:</span>{{$product1->width}}</li>
+                                    @endif
+                                    @if(isset($product1->height))
+                                        <li><span>Height:</span>{{$product1->height}}</li>
+                                    @endif
+                                    
+                                    
+                                    
                                 </ul>
                             </div>
 

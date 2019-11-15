@@ -1197,5 +1197,54 @@ function addWishlist(id){
         }
 	});
 }
+function saveProject(){
+      var formData = new FormData($('#project_form')[0]);
+
+        $.ajax({
+                url : '/account/create-project',
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {
+
+					
+                     toastr.success(data.message);
+                     location.reload();
+
+                },error: function (data) {
+                    console.log(data)
+                  toastr.error('Site Title Required', 'Required!');
+              }
+            });
+  
+
+    }
+	function updateProject(){
+      var formData = new FormData($('#project_form')[0]);
+
+        $.ajax({
+                url : '/account/update-project',
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {
+
+					
+                     toastr.success(data.message);
+                       location.reload();
+                },error: function (data) {
+                    console.log(data)
+                  toastr.error('Site Title Required', 'Required!');
+              }
+            });
+  
+
+    }
 	</script>
 </html>

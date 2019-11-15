@@ -127,17 +127,17 @@
 
 										<li class="col-sm-4 col-md-4 col-lg-4 shipping-row">
 												<div class="col-xs-12">
-													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->first_name}}</label>
-													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->last_name}}</label><br>
-													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->email}}</label><br>
+													<label for="billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->first_name}}</label>
+													<label for="billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->last_name}}</label><br>
+													<label for="billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->email}}</label><br>
 													@if($x == 1)
 													<input type="radio" checked name="billing" id="billing_<?php echo $x?>" value="{{$item->id}}">
 													@else
 													<input type="radio" name="billing" id="billing_<?php echo $x?>" value="{{$item->id}}">
 													@endif
-													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->telephone}}</label><br>
-													<label for=billing_<?php echo $x?>" class="address-align">{{$item->address}}</label><br>
-													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->state}}</label>  <label class="item-align-left-shipping" for=billing_<?php echo $x?>">{{$item->zip}}</label>
+													<label for="billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->telephone}}</label><br>
+													<label for="billing_<?php echo $x?>" class="address-align">{{$item->address}}</label><br>
+													<label for="billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->state}}</label>  <label class="item-align-left-shipping" for=billing_<?php echo $x?>">{{$item->zip}}</label>
 
 												</div>
 
@@ -180,19 +180,40 @@
 							</div> --}}
 							<br>
 						<br>
+						<h3>Select Your Building Site</h3>
+							<a href="javascript:void(null)"  class="button_blue mini_btn" data-modal-url="/account/create-project">Create New Site</a>
+							<ul class="simple_vertical_list">
+								@if(count($project)>0)
+								<br>
+								@foreach($project as $index => $pro)
+								<li>
+
+								<input type="radio" value="{{$pro->id}}" <?php echo $index ==0 ? 'checked':''?> name="project" id="radio_button_{{$index}}">
+								<label for="radio_button_{{$index}}">{{$pro->project_name}}</label>
+
+								</li>
+
+								@endforeach
+								@endif
+							</ul>
+							<br>
+							<br>
+							<hr>
+							<br>
+
 						<h3>Select Payment Type</h3>
 							<ul class="simple_vertical_list">
 									<li>
 
-										<input value="online" type="radio" checked name="payment_type" id="radio_button_2">
-										<label for="radio_button_2">Pay Online</label>
+										<input value="online" type="radio" checked name="payment_type" id="radio_button_2222">
+										<label for="radio_button_2222">Pay Online</label>
 
 									</li>
 									@if($location->cod == 0)
 									<li>
 
-										<input value="cod" type="radio" name="payment_type" id="radio_button_1">
-										<label for="radio_button_1">Cash on Delivery</label>
+										<input value="cod" type="radio" name="payment_type" id="radio_button_1111">
+										<label for="radio_button_1111">Cash on Delivery</label>
 
 									</li>
 									@endif
@@ -204,6 +225,7 @@
 
 						<br>
 						<br>
+						<hr>
 						<br>
 
 
@@ -250,15 +272,13 @@
 										<td class="total">₹ {{$totalPrice}}</td>
 
 									</tr>
-									<tr>
-										
-										<td colspan="5" class="bold">Shipping &amp; Heading (Flat Rate - Fixed)</td>
-										<td class="total">₹ 5.00</td>
+									
 
-									</tr>
+								<?php echo $shipping_price ?>
+								
 									<tr>
 										<td colspan="5" class="grandtotal">Grand Total</td>
-										<td class="grandtotal" style="text-align:center">₹ {{$totalPrice}}</td>
+										<td class="grandtotal" style="text-align:center">₹ {{$final_total}}</td>
 									</tr>
 
 								</tfoot>
@@ -279,7 +299,7 @@
 
 							<div class="right_side">
 
-								<button type="button" class="button_blue middle_btn" id="order_button">PLACE TO ORDER</button>
+								<button type="button" class="button_blue middle_btn" id="order_button">PROCEED TO PAY</button>
 
 							</div>
 
@@ -296,14 +316,16 @@
 			@section('extra-js')
 			<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       <script>
+		  	var pay_type = 2;
          var SITEURL = '{{URL::to('')}}';
          $.ajaxSetup({
            headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            }
          }); 
+		 if(pay_type ==2){
          $('body').on('click', '#order_button', function(e){
-           var totalAmount = '{{$totalPrice}}';
+           var totalAmount = '{{$final_total}}';
            var options = {
            "key": "rzp_test_InZD6eAnToWcgk",
            "amount": (totalAmount*100), // 2000 paise = INR 20
@@ -326,8 +348,8 @@
              
            },
           "prefill": {
-               "contact": '9171035128',
-               "email":   'prasanthats@gmail.com',
+               "contact": '{{Auth::user()->phone}}',
+               "email":   '{{Auth::user()->email}}',
            },
         //    "theme": {
         //        "color": "#528FF0"
@@ -337,18 +359,19 @@
          rzp1.open();
          e.preventDefault();
          });
+		 }
          /*document.getElementsClass('buy_plan1').onclick = function(e){
            rzp1.open();
            e.preventDefault();
          }*/
       </script>
 			<script>
-				var pay_type = 1;
-			$('#radio_button_1').click(function(){
+			
+			$('#radio_button_1111').click(function(){
 				pay_type = 1;
 				$('#order_button').text('PLACE TO ORDER')
 			});
-			$('#radio_button_2').click(function(){
+			$('#radio_button_2222').click(function(){
 				pay_type = 2;
 				$('#order_button').text('PROCEED TO PAY')
 			});

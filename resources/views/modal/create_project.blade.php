@@ -28,7 +28,7 @@
 		<ul>
 
 			<li>
-				<label for="project_name">Site Title</label>
+				<label for="project_name">Building Site Name</label>
 				<input type="text" name="project_name" id="project_name">
 			</li>
 

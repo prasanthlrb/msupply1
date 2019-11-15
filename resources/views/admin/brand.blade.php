@@ -170,22 +170,25 @@
                 <div class="col-md-9">
                   <select name="order_type" class="form-control" id="order_type">
                     <option selected="" disabled>Select </option>
-                    <option value="0">Price</option>
-                    <option value="1">QTY</option>
+                     <option value="0">QTY</option>
+                    <option value="1">Weight</option>
+                    <option value="2">Price</option>
+                    <option value="3">LIT</option>
                   </select>
                 </div>
               </div>
-            <div class="form-group row not_available" id="order_unit_type">
+            {{-- <div class="form-group row not_available" id="order_unit_type">
                 <label class="col-md-3 label-control" for="projectinput6">Order Unit Type</label>
                 <div class="col-md-9">
                   <select name="order_unit_type" class="form-control">
                     <option selected="" disabled>Select </option>
+                     <option value="0">Basic Qty</option>
                   @foreach($units as $unit)
                   <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
                   @endforeach
                   </select>
                 </div>
-              </div>
+              </div> --}}
               
             <div class="form-group row">
             <label class="col-md-3 label-control" for="projectinput1">Order Limit Value</label>
@@ -429,13 +432,13 @@ $('#brand_set').remove();
         }
       });
 }
-$('#order_type').change(function(){
-  var types = $(this).val();
-  if(types == "1"){
-    $('#order_unit_type').removeClass('not_available');
-  }else{
-    $('#order_unit_type').addClass('not_available');
-  }
-})
+// $('#order_type').change(function(){
+//   var types = $(this).val();
+//   if(types == "1"){
+//     $('#order_unit_type').removeClass('not_available');
+//   }else{
+//     $('#order_unit_type').addClass('not_available');
+//   }
+// })
 </script>
 @endsection

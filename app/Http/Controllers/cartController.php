@@ -11,6 +11,7 @@ use App\optionGroup;
 use App\optionValue;
 use Cart;
 use Illuminate\Support\Collection;
+use AppHelper;
 
 class cartController extends Controller
 {
@@ -67,13 +68,15 @@ class cartController extends Controller
         $cat = category::find($product->category);
         $attribute = array(
             'product_type' => $cat->category_name,
+            'brand' => $product->brand_name,
+            'category' => $product->category
         );
         Cart::add(array(
             'id' => $product->id,
             'name' => $product->product_name,
             'price' => $product->sales_price,
             'quantity' => $request->qty,
-            'attributes' => $getOption,
+            'attributes' => $attribute,
         ));
         // $status =0;
         // }else{
@@ -112,7 +115,9 @@ class cartController extends Controller
             'product_id' => $request->product_id,
             'lit' => $request->lit,
             'color_id' => $request->colors_id,
-            'color_code' => $request->colors_code
+            'color_code' => $request->colors_code,
+            'brand' => "1",
+            'category' => "21"
         );
         Cart::add(array(
             'id' => $optionName,
@@ -128,82 +133,76 @@ class cartController extends Controller
     {
 
         $cartCollection = Cart::getContent();
-        $total = Cart::getTotal();
-        $shipping_charge = 0;
-        $orer_limit = array();
-        foreach (Cart::getContent() as $pro) {
-            if (isset($pro['attributes']['color'])) {
-                $limit = new Collection(
-                    [
-                        'id' => $pro['id'],
-                        'price' => $pro['price'],
-                        'quantity' => $pro['quantity'],
-                        'total' => $pro['price'] * $pro['quantity'],
-                        'brand' => '1',
-                        'lit' => $pro['attributes']['lit'],
-                        'category' => '21'
-                    ]
-                );
-                $orer_limit[] = $limit;
-            } else {
-                $product = product::find($pro['id']);
-                $limit = new Collection(
-                    [
-                        'id' => $pro['id'],
-                        'price' => $pro['price'],
-                        'total' => $pro['price'] * $pro['quantity'],
-                        'quantity' => $pro['quantity'],
-                        'brand' => $product->brand_name,
-                        'category' => $product->category
-                    ]
-                );
-                $orer_limit[] = $limit;
-            }
+        //get brand
+        //return response()->json($cartCollection);
+        $brand_data = array();
+        foreach ($cartCollection as $b) {
+            $brand_data[$b['attributes']->brand] = $b['attributes']->brand; // Get unique country by code.
+            //array_push($brand_data[$b['attributes']->brand], );
         }
-        $brand_collect = array();
-        $brand_data_collect = array();
-        $layout_brand = array();
-        $limit_msg = '';
-        foreach ($orer_limit as $data) {
-            if (in_array($data['brand'], $brand_collect)) {
-                foreach ($brand_data_collect as $collect) {
-                    if ($collect['brand'] == $data['brand']) {
-                        //return response()->json($brand_data_collect);
-                        if ($collect['brand'] == 1) {
-                            $collect['total'] = $collect['total'] + $data['total'];
-                            $collect['quantity'] += $data['quantity'];
-                            $collect['lit'] += $data['lit'];
+        $get_brand = brand::whereIn('id', $brand_data)->get();
+        foreach ($get_brand as $b) {
+            $dummy_total = array('total' => 0, 'brand' => '', 'order_type' => '', 'category' => '');
+            foreach ($cartCollection as $c) {
+                if ($b->id == $c['attributes']->brand) {
+                    if ($b->order_type == 0) {
+                        $dummy_total['total'] += $c['quantity'];
+                        $dummy_total['brand'] = $c['attributes']->brand;
+                        $dummy_total['category'] = $c['attributes']->category;
+                        $dummy_total['order_type'] = "QTY";
+                    } elseif ($b->order_type == 1) {
+                        if ($c['attributes']->category == 14) {
+                            $prod = product::find($c['id']);
+                            if ($c['attributes']->unit_name == "Rods") {
+                                $dummy_total['total'] += ceil($c['quantity'] * $prod->weight);
+                                $dummy_total['brand'] = $c['attributes']->brand;
+                                $dummy_total['category'] = $c['attributes']->category;
+                                $dummy_total['order_type'] = "Kg Weight";
+                            } else {
+                                $weight = ($prod->weight * $prod->items);
+                                $dummy_total['total'] +=  ceil($c['quantity'] * $weight);
+                                $dummy_total['brand'] = $c['attributes']->brand;
+                                $dummy_total['category'] = $c['attributes']->category;
+                                $dummy_total['order_type'] = "Kg Weight";
+                            }
                         } else {
-                            $collect['total'] = $collect['total'] + $data['total'];
-                            $collect['quantity'] += $data['quantity'];
+                            $dummy_total['total'] += $c['quantity'];
+                            $dummy_total['brand'] = $c['attributes']->brand;
+                            $dummy_total['category'] = $c['attributes']->category;
+                            $dummy_total['order_type'] = "Nos";
                         }
+                    } elseif ($b->order_type == 2) {
+                        $dummy_total['total'] += $c['quantity'] * $c['price'];
+                        $dummy_total['brand'] = $c['attributes']->brand;
+                        $dummy_total['category'] = $c['attributes']->category;
+                        $dummy_total['order_type'] = "Price";
+                    } elseif ($b->order_type == 3) {
+                        $dummy_total['total'] += $c['quantity'] * $c['attributes']->lit;
+                        $dummy_total['brand'] = $c['attributes']->brand;
+                        $dummy_total['category'] = $c['attributes']->category;
+                        $dummy_total['order_type'] = "Liter";
                     }
                 }
-            } else {
-                $brand_collect[] = $data['brand'];
-                $brand_data_collect[] = $data;
             }
+            $final_data[] = $dummy_total;
         }
-        foreach ($brand_data_collect as $is_limit) {
-            $limit_data = brand::find($is_limit['brand']);
-            if ($limit_data->order_limit != null) {
-                if ($limit_data->order_type == 0) {
-                    //orderlimit depand on price
-                    if ($limit_data->order_limit > $is_limit['total']) {
-                        $limit_msg .= '<div class="alert_box error">
-<b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i>' . $limit_data->order_limit . ', Please Order Equal Or Above Value!.
+
+        //return response()->json($final_data);
+        $limit_outline = array();
+        $total = Cart::getTotal();
+        $limit_msg = '';
+        foreach ($final_data as $fd) {
+            $limit_data = brand::find($fd['brand']);
+            if ($limit_data->order_limit >= $fd['total']) {
+                $limit_outline[] = $fd['brand'];
+                if ($fd['order_type'] == "Price") {
+                    $limit_msg .= '<div class="alert_box error">
+        <b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i>' . AppHelper::instance()->IND_money_format($limit_data->order_limit) . ', Please Order Equal Or Above Value!.
+        <button class="close"></button> </div>';
+                } else {
+                    $limit_msg .= '<div class="alert_box error">
+<b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  ' . $limit_data->order_limit .  ' ' . $fd['order_type'] . ', Please Order Equal Or Above Value!.
 <button class="close"></button> </div>';
-                        $layout_brand[] = $limit_data->id;
-                    }
-                } else { //orderLimit depand on unit type
-                    if ($limit_data->order_unit_type == 3) {
-                        if ($limit_data->order_limit > $is_limit['lit']) {
-                            $limit_msg .= '<div class="alert_box error">
-<b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  ' . $limit_data->order_limit . ' Litre, Please Order Equal Or Above Value!.
-<button class="close"></button> </div>';
-                            $layout_brand[] = $limit_data->id;
-                        }
-                    }
                 }
             }
         }
@@ -237,7 +236,7 @@ class cartController extends Controller
                 </thead>
 
                 <tbody>';
-            //return response()->json($cartCollection);
+            //return response()->json($limit_msg);
             foreach ($cartCollection as $cartData) {
 
                 $amount = ($cartData->quantity * $cartData->price);
@@ -258,7 +257,7 @@ class cartController extends Controller
 
                 //     }
                 // }
-                if (in_array((int) $product->brand_name, $layout_brand)) {
+                if (in_array((int) $product->brand_name, $limit_outline)) {
 
                     $output .= ' <tr class="error_layout">';
                 } else {
@@ -313,13 +312,26 @@ class cartController extends Controller
                     if (!isset($cartData['attributes']['steel'])) {
                         if (!isset($cartData['attributes']['tiles'])) {
                             if (count($cartData['attributes']) > 0) {
-                                foreach ($cartData['attributes'] as $key => $value) {
+                                //unset($cartData['attributes']->brand);
+                                // unset($cartData['attributes']['brand']);
+                                //unset($cartData['attributes']['category']);
+                                $dummyBox[] = $cartData['attributes'];
+
+                                //return response()->json($dummyBox[0]);
+                                foreach ($dummyBox as $key => $value) {
                                     foreach ($value as $field => $row) {
-                                        $output .= '<li>' . $field . ' : ' . $row . '</li>';
+                                        if ($field != "category" && $field != "brand") {
+                                            $output .= '<li>' . $field . ' : ' . $row . '</li>';
+                                        }
                                     }
                                 }
                                 // $output .="I'm Not Paint Steel";
                             }
+                        } else {
+                            $bran = brand::find($cartData['attributes']['brand']);
+                            $Pro = product::find($cartData['id']);
+                            $output .= '<li>Tiles Brand : ' . $bran->brand . '</li><br>';
+                            $output .= '<li>Tiles Size : ' . $Pro->width . '</li>';
                         }
                     }
                 }
@@ -332,7 +344,7 @@ class cartController extends Controller
     </td>
 
     <td class="subtotal" data-title="Price">
-    ₹ ' . $cartData->price . '
+    ₹ ' . AppHelper::instance()->IND_money_format(ceil($cartData->price)) . '
     </td>
 
     <td data-title="Quantity">
@@ -347,7 +359,7 @@ class cartController extends Controller
     </td>
 
     <td class="total" data-title="Total">
-    ₹ ' . $amount . '
+    ₹ ' . AppHelper::instance()->IND_money_format(ceil($amount)) . '
     </td>
 
     <td data-title="Action">
@@ -356,7 +368,7 @@ class cartController extends Controller
 
 </tr>';
             }
-            $total = $total + $shipping_charge;
+            //$total = $total + $shipping_charge;
             $output .= ' </tbody>
     </table>
 
@@ -387,7 +399,7 @@ class cartController extends Controller
 
             $output .= '   <tr class="total">
                         <td>Total</td>
-                        <td>₹ ' . $total . '</td>
+                        <td>₹ ' . AppHelper::instance()->IND_money_format(ceil($total)) . '</td>
                     </tr>
                 </tfoot>
             </table>
@@ -451,7 +463,7 @@ class cartController extends Controller
 
         $output .= '<div class="animated_item">
 <ul class="total_info">
-          <li class="total"><b><span class="price">Total:</span> Rs ' . $total . '</b></li>
+          <li class="total"><b><span class="price">Total:</span> Rs ' . ceil($total) . '</b></li>
     </ul>
 </div>
 <div class="animated_item">
@@ -466,7 +478,11 @@ class cartController extends Controller
         // $cart_qty = Cart::get($request->product_id);
         // $totalQty = $cart_qty['quantity'] + $request->button_qty;
         // $total_price = $request->sales_price * $totalQty;
-        $attribute = array('tiles' => true);
+        $product = product::find($request->product_id);
+        $attribute = array(
+            'tiles' => true, 'brand' => $product->brand_name,
+            'category' => $product->category
+        );
         Cart::add(array(
             'id' => $request->product_id,
             'name' => $request->product_name,
@@ -480,7 +496,13 @@ class cartController extends Controller
     public function steelProductAddtoCart(Request $request)
     {
         foreach ($request->data as $row) {
-            $attribute = array('steel' => true, 'unit_name' => $row['unit_name']);
+            $product = product::find($row['product_id']);
+            $attribute = array(
+                'steel' => true,
+                'unit_name' => $row['unit_name'],
+                'brand' => $product->brand_name,
+                'category' => $product->category
+            );
             Cart::add(array(
                 'id' => $row['product_id'],
                 'name' => $row['product_name'],

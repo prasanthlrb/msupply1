@@ -307,10 +307,10 @@ class pageController extends Controller
                                     $output .= '<p class="product_price alignleft">';
                                     if ($row->category != 7 && $row->category != 21) {
                                         if ($row->regular_price != null) {
-                                            $output .= ' <s>₹ ' . $row->regular_price . '</s>
-                        <b>₹ ' . $row->sales_price . '</b></p>';
+                                            $output .= ' <s>₹ ' . ceil($row->regular_price) . '</s>
+                        <b>₹ ' . ceil($row->sales_price) . '</b></p>';
                                         } else {
-                                            $output .= '<b>₹ ' . $row->sales_price . '</b></p>';
+                                            $output .= '<b>₹ ' . ceil($row->sales_price) . '</b></p>';
                                         }
                                     }
                                     $output .= '
@@ -488,10 +488,10 @@ class pageController extends Controller
                         $output .= ' <p class="product_price alignleft">';
                         if ($row->category != 7 && $row->category != 21 && $row->map_location == null) {
                             if ($row->regular_price != null) {
-                                $output .= ' <s>₹ ' . $row->regular_price . '</s>
-                                    <b>₹ ' . $row->sales_price . '</b></p>';
+                                $output .= ' <s>₹ ' . ceil($row->regular_price) . '</s>
+                                    <b>₹ ' . ceil($row->sales_price) . '</b></p>';
                             } else {
-                                $output .= '<b>₹ ' . $row->sales_price . '</b></p>';
+                                $output .= '<b>₹ ' . ceil($row->sales_price) . '</b></p>';
                             }
                         }
 
@@ -686,16 +686,16 @@ class pageController extends Controller
                  <hr>';
         if ($product->category != 7) {
             if ($product->regular_price != "") {
-                $output .= ' <p class="product_price"><s>₹' . $product->regular_price . '</s> <b class="theme_color">₹' . $product->sales_price . '</b></p>';
+                $output .= ' <p class="product_price"><s>₹' . ceil($product->regular_price) . '</s> <b class="theme_color">₹' . ceil($product->sales_price) . '</b></p>';
             } else {
-                $output .= ' <p class="product_price"><b class="theme_color">₹' . $product->sales_price . '</b></p>';
+                $output .= ' <p class="product_price"><b class="theme_color">₹' . ceil($product->sales_price) . '</b></p>';
             }
         }
         $output .= '<form method="post" id="termsData">' . csrf_field() . '
      ';
 
         $output .= '
-                 <input type="hidden" id="shipping_amount" name="shipping_amount" value="' . $product->shipping_amount . '">
+                 <input type="hidden" id="shipping_amount" name="shipping_amount" value="' . ceil($product->shipping_amount) . '">
                  <div class="buttons_row">
                      <a class="button_blue middle_btn" href="/product/' . $product->id . '">See product details</a>
                      <a href="javascript:void(null)" onclick="addWishlist(' . $product->id . ')"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
@@ -780,9 +780,9 @@ class pageController extends Controller
                ';
 
         if ($product->regular_price != "") {
-            $output .= ' <p class="product_price"><s>₹' . $product->regular_price . '</s> <b class="theme_color">₹' . $product->sales_price . '</b></p>';
+            $output .= ' <p class="product_price"><s>₹' . ceil($product->regular_price) . '</s> <b class="theme_color">₹' . ceil($product->sales_price) . '</b></p>';
         } else {
-            $output .= ' <p class="product_price"><b class="theme_color">₹' . $product->sales_price . '</b></p>';
+            $output .= ' <p class="product_price"><b class="theme_color">₹' . ceil($product->sales_price) . '</b></p>';
         }
 
         $output .= '<ul class="specifications">
@@ -1186,8 +1186,10 @@ class pageController extends Controller
 
             foreach ($product_attribute as $attributes) {
                 $attribute = attribute::find($attributes->attribute);
-                $data[] = array(
+                $data = array(
                     $attribute->name => $attributes->terms,
+                    'brand' => $product->brand_name,
+                    'category' => $product->category
                 );
             }
             Cart::add(array(
