@@ -128,14 +128,14 @@ ul.pagination {
 							<div class="table_wrap">
 
 								<table class="table_type_1 orders_table">
-
+									@if(count($orders)>0)
 									<thead>
 
 										<tr>
 											
-											<th class="order_number_col">Order Number</th>
-											<th>Order Date</th>
-											<th class="ship_col">Ship To</th>
+											<th class="order_number_col" style="width:25%">Order Details</th>
+											<th>Payment Type</th>
+											<th class="ship_col" style="width:20%">Ship To</th>
 											<th>Order Status</th>
 											<th class="order_total_col">Total</th>
 											<th class="product_action_col">Action</th>
@@ -143,12 +143,27 @@ ul.pagination {
 										</tr>
 
 									</thead>
-
+									@endif
 									<tbody>
+										@if(count($orders)>0)
 									@foreach($orders as $order)
 										<tr>
-											<td data-title="Order Number"><a href="/account/vieworders/{{$order->id}}" style="color: #ff4557;">#{{$order->id}}</a></td>
-											<td data-title="Order Date">{{date('Y-m-d', strtotime($order->created_at))}}</td>
+											<td data-title="Order Number">
+												<a href="/account/vieworders/{{$order->id}}" style="color: #ff4557;">Order ID : #{{$order->id}}</a>
+												<img src="{{asset('/upload_brand').'/'.$order->brand_image}}" alt="">
+												<p>Construction Site : <b>{{$order->project_name}}</b></p>
+												<p>Order Date : <b>{{date('Y-m-d', strtotime($order->created_at))}}</b></p>
+											<p style="color: #2db125;">{{$order->delivery_info}}</p>
+											</td>
+											
+											
+											<td data-title="Order Date">
+												@if($order->payment_type == 0)
+												<p>Online Payment</p>
+												@else
+												<p>Cash On Delivery</p>
+												@endif
+											</td>
 											<td data-title="Ship To">
 												<p>{{$order->first_name}} - {{$order->last_name}}</p>
 												<p>{{$order->telephone}}</p>
@@ -186,6 +201,9 @@ ul.pagination {
 											</td>
 										</tr>
 									@endforeach
+									@else
+										<h2 style="margin-top: 19px">Orders data Not Found!</h2>
+									@endif
 									</tbody>
 
 								</table>

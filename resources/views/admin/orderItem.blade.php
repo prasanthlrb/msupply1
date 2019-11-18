@@ -120,30 +120,8 @@
                   </div>
                   <div class="row">
                     <div class="col-md-7 col-sm-12 text-center text-md-left">
-                      <p class="lead">Transport Type:</p>
-                      <div class="row">
-                        <div class="col-md-8">
-                          <table class="table table-borderless table-sm">
-                            <tbody>
-                              <tr>
-                                <td>Transport Mode:</td>
-                              <td class="text-right">{{$order->transport_type == 1 ? "KAS Earth Movers" : "Own Transport"}}</td>
-                              </tr>
-                              <tr>
-                              @if($order->transport_type == 1)
-                             <?php $row = App\transport::find($order->transport_id); ?>
-                                <td>Vehicle Name:</td>
-                              <td class="text-right">{{$row->vehicle_name}}</td>
-                             
-                              <img src="/transport/{{$row->vehicle_image}}" alt="" width="50%">
-                              
-                              @endif
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
+
+                    </div> 
                     <div class="col-md-5 col-sm-12">
                       <p class="lead">Calculate</p>
                       <div class="table-responsive">

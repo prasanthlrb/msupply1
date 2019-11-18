@@ -189,7 +189,7 @@ class cartController extends Controller
 
         //return response()->json($final_data);
         $limit_outline = array();
-        $total = Cart::getTotal();
+        $total = ceil(Cart::getTotal());
         $limit_msg = '';
         foreach ($final_data as $fd) {
             $limit_data = brand::find($fd['brand']);

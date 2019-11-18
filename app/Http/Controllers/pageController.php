@@ -1206,7 +1206,7 @@ class pageController extends Controller
 
         $total = Cart::getTotal();
         $quantity = count(Cart::getContent());
-        return response()->json(array($status, $total, $quantity));
+        return response()->json(array($status, ceil($total), $quantity));
         // return response()->json($totalQty);
     }
     public function colorModals($id)

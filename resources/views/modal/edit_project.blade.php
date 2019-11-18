@@ -10,7 +10,7 @@
 
 		<div class="left_side">
 
-			<h2>Update Site</h2>
+			<h2>Update Construction Site</h2>
 
 		</div>
 
@@ -28,7 +28,7 @@
 		<ul>
 
 			<li>
-				<label for="project_name">Building Site Name</label>
+				<label for="project_name">Construction Site Name</label>
 			<input type="hidden" name="id" value="{{$project->id}}">
 			<input type="text" name="project_name" id="project_name" value="{{$project->project_name}}">
 			</li>

@@ -180,7 +180,7 @@
 							</div> --}}
 							<br>
 						<br>
-						<h3>Select Your Building Site</h3>
+						<h3>Select Your Construction Site</h3>
 							<a href="javascript:void(null)"  class="button_blue mini_btn" data-modal-url="/account/create-project">Create New Site</a>
 							<ul class="simple_vertical_list">
 								@if(count($project)>0)
@@ -316,15 +316,19 @@
 			@section('extra-js')
 			<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       <script>
-		  	var pay_type = 2;
+			  var pay_type = 2;
+			  
          var SITEURL = '{{URL::to('')}}';
          $.ajaxSetup({
            headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            }
          }); 
-		 if(pay_type ==2){
          $('body').on('click', '#order_button', function(e){
+			var billing_id =  $('input[name=billing]:checked').val();
+			var shipping_id =  $('input[name=ship]:checked').val();
+			var project_id =  $('input[name=project]:checked').val();
+			 if(pay_type ==2){
            var totalAmount = '{{$online_total}}';
            var options = {
            "key": "rzp_test_InZD6eAnToWcgk",
@@ -334,15 +338,16 @@
            //"image": "https://www.tutsmake.com/wp-content/uploads/2018/12/cropped-favicon-1024-1-180x180.png",
            "handler": function (response){
                  $.ajax({
-                   url: SITEURL + 'paysuccess',
+                  // url: SITEURL + 'paysuccess',
+                   url: '/account/online-payment',
                    type: 'post',
                    dataType: 'json',
                    data: {
-                    razorpay_payment_id: response.razorpay_payment_id ,
+                    payment_id: response.razorpay_payment_id,billing_id:billing_id,shipping_id:shipping_id,payment_type:0,project_id:project_id,
                    }, 
                    success: function (msg) {
-          
-                       window.location.href = SITEURL + 'razor-thank-you';
+					window.location.href = '/account/orders';
+                       //window.location.href = SITEURL + 'razor-thank-you';
                    }
                });
              
@@ -358,8 +363,27 @@
          var rzp1 = new Razorpay(options);
          rzp1.open();
          e.preventDefault();
-         });
-		 }
+		 }else{
+			
+	
+			 $.ajax({
+                  // url: SITEURL + 'paysuccess',
+				   url: '/account/online-payment',
+				   headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           },
+                   type: 'post',
+                   dataType: 'json',
+                   data: {
+                    payment_id: null,billing_id:billing_id,shipping_id:shipping_id,payment_type:1,project_id:project_id,
+                   }, 
+                   success: function (msg) {
+				
+                       window.location.href = '/account/orders';
+                   }
+               });
+			}
+		});
          /*document.getElementsClass('buy_plan1').onclick = function(e){
            rzp1.open();
            e.preventDefault();
@@ -375,7 +399,7 @@
 				pay_type = 2;
 				$('#order_button').text('PROCEED TO PAY')
 			});
-            var otpValue = 666333;
+            //var otpValue = 666333;
 	// 	$('#order_button').click(function(){
     //         // if($('input[name=payment_type]:checked').val() == 'cod'){
     //         //     $.ajax({

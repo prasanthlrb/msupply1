@@ -33,6 +33,9 @@ Route::group(['middleware' => ['location']], function () {
 });
 
 Route::get('/event', 'PayController@index');
+
+
+Route::get('/getOrderEligibleData', 'accountController@getOrderEligibleData');
 Route::post('/pay', 'PayController@pay');
 Route::get('/pay-success', 'PayController@success');
 
@@ -481,6 +484,8 @@ Route::group(['prefix' => 'account'], function () {
     Route::get('/edit-project/{id}', 'accountController@editProject');
     Route::get('/delete-project/{id}', 'accountController@deleteProject');
     Route::post('/update-project', 'accountController@updateProject');
+    //online payment
+    Route::post('/online-payment', 'accountController@onlinePayment');
 });
 Route::post('/submit-company', 'accountController@submitCompany');
 Route::get('/get-compare', 'pageController@compare');
@@ -494,7 +499,7 @@ Route::get('/add-cart/{id}/{qty}', 'pageController@addToCart');
 Route::get('/get-cart', function () {
     $total = Cart::getTotal();
     $cartTotalQuantity = count(Cart::getContent());
-    $data = $total . '|' . $cartTotalQuantity;
+    $data = ceil($total) . '|' . $cartTotalQuantity;
     return json_encode($data);
 });
 Route::get('/clean-cart', function () {

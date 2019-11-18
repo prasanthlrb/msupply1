@@ -17,13 +17,15 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->string('user_id');
             $table->string('order_status')->default(0);
-            $table->string('billing')->nullable();
-            $table->string('shipping')->nullable();
+            $table->string('billing_id')->nullable();
+            $table->string('shipping_id')->nullable();
             $table->string('payment_type')->nullable();
             $table->string('total_amount')->nullable();
-            $table->string('transport_type')->nullable();
-            $table->string('transport_id')->nullable();
+            $table->string('shipping_type')->nullable();
+            $table->string('shipping_value')->nullable();
             $table->string('project_id')->nullable();
+            $table->string('payment_id')->nullable();
+            $table->string('brand_id')->nullable();
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@
 					<ul class="breadcrumbs">
 
 						<li><a href="index.html">Home</a></li>
-						<li>My site</li>
+						<li>My Construction site</li>
 
 					</ul>
 
@@ -39,7 +39,7 @@
 
 							<section class="theme_box table">
 								<a href="javascript:void(null)"  class="button_blue mini_btn" style="float:right" data-modal-url="/account/create-project">Create New Site</a>
-								<h3>Site List</h3>
+								<h3> Construction Site List</h3>
 								
         <section class="section_offset">
             <div class="row">

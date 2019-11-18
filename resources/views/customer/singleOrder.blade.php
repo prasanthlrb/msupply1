@@ -68,7 +68,7 @@
 
                                 <tbody>
                                     <tr>
-                                        <th>Order Number</th>
+                                        <th>Order ID</th>
 
                                         <td><a href="#">{{$order->id}}</a></td>
                                     </tr>
@@ -78,7 +78,7 @@
                                     </tr>
 
                                     <tr>
-                                        <th>Product Status</th>
+                                        <th>Order Status</th>
                                         <td>@if($order->order_status == 0)
                                                 Pending
                                                 @elseif($order->order_status == 1)
@@ -109,6 +109,22 @@
                                                 @else
                                                 Online Payment
 												@endif</td>
+
+                                    </tr>
+                                    <tr>
+                                        
+                                        <th>Delivery Date</th>
+
+                                    <td>{{$order->delivery_info}}</td>
+                                            
+
+                                    </tr>
+                                    <tr>
+                                        
+                                        <th>Construction Site</th>
+
+                                    <td>{{$project->project_name}}</td>
+                                            
 
                                     </tr>
 
@@ -339,7 +355,7 @@
                                 $shipping = 0;
                                 $table_pos =3;
                                 ?>
-                                @foreach($order_items as $order_item)
+                                @foreach($order_items as $index => $order_item)
                                 <input type="hidden" name="order_item_id" id="order_item_id" value="{{$order_item->id}}">
                                     <tr>
                                         <td data-title="Product Name">
@@ -356,11 +372,11 @@
                                         <td data-title="Price" class="subtotal">₹ {{$order_item->sales_price}}</td>
                                         <td data-title="Quantity">{{$order_item->qty}}</td>
                                          @if(count($ifPaint)>0)
-                                        <td>{{$ifPaint[0]->color_id}}	</td>
-                                        <td>{{$ifPaint[0]->lit}}	</td>
+                                        <td>{{$ifPaint[$index]->color_id}}	</td>
+                                        <td>{{$ifPaint[$index]->lit}}	</td>
                                         <?php $table_pos=5?>
                                         @endif
-                                        <td data-title="Total" class="total">₹ {{$order_item->sales_price * $order_item->qty}}</td>
+                                        <td data-title="Total" class="total">₹ {{$order_item->total_price }}</td>
                                     </tr>
                                    
                                 @endforeach
@@ -369,11 +385,17 @@
                                 <tfoot>
                                         <tr>
                                         
-                                        <td colspan="{{$table_pos}}" class="bold">Tax ({{$order_item->tax_type}}) </td>
+                                        <td colspan="{{$table_pos}}" class="bold">Tax ({{$order_item->tax_percent}} % {{$order_item->tax_type}}) </td>
                                                 <td class="total">₹ {{$order_item->tax}}</td>
         
                                             </tr>
-
+                                            @if($order->shipping_type == 1)
+                                             <tr>
+                                             <td colspan="{{$table_pos}}" class="bold">Shipping &amp; Heading (Flat Rate - Include)  </td>
+                                                <td class="total">₹ {{$order->shipping_value}}</td>
+        
+                                            </tr>
+                                            @endif
                                    
 
                                    
@@ -381,7 +403,7 @@
                                     <tr>
                                         
                                     <td colspan="{{$table_pos}}" class="grandtotal">Grand Total</td>
-                                        <td class="grandtotal">₹ {{$order_item->total_price}}</td>
+                                        <td class="grandtotal">₹ {{$order->total_amount}}</td>
 
                                     </tr>
 

@@ -331,6 +331,7 @@ class accountController extends Controller
                 }
                 $final_data[] = $dummy_total;
             }
+
             $limit_outline = array();
             $freeShipping = array();
             $nonFreeShipping = array();
@@ -392,9 +393,12 @@ class accountController extends Controller
                 }
                 $final_nfs_data[] = $dummyTotal;
             }
+
             $shipping_price = '';
             $paid_shipping_amount = 0;
+
             foreach ($final_nfs_data as $fnd) {
+
                 $getBrand = brand::find($fnd['brand']);
                 $total_paid = ceil($getBrand->paid_base + ($fnd['total'] * $getBrand->paid_value));
                 $paid_shipping_amount += $total_paid;
@@ -403,10 +407,13 @@ class accountController extends Controller
 									<td colspan="5" ><span class="bold">' . $getBrand->brand . ' Product</span>, Shipping &amp; Heading (Flat Rate - Fixed)</td>
 									<td class="total">₹ ' . AppHelper::instance()->IND_money_format($total_paid) . '</td>
 
-									</tr>';
+                                    </tr>';
             }
 
             //return response()->json($final_nfs_data);
+
+            //return response()->json($order_successful);
+            // $order_success_item = array();
             foreach ($getCart as $item) {
                 if (in_array($item['attributes']->brand, $limit_outline)) {
                     //$product_id[] = $item->id;
@@ -418,6 +425,7 @@ class accountController extends Controller
                     } else {
                         $row = product::find($item->id);
                     }
+                    //$order_success_item_set = array("product_name" => $row->product_name, 'sales_price' => 0, 'product_id' => $row->id, 'qty' => 0, 'tax_type' => '', 'tax' => '', 'tax_percentage' => '', 'total_price' => '', 'unit_type' => '');
                     //    // foreach ($products as $row) {
                     $brand = brand::find($row->brand_name);
                     $result .= '<tr>';
@@ -699,16 +707,21 @@ class accountController extends Controller
 
     public function orders()
     {
-        // $orders =DB::table('orders as o')
+        //$orders = DB::table('orders as o')->where('o.user_id', Auth::user()->id)
+        // ->rightJoin('shippings as s', 's.id', '=', 'o.shipping_id')
+        // ->get();
         // ->join('shippings as s','o.shipping','=','s.id')
         // ->select('o.id','o.created_at','o.order_status','o.total_amount','s.first_name','s.last_name','s.email','s.telephone','s.address','s.zip')
         // ->orderBy('o.id','desc')->paginate(1);
         $orders = DB::table('orders as o')
             ->where('o.user_id', Auth::user()->id)
-            ->join('shippings as s', 'o.shipping', '=', 's.id')
-            ->select('o.*', 's.first_name', 's.last_name', 's.email', 's.address', 's.city', 's.state', 's.zip', 's.country', 's.telephone')
+            ->join('shippings as s', 'o.shipping_id', '=', 's.id')
+            ->join('projects as p', 'o.project_id', '=', 'p.id')
+            ->join('brands as b', 'o.brand_id', '=', 'b.id')
+            ->select('o.*', 's.first_name', 's.last_name', 's.email', 's.address', 's.city', 's.state', 's.zip', 's.country', 's.telephone', 'b.brand_image', 'p.project_name')
             ->orderBy('o.id', 'desc')
-            ->paginate(3);
+            //->get();
+            ->paginate(5);
         //return response()->json($orders);
         return view('customer/orders', compact('orders'));
     }
@@ -1023,15 +1036,16 @@ class accountController extends Controller
     public function vieworders($id)
     {
         $order = order::find($id);
+        $project = project::find($order->project_id);
         $order_items = order_item::where('order_id', $id)->get();
-        $shipping = shipping::where('id', $order->shipping)->get();
-        $billing = billing::where('id', $order->billing)->get();
+        $shipping = shipping::where('id', $order->shipping_id)->get();
+        $billing = billing::where('id', $order->billing_id)->get();
         $product = product::find($order_items[0]->product_id);
         $review = review::where('user_id', Auth::user()->id)->where('order_item_id', $order_items[0]->id)->first();
         $rating = rating::where('user_id', Auth::user()->id)->where('order_item_id', $order_items[0]->id)->first();
         $ifPaint =  paintOrderDetails::where('order_id', $order->id)->get();
-        //return response()->json($order_items);
-        return view('customer.singleOrder', compact('order', 'order_items', 'billing', 'shipping', 'product', 'review', 'rating', 'ifPaint'));
+        //return response()->json($ifPaint);
+        return view('customer.singleOrder', compact('order', 'order_items', 'billing', 'shipping', 'product', 'review', 'rating', 'ifPaint', 'project'));
     }
 
     //review
@@ -1108,7 +1122,7 @@ class accountController extends Controller
     public function orderPrint($id)
     {
         $order = order::find($id);
-        $billing = billing::find($order->billing);
+        $billing = billing::find($order->billing_id);
         $info = contactInfo::find(1);
         $item = order_item::where('order_id', $order->id)->get();
         $pdf = PDF::loadView('customer.printOrder', compact('order', 'billing', 'info', 'item'));
@@ -1193,5 +1207,308 @@ class accountController extends Controller
     {
         project::find($id)->delete();
         return response()->json(['message' => "Successfully Delete"], 200);
+    }
+
+    public function onlinePayment(Request $request)
+    {
+
+        //return response()->json(['message' => "Successfully Store"], 200);
+        $collect_all = $this->getOrderEligibleData($request);
+        return response()->json($collect_all);
+    }
+    public function getOrderEligibleData($request)
+    {
+        $getCart = Cart::getContent();
+        $brand_data = array();
+        foreach ($getCart as $b) {
+            $brand_data[$b['attributes']->brand] = $b['attributes']->brand; // Get unique country by code.
+            //array_push($brand_data[$b['attributes']->brand], );
+        }
+        //return response()->json($getCart);
+        $get_brand = brand::whereIn('id', $brand_data)->get();
+        foreach ($get_brand as $b) {
+            $dummy_total = array('total' => 0, 'brand' => '', 'order_type' => '', 'category' => '');
+            foreach ($getCart as $c) {
+                if ($b->id == $c['attributes']->brand) {
+                    if ($b->order_type == 0) {
+                        $dummy_total['total'] += $c['quantity'];
+                        $dummy_total['brand'] = $c['attributes']->brand;
+                        $dummy_total['category'] = $c['attributes']->category;
+                        $dummy_total['order_type'] = "QTY";
+                    } elseif ($b->order_type == 1) {
+                        if ($c['attributes']->category == 14) {
+                            $prod = product::find($c['id']);
+                            if ($c['attributes']->unit_name == "Rods") {
+                                $dummy_total['total'] += ceil($c['quantity'] * $prod->weight);
+                                $dummy_total['brand'] = $c['attributes']->brand;
+                                $dummy_total['category'] = $c['attributes']->category;
+                                $dummy_total['order_type'] = "Kg Weight";
+                            } else {
+                                $weight = ($prod->weight * $prod->items);
+                                $dummy_total['total'] +=  ceil($c['quantity'] * $weight);
+                                $dummy_total['brand'] = $c['attributes']->brand;
+                                $dummy_total['category'] = $c['attributes']->category;
+                                $dummy_total['order_type'] = "Kg Weight";
+                            }
+                        } else {
+                            $dummy_total['total'] += $c['quantity'];
+                            $dummy_total['brand'] = $c['attributes']->brand;
+                            $dummy_total['category'] = $c['attributes']->category;
+                            $dummy_total['order_type'] = "Nos";
+                        }
+                    } elseif ($b->order_type == 2) {
+                        $dummy_total['total'] += $c['quantity'] * $c['price'];
+                        $dummy_total['brand'] = $c['attributes']->brand;
+                        $dummy_total['category'] = $c['attributes']->category;
+                        $dummy_total['order_type'] = "Price";
+                    } elseif ($b->order_type == 3) {
+                        $dummy_total['total'] += $c['quantity'] * $c['attributes']->lit;
+                        $dummy_total['brand'] = $c['attributes']->brand;
+                        $dummy_total['category'] = $c['attributes']->category;
+                        $dummy_total['order_type'] = "Liter";
+                    }
+                }
+            }
+            $final_data[] = $dummy_total;
+        }
+
+        $limit_outline = array();
+        $freeShipping = array();
+        $nonFreeShipping = array();
+
+        foreach ($final_data as $fd) {
+            $limit_data = brand::find($fd['brand']);
+            if ($limit_data->order_limit <= $fd['total']) {
+                $limit_outline[] = $fd['brand'];
+                if ($limit_data->free_shipping <= $fd['total']) {
+                    $freeShipping[] = $fd['brand'];
+                } else {
+                    $nonFreeShipping[] = $fd['brand'];
+                }
+            }
+        }
+        foreach ($nonFreeShipping as $nfs) {
+            $dummyTotal = array('total' => 0, 'brand' => '', 'paid_type' => '', 'category' => '');
+            foreach ($getCart as $gC) {
+                if ($nfs == $gC['attributes']->brand) {
+                    $getBrand = brand::find($nfs);
+                    if ($getBrand->paid_type == 0) {
+                        $dummyTotal['total'] += $gC['quantity'];
+                        $dummyTotal['brand'] = $gC['attributes']->brand;
+                        $dummyTotal['category'] = $gC['attributes']->category;
+                        $dummyTotal['paid_type'] = "QTY";
+                    } elseif ($getBrand->paid_type == 1) {
+                        if ($gC['attributes']->category == 14) {
+                            $prod = product::find($gC['id']);
+                            if ($gC['attributes']->unit_name == "Rods") {
+                                $dummyTotal['total'] += ceil($gC['quantity'] * $prod->weight);
+                                $dummyTotal['brand'] = $gC['attributes']->brand;
+                                $dummyTotal['category'] = $gC['attributes']->category;
+                                $dummyTotal['paid_type'] = "Kg Weight";
+                            } else {
+                                $weight = ($prod->weight * $prod->items);
+                                $dummyTotal['total'] +=  ceil($gC['quantity'] * $weight);
+                                $dummyTotal['brand'] = $gC['attributes']->brand;
+                                $dummyTotal['category'] = $gC['attributes']->category;
+                                $dummyTotal['paid_type'] = "Kg Weight";
+                            }
+                        } else {
+                            $dummyTotal['total'] += $gC['quantity'];
+                            $dummyTotal['brand'] = $gC['attributes']->brand;
+                            $dummyTotal['category'] = $gC['attributes']->category;
+                            $dummyTotal['paid_type'] = "Nos";
+                        }
+                    } elseif ($getBrand->paid_type == 2) {
+                        $dummyTotal['total'] += $gC['quantity'] * $gC['price'];
+                        $dummyTotal['brand'] = $gC['attributes']->brand;
+                        $dummyTotal['category'] = $gC['attributes']->category;
+                        $dummyTotal['paid_type'] = "Price";
+                    } elseif ($getBrand->paid_type == 3) {
+                        $dummyTotal['total'] += $gC['quantity'] * $gC['attributes']->lit;
+                        $dummyTotal['brand'] = $gC['attributes']->brand;
+                        $dummyTotal['category'] = $gC['attributes']->category;
+                        $dummyTotal['paid_type'] = "Liter";
+                    }
+                }
+            }
+            $final_nfs_data[] = $dummyTotal;
+        }
+
+        $paid_shipping_amount = 0;
+        $paid_shipping_data = array();
+        foreach ($final_nfs_data as $fnd) {
+
+            $getBrand = brand::find($fnd['brand']);
+            $total_paid = ceil($getBrand->paid_base + ($fnd['total'] * $getBrand->paid_value));
+            $paid_shipping_amount += $total_paid;
+            $paid_shipping_data_collection = array('brand' => $fnd['brand'], 'shipping_value' => AppHelper::instance()->IND_money_format($total_paid));
+            $paid_shipping_data[] = $paid_shipping_data_collection;
+        }
+
+        //return response()->json($final_nfs_data);
+        $order_successful = array();
+        foreach ($final_data as $fdss) {
+            foreach ($paid_shipping_data as $psd) {
+                if ($psd['brand'] == $fdss['brand']) {
+                    $dummy_set = array(
+                        'brand' => $fdss['brand'],
+                        'shipping_value' => $psd['shipping_value'],
+                        'shipping_type' => 1,
+                        'total_amount' => 0,
+                        'items' => []
+                    );
+                } else {
+                    $dummy_set = array(
+                        'brand' => $fdss['brand'],
+                        'shipping_value' => null,
+                        'shipping_type' => 0,
+                        'total_amount' => 0,
+                        'items' => []
+                    );
+                }
+            }
+
+
+
+            $order_successful[$fdss['brand']] = $dummy_set;
+        }
+        //return response()->json($order_successful);
+        foreach ($order_successful as $orders_data) {
+
+            if (in_array($orders_data['brand'], $limit_outline)) {
+                $order = new order;
+                $order->brand_id = $orders_data['brand'];
+                $order->shipping_value = $orders_data['shipping_value'];
+                $order->shipping_type = $orders_data['shipping_type'];
+                $order->user_id = Auth::user()->id;
+                $order->billing_id = $request->billing_id;
+                $order->shipping_id = $request->shipping_id;
+                $order->payment_type = $request->payment_type;
+                $order->payment_id = $request->payment_id;
+                $order->project_id = $request->project_id;
+                $brand_row = brand::find($orders_data['brand']);
+                if ($brand_row->delivery_from != null) {
+                    $start = date('m-d', mktime(0, 0, 0, date('m'), date('d') + $brand_row->delivery_from, date('Y')));
+                    $parts = explode('-', $start);
+                    $month_name = date("M", mktime(0, 0, 0, $parts[0]));
+
+                    if ($brand_row->delivery_to != null) {
+                        $end = date('d', mktime(0, 0, 0, date('m'), date('d') + $brand_row->delivery_to, date('Y')));
+                        $order->delivery_info  = ' Delivery By : ' . $month_name . ' ' . $parts[1] . ' - ' . $end . '';
+                    }
+                }
+                $order->save();
+                $totalPrice = 0;
+                foreach ($getCart as $item) {
+                    if ($item['attributes']->brand == $orders_data['brand']) {
+                        if (isset($item['attributes']['color'])) {
+                            $row = product::find($item['attributes']->product_id);
+                            //return response()->json($row);
+                        } else {
+                            $row = product::find($item->id);
+                        }
+                        //$order_success_item_set = array("product_name" => $row->product_name, 'sales_price' => 0, 'product_id' => $row->id, 'qty' => 0, 'tax_type' => '', 'tax' => '', 'tax_percentage' => '', 'total_price' => '', 'unit_type' => '');
+                        //    // foreach ($products as $row) {
+                        $brand = brand::find($row->brand_name);
+                        $order_item = new order_item;
+                        $order_item->product_name = $item->name;
+                        $order_item->order_id = $order->id;
+                        $order_item->product_id = $row->id;
+                        $order_item->sales_price = ceil($item->price);
+                        $order_item->qty = $item->quantity;
+
+
+
+
+                        $item_total = $item->quantity * $item->price;
+
+                        if ($row->tax_type == "in") {
+                            $tax = round($item_total * $row->tax / (100 + $row->tax), 2);
+                            $order_item->tax_type = "inclusive";
+                            $order_item->tax = ceil($tax);
+                            $order_item->tax_percent = $row->tax;
+                            $order_item->total_price = ceil($item_total);
+
+                            $totalPrice += $item_total;
+                        } else {
+
+                            $tax = $item_total * $row->tax / 100;
+                            $total = $item_total + $tax;
+                            $order_item->tax_type = "exclusive";
+                            $order_item->tax = ceil($tax);
+                            $order_item->tax_percent = $row->tax;
+                            $order_item->total_price = ceil($total);
+                            // $exTax += $tax;
+                            $totalPrice += $total;
+                        }
+                        if (isset($item['attributes']['steel'])) {
+                            $order_item->unit_type = $item['attributes']['unit_name'];
+                        }
+                        $order_item->save();
+
+                        // $product_attribute = product_attribute::where('product_id', $row->id)->get();
+                        // if (count($product_attribute) > 0) {
+                        //     foreach ($product_attribute as $attr) {
+                        //         $attr_name = attribute::find($attr->attribute);
+                        //         $order_attribute = new order_attribute;
+                        //         $order_attribute->attr_name = $attr_name->name;
+                        //         $order_attribute->terms = $attr->term;
+                        //         $order_attribute->order_item_id = $order_item->id;
+                        //         $order_attribute->save();
+                        //     }
+                        // }
+                        if (isset($item['attributes']['color'])) {
+                            $paint_order = new paintOrderDetails;
+                            $paint_order->order_id = $order->id;
+                            $paint_order->order_item_id = $order_item->id;
+                            $paint_order->price = $item->price;
+                            $paint_order->lit = $item['attributes']['lit'];
+                            $paint_order->color_id = $item['attributes']['color_id'];
+                            $paint_order->save();
+                        }
+
+
+                        // $product_attribute = product_attribute::where('product_id', $row->id)->get();
+
+                        if (!isset($item['attributes']['color'])) {
+                            if (!isset($item['attributes']['steel'])) {
+                                if (!isset($item['attributes']['tiles'])) {
+                                    if (count($item['attributes']) > 0) {
+                                        $dummyBox[] = $item['attributes'];
+
+                                        //return response()->json($dummyBox[0]);
+                                        foreach ($dummyBox as $key => $value) {
+                                            foreach ($value as $field => $row1) {
+                                                if ($field != "category" && $field != "brand") {
+                                                    $order_attribute = new order_attribute;
+                                                    $order_attribute->attr_name = $field;
+                                                    $order_attribute->terms = $row1;
+                                                    $order_attribute->order_item_id = $order_item->id;
+                                                    $order_attribute->save();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // if (isset($item['attributes']['color'])) {
+                        //     if ($item['attributes']['color_id'] != 0) {
+                        //         $result .= ' <li>Color Code : ' . $item['attributes']['color_id'] . '</li>';
+                        //     }
+                        //     if ($item['attributes']['lit'] != 0) {
+                        //         $result .= ' <li>Litreage : ' . $item['attributes']['lit'] . '</li>';
+                        //     }
+                        // }
+                        Cart::remove($item->id);
+                    }
+                }
+                $order_update = order::find($order->id);
+                $order_update->total_amount = $totalPrice + $order_update->shipping_value;
+                $order_update->save();
+            }
+        }
+        return $request;
     }
 }
