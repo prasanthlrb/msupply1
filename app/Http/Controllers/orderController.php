@@ -18,6 +18,8 @@ use App\role;
 use App\order_log;
 use App\paintOrderDetails;
 use App\color;
+use AppHelper;
+use App\brand;
 
 class orderController extends Controller
 {
@@ -103,14 +105,19 @@ class orderController extends Controller
                 if ($order->order_status == 0) {
                     $status = '<b>Pending</b>';
                 } else if ($order->order_status == 1) {
+
                     $status = '<b>Processing</b>';
                 } else if ($order->order_status == 2) {
+
                     $status = '<b>Shipping</b>';
                 } else if ($order->order_status == 3) {
+
                     $status = '<b>Delivered</b>';
                 } else if ($order->order_status == 4) {
+
                     $status = '<b>on-hold</b>';
                 } else {
+
                     $status = '<b>failed</b>';
                 }
                 return '<td>
@@ -142,22 +149,40 @@ class orderController extends Controller
                 $row->save();
                 if ($request->status == 0) {
                     $status = '<b>Pending</b>';
+                    $status_msg = 'Pending';
                 } else if ($request->status == 1) {
                     $status = '<b>Processing</b>';
+                    $status_msg = 'Processing';
                 } else if ($request->status == 2) {
                     $status = '<b>Shipping</b>';
+                    $status_msg = 'Shipping';
                 } else if ($request->status == 3) {
                     $status = '<b>Delivered</b>';
+                    $status_msg = 'Delivered';
                 } else if ($request->status == 4) {
                     $status = '<b>on-hold</b>';
+                    $status_msg = 'on-hold';
                 } else {
                     $status = '<b>failed</b>';
+                    $status_msg = 'failed';
                 }
                 $order_log = new order_log;
                 $order_log->order_id  = $row->id;
                 $order_log->change_status = $status;
                 $order_log->employee_name = Auth::guard('admin')->user()->emp_name;
                 $order_log->save();
+                $brand_msg = brand::find($row->brand_id);
+                $msg_items = order_item::where('order_id', $row->id)->get();
+                $user_ = User::find($row->user_id);
+                $msg_item_name = '';
+                $msg_mobile = $user_->phone;
+                // $message = "hi";
+                foreach ($msg_items as $mitem) {
+                    $msg_item_name .= '' . $mitem->product_name . ',';
+                }
+                $message = $status_msg . ': Your order for ' . $brand_msg->brand . ' Brand Product (' . $msg_item_name . ') with Order ID #' . $row->id . ' Total Amount is Rs.' . $row->total_amount . ' .';
+
+                AppHelper::instance()->sendMessage($message, $msg_mobile);
             }
         }
         return response()->json(["Successfully Update"], 200);
@@ -169,22 +194,40 @@ class orderController extends Controller
         $orderChange->save();
         if ($request->status == 0) {
             $status = '<b>Pending</b>';
+            $status_msg = 'Pending';
         } else if ($request->status == 1) {
             $status = '<b>Processing</b>';
+            $status_msg = 'Processing';
         } else if ($request->status == 2) {
             $status = '<b>Shipping</b>';
+            $status_msg = 'Shipping';
         } else if ($request->status == 3) {
             $status = '<b>Delivered</b>';
+            $status_msg = 'Delivered';
         } else if ($request->status == 4) {
             $status = '<b>on-hold</b>';
+            $status_msg = 'on-hold';
         } else {
             $status = '<b>failed</b>';
+            $status_msg = 'failed';
         }
         $order_log = new order_log;
         $order_log->order_id  = $orderChange->id;
         $order_log->change_status = $status;
         $order_log->employee_name = Auth::guard('admin')->user()->emp_name;
         $order_log->save();
+        $brand_msg = brand::find($orderChange->brand_id);
+        $msg_items = order_item::where('order_id', $orderChange->id)->get();
+        $user_ = User::find($orderChange->user_id);
+        $msg_item_name = '';
+        $msg_mobile = $user_->phone;
+        // $message = "hi";
+        foreach ($msg_items as $mitem) {
+            $msg_item_name .= '' . $mitem->product_name . ',';
+        }
+        $message = $status_msg . ': Your order for ' . $brand_msg->brand . ' Brand Product (' . $msg_item_name . ') with Order ID #' . $orderChange->id . ' Total Amount is Rs.' . $orderChange->total_amount . ' .';
+
+        AppHelper::instance()->sendMessage($message, $msg_mobile);
         return response()->json(["Successfully Update"], 200);
     }
 

@@ -1374,7 +1374,14 @@ class pageController extends Controller
     {
         // Session::push('locations', $data);
         //Session::forget('locations');
-        Session::put('locations', $data);
+        if (Session::has('locations')) {
+            if (Session::get('locations') != $data) {
+                Cart::clear();
+            }
+        } else {
+
+            Session::put('locations', $data);
+        }
         return response()->json(Session::get('locations'));
     }
     public function tilesLocationBasedData($where, $where_value)

@@ -463,7 +463,7 @@ class accountController extends Controller
                     }
                     if (isset($item['attributes']['color'])) {
                         if ($item['attributes']['color_id'] != 0) {
-                            $result .= ' <li>Color Code : ' . $item['attributes']['color_id'] . '</li>';
+                            $result .= ' <li>Color Code : ' . $item['attributes']['color_code'] . '</li>';
                         }
                         if ($item['attributes']['lit'] != 0) {
                             $result .= ' <li>Litreage : ' . $item['attributes']['lit'] . '</li>';
@@ -1463,7 +1463,7 @@ class accountController extends Controller
                             $paint_order->order_item_id = $order_item->id;
                             $paint_order->price = $item->price;
                             $paint_order->lit = $item['attributes']['lit'];
-                            $paint_order->color_id = $item['attributes']['color_id'];
+                            $paint_order->color_id = $item['attributes']['color_code'];
                             $paint_order->save();
                         }
 
@@ -1507,6 +1507,16 @@ class accountController extends Controller
                 $order_update = order::find($order->id);
                 $order_update->total_amount = $totalPrice + $order_update->shipping_value;
                 $order_update->save();
+                $brand_msg = brand::find($order_update->brand_id);
+                $msg_items = order_item::where('order_id', $order->id)->get();
+                $msg_item_name = '';
+                $msg_mobile = Auth::user()->phone;
+                // $message = "hi";
+                foreach ($msg_items as $mitem) {
+                    $msg_item_name .= '' . $mitem->product_name . ',';
+                }
+                $message = 'Placed: Your order for ' . $brand_msg->brand . ' Brand Product (' . $msg_item_name . ') with Order ID #' . $order_update->id . ' Total Amount is Rs.' . $order_update->total_amount . ', You Can ' . $order_update->delivery_info . ', We will send your an update when your order is packed/shipped.';
+                AppHelper::instance()->sendMessage($message, $msg_mobile);
             }
         }
         return $request;
