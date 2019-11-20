@@ -403,99 +403,99 @@ class pageController extends Controller
                             $row = $this->tilesSingleLocation($row->id);
                             //return response()->json($row);
                         }
-
-                        $output .= '
+                        if (isset($row)) {
+                            $output .= '
                 <div class="product_item type_2">
                     <div class="image_wrap">';
-                        if ($row->category == 1) {
-                            $output .= '<img src="http://www.kagtech.net/KAGAPP/Partsupload/' . $row->product_image . '" alt="">';
-                        } else {
-                            $output .= '<img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">';
-                        }
+                            if ($row->category == 1) {
+                                $output .= '<img src="http://www.kagtech.net/KAGAPP/Partsupload/' . $row->product_image . '" alt="">';
+                            } else {
+                                $output .= '<img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">';
+                            }
 
-                        $output .= '<div class="actions_wrap">
+                            $output .= '<div class="actions_wrap">
                             <div class="centered_buttons">';
-                        if ($row->category == 1) {
-                            $output .= '
+                            if ($row->category == 1) {
+                                $output .= '
             <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/' . $row->id . '">Quick View</a>';
-                        } else if ($row->category == 21) {
-                            $output .= '
+                            } else if ($row->category == 21) {
+                                $output .= '
             <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-model-paint/' . $row->id . '">Quick View</a>';
-                        } else if ($row->category == 7) { } else {
+                            } else if ($row->category == 7) { } else {
 
-                            $output .= '
+                                $output .= '
                 <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/' . $row->id . '">Quick View</a>';
-                        }
-                        $output .= '
+                            }
+                            $output .= '
                             </div>
                         </div>
                     </div>';
-                        if ($row->regular_price != null && $row->category != 7) {
+                            if ($row->regular_price != null && $row->category != 7) {
 
-                            $v1 = $row->regular_price - $row->sales_price;
-                            $v2 = ceil($v1 / $row->regular_price * 100);
-                            $output .= '<div class="label_offer percentage">
+                                $v1 = $row->regular_price - $row->sales_price;
+                                $v2 = ceil($v1 / $row->regular_price * 100);
+                                $output .= '<div class="label_offer percentage">
 													<div>' . $v2 . '%</div>OFF</div>';
-                        }
-                        $output .= '<div class="description">
+                            }
+                            $output .= '<div class="description">
                     <a href="/product/' . $row->id . '">' . $row->product_name . '</a>
                         <div class="clearfix product_info"> ';
 
-                        $getRating = rating::where('item_id', $row->id)->get();
-                        $rating_count = 0;
-                        if (count($getRating) > 0) {
-                            $total = 0;
-                            foreach ($getRating as $rows) {
-                                $total += $rows->rating;
-                            }
-                            $rating_count = $total / count($getRating);
+                            $getRating = rating::where('item_id', $row->id)->get();
+                            $rating_count = 0;
+                            if (count($getRating) > 0) {
+                                $total = 0;
+                                foreach ($getRating as $rows) {
+                                    $total += $rows->rating;
+                                }
+                                $rating_count = $total / count($getRating);
 
-                            $output .= '<ul class="rating alignright">
+                                $output .= '<ul class="rating alignright">
 
                             <li class="active"></li>
 
                             <li class="';
-                            if ($rating_count >= 2) {
+                                if ($rating_count >= 2) {
 
-                                $output .= 'active';
-                            }
-                            $output .= '"></li>
-
-                            <li class="';
-                            if ($rating_count >= 3) {
-
-                                $output .= 'active';
-                            }
-                            $output .= '"></li>
+                                    $output .= 'active';
+                                }
+                                $output .= '"></li>
 
                             <li class="';
-                            if ($rating_count >= 4) {
+                                if ($rating_count >= 3) {
 
-                                $output .= 'active';
-                            }
-                            $output .= '"></li>
+                                    $output .= 'active';
+                                }
+                                $output .= '"></li>
 
                             <li class="';
-                            if ($rating_count >= 5) {
+                                if ($rating_count >= 4) {
 
-                                $output .= 'active';
-                            }
-                            $output .= '"></li>
+                                    $output .= 'active';
+                                }
+                                $output .= '"></li>
+
+                            <li class="';
+                                if ($rating_count >= 5) {
+
+                                    $output .= 'active';
+                                }
+                                $output .= '"></li>
 
 
                         </ul>';
-                        }
-                        $output .= ' <p class="product_price alignleft">';
-                        if ($row->category != 7 && $row->category != 21 && $row->map_location == null) {
-                            if ($row->regular_price != null) {
-                                $output .= ' <s>₹ ' . ceil($row->regular_price) . '</s>
-                                    <b>₹ ' . ceil($row->sales_price) . '</b></p>';
-                            } else {
-                                $output .= '<b>₹ ' . ceil($row->sales_price) . '</b></p>';
                             }
-                        }
+                            $output .= ' <p class="product_price alignleft">';
+                            if ($row->category != 7 && $row->category != 21 && $row->map_location == null) {
+                                if ($row->regular_price != null) {
+                                    $output .= ' <s>₹ ' . ceil($row->regular_price) . '</s>
+                                    <b>₹ ' . ceil($row->sales_price) . '</b></p>';
+                                } else {
+                                    $output .= '<b>₹ ' . ceil($row->sales_price) . '</b></p>';
+                                }
+                            }
 
-                        $output .= ' </div>
+                            $output .= ' </div>
                     </div>
                 <div class="buttons_row">
                     <a href="/product/' . $row->id . '" class="button_blue middle_btn">See Details</a>
@@ -503,6 +503,7 @@ class pageController extends Controller
 			<a href="javascript:void(null)" onclick="addCompare(' . $row->id . ')" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></a>
                 </div>
             </div>';
+                        }
                     }
                     $output .= '
         </div>
@@ -1374,14 +1375,12 @@ class pageController extends Controller
     {
         // Session::push('locations', $data);
         //Session::forget('locations');
-        if (Session::has('locations')) {
-            if (Session::get('locations') != $data) {
-                Cart::clear();
-            }
-        } else {
 
-            Session::put('locations', $data);
+        if (Session::get('locations') != $data) {
+            Cart::clear();
         }
+        Session::put('locations', $data);
+        // Session::put('locations', $data);
         return response()->json(Session::get('locations'));
     }
     public function tilesLocationBasedData($where, $where_value)
@@ -1435,22 +1434,26 @@ class pageController extends Controller
             ->select(DB::raw('sum(tsl.stock) as stocks,max(tsl.price) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price,p.width,p.weight,p.length,p.items,p.product_description,p.map_location'))
             ->whereIn('tsl.location', $this->locationFullData()[$location])
             ->where('p.id', $id)
+            // ->where('tsl.price', '!=', null)
             ->join('products as p', 'p.id', '=', 'tsl.product_id')
             ->groupBy('tsl.product_id')
             ->orderBy('stocks', 'desc')
             ->first();
-        if ($stock->amount != null) {
-            if ($stock->price_type == "discount") {
-                if ($stock->value_type == "percentage") {
-                    $stock->sales_price = $stock->sales_price - ($stock->sales_price * ($stock->amount / 100));
+        //return response()->json($stock);
+        if (isset($stock)) {
+            if ($stock->amount != null) {
+                if ($stock->price_type == "discount") {
+                    if ($stock->value_type == "percentage") {
+                        $stock->sales_price = $stock->sales_price - ($stock->sales_price * ($stock->amount / 100));
+                    } else {
+                        $stock->sales_price = $stock->sales_price - $stock->amount;;
+                    }
                 } else {
-                    $stock->sales_price = $stock->sales_price - $stock->amount;;
-                }
-            } else {
-                if ($stock->value_type == "percentage") {
-                    $stock->sales_price = $stock->sales_price + ($stock->sales_price * ($stock->amount / 100));
-                } else {
-                    $stock->sales_price = $stock->sales_price + $stock->amount;
+                    if ($stock->value_type == "percentage") {
+                        $stock->sales_price = $stock->sales_price + ($stock->sales_price * ($stock->amount / 100));
+                    } else {
+                        $stock->sales_price = $stock->sales_price + $stock->amount;
+                    }
                 }
             }
         }
