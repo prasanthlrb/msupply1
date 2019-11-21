@@ -331,7 +331,7 @@
 			 if(pay_type ==2){
            var totalAmount = '{{$online_total}}';
            var options = {
-           "key": "rzp_test_InZD6eAnToWcgk",
+           "key": "rzp_live_pdj3f0qWQslA0N",
            "amount": (totalAmount*100), // 2000 paise = INR 20
            "name": "MSupply",
            "description": "Payment",
