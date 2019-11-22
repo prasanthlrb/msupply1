@@ -268,7 +268,7 @@ class accountController extends Controller
 
     public function checkout()
     {
-        //try {
+        // try {
         $location = location::where('location_name', Session::get('locations'))->first();
         //return response()->json($location);
         $shipping = shipping::where('customer_id', Auth::user()->id)->get();
@@ -280,6 +280,13 @@ class accountController extends Controller
             $totalPrice = 0;
             $transport_Price = 0;
             $brand_data = array();
+            //return response()->json(count($getCart));
+            if (count($getCart) == 0) {
+
+                $message = "Your Cart is Empty";
+                return view('empty', compact("message"));
+            }
+
             foreach ($getCart as $b) {
                 $brand_data[$b['attributes']->brand] = $b['attributes']->brand; // Get unique country by code.
                 //array_push($brand_data[$b['attributes']->brand], );
@@ -335,7 +342,7 @@ class accountController extends Controller
             $limit_outline = array();
             $freeShipping = array();
             $nonFreeShipping = array();
-
+            $final_nfs_data = array();
             foreach ($final_data as $fd) {
                 $limit_data = brand::find($fd['brand']);
                 if ($limit_data->order_limit <= $fd['total']) {
@@ -396,22 +403,26 @@ class accountController extends Controller
 
             $shipping_price = '';
             $paid_shipping_amount = 0;
+            if (count($final_nfs_data) > 0) {
+                foreach ($final_nfs_data as $fnd) {
 
-            foreach ($final_nfs_data as $fnd) {
-
-                $getBrand = brand::find($fnd['brand']);
-                $total_paid = ceil($getBrand->paid_base + ($fnd['total'] * $getBrand->paid_value));
-                $paid_shipping_amount += $total_paid;
-                $shipping_price .= '<tr>
+                    $getBrand = brand::find($fnd['brand']);
+                    $total_paid = ceil($getBrand->paid_base + ($fnd['total'] * $getBrand->paid_value));
+                    $paid_shipping_amount += $total_paid;
+                    $shipping_price .= '<tr>
 										
 									<td colspan="5" ><span class="bold">' . $getBrand->brand . ' Product</span>, Shipping &amp; Heading (Flat Rate - Fixed)</td>
 									<td class="total">₹ ' . AppHelper::instance()->IND_money_format($total_paid) . '</td>
 
                                     </tr>';
+                }
             }
 
             //return response()->json($final_nfs_data);
-
+            if (count($limit_outline) == 0) {
+                $message = "Your Cart Item is Not Eligible to Checkout";
+                return view('empty', compact("message"));
+            }
             //return response()->json($order_successful);
             // $order_success_item = array();
             foreach ($getCart as $item) {
@@ -531,10 +542,10 @@ class accountController extends Controller
         } else {
             return redirect('/shipping');
         }
-        //} catch (\Exception $e) {
-        //return response()->json($row);
-        //return $e->getMessage();
-        //}
+        // } catch (\Exception $e) {
+        //     //return response()->json($row);
+        //     return $e->getMessage();
+        // }
     }
 
 
@@ -1125,10 +1136,11 @@ class accountController extends Controller
         $billing = billing::find($order->billing_id);
         $info = contactInfo::find(1);
         $item = order_item::where('order_id', $order->id)->get();
-        $pdf = PDF::loadView('customer.printOrder', compact('order', 'billing', 'info', 'item'));
+        $ifPaint =  paintOrderDetails::where('order_id', $order->id)->get();
+        $pdf = PDF::loadView('customer.printOrder', compact('order', 'billing', 'info', 'item', 'ifPaint'));
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('order.pdf');
-        // return view('customer.printOrder',compact('order','billing'));
+        //return view('customer.printOrder', compact('order', 'billing', 'info', 'item', 'ifPaint'));
     }
 
     public function verifyOrder()
@@ -1175,8 +1187,14 @@ class accountController extends Controller
 
     public function project()
     {
+        $project_value = DB::table('projects as p')
+            ->select(DB::raw('sum(o.total_amount) as amount, o.project_id'))
+            ->join('orders as o', 'o.project_id', '=', 'p.id')
+            ->groupBy('o.project_id')
+            ->get();
         $project = project::where('user_id', Auth::user()->id)->get();
-        return view('customer.project', compact('project'));
+        //return response()->json($project);
+        return view('customer.project', compact('project', 'project_value'));
     }
 
     public function createProject()
@@ -1275,7 +1293,7 @@ class accountController extends Controller
         $limit_outline = array();
         $freeShipping = array();
         $nonFreeShipping = array();
-
+        $final_nfs_data = array();
         foreach ($final_data as $fd) {
             $limit_data = brand::find($fd['brand']);
             if ($limit_data->order_limit <= $fd['total']) {
@@ -1287,6 +1305,7 @@ class accountController extends Controller
                 }
             }
         }
+
         foreach ($nonFreeShipping as $nfs) {
             $dummyTotal = array('total' => 0, 'brand' => '', 'paid_type' => '', 'category' => '');
             foreach ($getCart as $gC) {
@@ -1336,38 +1355,52 @@ class accountController extends Controller
 
         $paid_shipping_amount = 0;
         $paid_shipping_data = array();
-        foreach ($final_nfs_data as $fnd) {
 
-            $getBrand = brand::find($fnd['brand']);
-            $total_paid = ceil($getBrand->paid_base + ($fnd['total'] * $getBrand->paid_value));
-            $paid_shipping_amount += $total_paid;
-            $paid_shipping_data_collection = array('brand' => $fnd['brand'], 'shipping_value' => AppHelper::instance()->IND_money_format($total_paid));
-            $paid_shipping_data[] = $paid_shipping_data_collection;
+        if (count($final_nfs_data) > 0) {
+
+            foreach ($final_nfs_data as $fnd) {
+
+                $getBrand = brand::find($fnd['brand']);
+                $total_paid = ceil($getBrand->paid_base + ($fnd['total'] * $getBrand->paid_value));
+                $paid_shipping_amount += $total_paid;
+                $paid_shipping_data_collection = array('brand' => $fnd['brand'], 'shipping_value' => AppHelper::instance()->IND_money_format($total_paid));
+                $paid_shipping_data[] = $paid_shipping_data_collection;
+            }
         }
 
         //return response()->json($final_nfs_data);
+        $dummy_set = array();
         $order_successful = array();
         foreach ($final_data as $fdss) {
-            foreach ($paid_shipping_data as $psd) {
-                if ($psd['brand'] == $fdss['brand']) {
-                    $dummy_set = array(
-                        'brand' => $fdss['brand'],
-                        'shipping_value' => $psd['shipping_value'],
-                        'shipping_type' => 1,
-                        'total_amount' => 0,
-                        'items' => []
-                    );
-                } else {
-                    $dummy_set = array(
-                        'brand' => $fdss['brand'],
-                        'shipping_value' => null,
-                        'shipping_type' => 0,
-                        'total_amount' => 0,
-                        'items' => []
-                    );
+            if (count($paid_shipping_data) > 0) {
+                foreach ($paid_shipping_data as $psd) {
+                    if ($psd['brand'] == $fdss['brand']) {
+                        $dummy_set = array(
+                            'brand' => $fdss['brand'],
+                            'shipping_value' => $psd['shipping_value'],
+                            'shipping_type' => 1,
+                            'total_amount' => 0,
+                            'items' => []
+                        );
+                    } else {
+                        $dummy_set = array(
+                            'brand' => $fdss['brand'],
+                            'shipping_value' => null,
+                            'shipping_type' => 0,
+                            'total_amount' => 0,
+                            'items' => []
+                        );
+                    }
                 }
+            } else {
+                $dummy_set = array(
+                    'brand' => $fdss['brand'],
+                    'shipping_value' => null,
+                    'shipping_type' => 0,
+                    'total_amount' => 0,
+                    'items' => []
+                );
             }
-
 
 
             $order_successful[$fdss['brand']] = $dummy_set;

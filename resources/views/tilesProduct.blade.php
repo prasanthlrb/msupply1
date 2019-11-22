@@ -183,7 +183,7 @@ p.productdesc{
                             <hr>
 									
 
-                                    <p class="product_price">Rs : <b class="theme_color">{{$stock->sales_price}} </b>/ Per Box</p>
+                                    <p class="product_price">Rs : <b class="theme_color">{{ceil($stock->sales_price)}} </b>/ Per Box</p>
 
 
 								   <ul class="specifications">

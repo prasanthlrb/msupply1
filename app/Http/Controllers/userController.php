@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Admin;
 use Hash;
 use Illuminate\Http\Request;
@@ -20,73 +21,76 @@ class userController extends Controller
         $this->middleware('auth:admin');
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         $currentMonth = date('m');
         $product = product::all();
         $user = User::all();
         $order = order::all();
-        if($currentMonth != 01){
+        if ($currentMonth != 01) {
             $previousMonth = $currentMonth - 01;
-        }else{
+        } else {
             $previousMonth = 12;
         }
         //$low = DB::table('products')->whereRaw('stock_quantity < low_stock')->get();
         $low = product::whereRaw('stock_quantity < low_stock')->get();
-        $cMonth = order::whereRaw('MONTH(created_at) = ?',[$currentMonth])
-        ->select(DB::raw("SUM(total_amount) as get_total"))->get();
-        $pMonth = order::whereRaw('MONTH(created_at) = ?',[$previousMonth])
-        ->select(DB::raw("SUM(total_amount) as get_total"))->get();
+        $cMonth = order::whereRaw('MONTH(created_at) = ?', [$currentMonth])
+            ->select(DB::raw("SUM(total_amount) as get_total"))->get();
+        $pMonth = order::whereRaw('MONTH(created_at) = ?', [$previousMonth])
+            ->select(DB::raw("SUM(total_amount) as get_total"))->get();
         //$topProduct = order_item::whereRaw('MONTH(created_at) = ?',[$currentMonth])
-        $topProduct = order_item::whereRaw('MONTH(created_at) = ?',[$currentMonth])
-        ->select(DB::raw('COUNT(id) as cnt'),'product_name')
-        ->groupBy('product_name')
-        ->orderBy('cnt', 'DESC')->get();
-        $topCustomer = order_item::whereRaw('MONTH(created_at) = ?',[$currentMonth])
-        ->select(DB::raw('COUNT(id) as cnt'),'user_id')
-        ->groupBy('user_id')
-        ->orderBy('cnt', 'DESC')
-        ->get();
-        if(count($topCustomer) >5){
+        $topProduct = order_item::whereRaw('MONTH(created_at) = ?', [$currentMonth])
+            ->select(DB::raw('COUNT(id) as cnt'), 'product_name')
+            ->groupBy('product_name')
+            ->orderBy('cnt', 'DESC')->get();
+        $topCustomer = order::whereRaw('MONTH(created_at) = ?', [$currentMonth])
+            ->select(DB::raw('COUNT(id) as cnt'), 'user_id')
+            ->groupBy('user_id')
+            ->orderBy('cnt', 'DESC')
+            ->get();
+        if (count($topCustomer) > 5) {
             $topCustomerCount = 5;
-        }else{
+        } else {
             $topCustomerCount = count($topCustomer);
         }
-       // $customerCount = array();
-       $countX=0;
-        foreach($topCustomer as $row){
-            if($countX >= 5){
+        // return response()->json($topCustomer);
+        // $customerCount = array();
+        $countX = 0;
+        foreach ($topCustomer as $row) {
+            if ($countX >= 5) {
                 break;
             }
             $users = User::find($row->user_id);
             $data = array(
-                'customer_name'=>$users->name,
-                'order_count'=>$row->cnt
+                'customer_name' => $users->name,
+                'order_count' => $row->cnt
             );
             $customerData[] = $data;
-
         }
         //return response()->json($customerData);
-        return view('admin/dashboard',compact('product','user','order','low','cMonth','pMonth','topProduct','topCustomer'));
+        return view('admin/dashboard', compact('product', 'user', 'order', 'low', 'cMonth', 'pMonth', 'topProduct', 'topCustomer'));
     }
-    public function user(){
+    public function user()
+    {
         //$emp = Admin::all();
         $role = role::all();
 
         $emp = DB::table('admins as a')
-        ->join('roles as r','r.id','=','a.role_id')
-        ->select('a.emp_name','a.email','a.phone','a.id','r.role_name')
-        ->get();
+            ->join('roles as r', 'r.id', '=', 'a.role_id')
+            ->select('a.emp_name', 'a.email', 'a.phone', 'a.id', 'r.role_name')
+            ->get();
         $roles = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin/user',compact('emp','role','roles'));
+        return view('admin/user', compact('emp', 'role', 'roles'));
     }
 
-    public function saveEmployee(Request $request){
+    public function saveEmployee(Request $request)
+    {
         $request->validate([
-            'emp_name'=>'required',
-            'email'=>'required',
-            'phone'=>'required',
-            'password'=>'required',
-            'role_id'=>'required',
+            'emp_name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'password' => 'required',
+            'role_id' => 'required',
         ]);
         $admin = new Admin;
         $admin->emp_name = $request->emp_name;
@@ -95,33 +99,36 @@ class userController extends Controller
         $admin->password = Hash::make($request->password);
         $admin->role_id = $request->role_id;
         $admin->save();
-        return response()->json(['message'=>'Successfully Save'],200);
+        return response()->json(['message' => 'Successfully Save'], 200);
     }
 
-    public function updateEmployee(Request $request){
+    public function updateEmployee(Request $request)
+    {
         $request->validate([
-            'emp_name'=>'required',
-            'email'=>'required',
-            'phone'=>'required',
-            'role_id'=>'required',
+            'emp_name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'role_id' => 'required',
         ]);
         $admin = Admin::find($request->id);
         $admin->emp_name = $request->emp_name;
         $admin->email = $request->email;
-        if($request->password){
-        $admin->password = Hash::make($request->password);
+        if ($request->password) {
+            $admin->password = Hash::make($request->password);
         }
         $admin->phone = $request->phone;
         $admin->role_id = $request->role_id;
         $admin->save();
-        return response()->json(['message'=>'Successfully Update'],200);
+        return response()->json(['message' => 'Successfully Update'], 200);
     }
-    public function editEmployee($id){
+    public function editEmployee($id)
+    {
         $admin = Admin::find($id);
         return response()->json($admin);
     }
-    public function deleteEmployee($id){
-       Admin::find($id)->delete();
-        return response()->json(['message'=>'Successfully Delete'],200);
+    public function deleteEmployee($id)
+    {
+        Admin::find($id)->delete();
+        return response()->json(['message' => 'Successfully Delete'], 200);
     }
 }

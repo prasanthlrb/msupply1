@@ -37,7 +37,7 @@
   line-height: 5px;
 }
 .hide-form{
-  display: none;
+  display: none !important;
 }
 .nav-vertical {
   padding: 35px;
@@ -580,6 +580,21 @@
                                       <div class="dropdown-item">
                                         <input <?php echo $product_find->map_location == 'on' ? 'checked' : '' ?> type="checkbox" name="map_location" id="map_location" class="switchery-xs" />
                                         <label for="switchery5" class="card-title ml-1">Enable Map Option</label>
+                                      </div>
+
+                                      <div class="row location_not_show <?php echo $product_find->map_location != 'on' ? 'hide-form' : '' ?>">
+                                        <div class="col-md-6">
+                                              <div class="form-group">
+                                        <label for="projectinput1">Map Lat</label>
+                                              <input type="text" class="form-control" name="lat" id="lat" value="{{$product_find->lat}}">
+                                      </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                              <div class="form-group">
+                                        <label for="projectinput1">Map Lng</label>
+                                        <input type="text" class="form-control" name="lng" id="lng" value="{{$product_find->lng}}">
+                                      </div>
+                                        </div>
                                       </div>
                                 </div>
 
@@ -1349,7 +1364,14 @@ function getCategoryById(cat){
       }
  });
 }
+$('#map_location').change(function(){
 
+  if ($('input#map_location').is(':checked')) {
+    $('.location_not_show').removeClass('hide-form');
+  }else{
+    $('.location_not_show').addClass('hide-form');
+  }
+})
 </script>
 
 

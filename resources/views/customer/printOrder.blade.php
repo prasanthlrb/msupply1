@@ -18,6 +18,7 @@
           <br>
           <br>
           <br>
+          <br>
       <div class="row">
       <div class="col-sm-7">
       <h6>From:</h6>
@@ -44,26 +45,44 @@
       <table class="table table-striped">
       <thead>
       <tr>
+        <?php $table_pos=4;?>
       <th class="center">#</th>
       <th>Item</th>
       <th class="right">Unit Cost</th>
         <th class="center">Qty</th>
+        <th class="center">Tax(GST)</th>
+          @if(count($ifPaint)>0)
+          <?php $table_pos =6;?>
+                                        <th class="product_qty_col">Color Code	</th>
+                                        <th class="product_qty_col">Litreage	</th>
+                                        @endif
       <th class="right">Total</th>
       </tr>
       </thead>
       <tbody>
-          <?php $x=1;?>
-          @foreach($item as $row)
+          <?php $x=1;
+      
+          ?>
+          @foreach($item as $index => $row)
       <tr>
       <td class="center">{{$x}}</td>
-      <td class="left strong">{{$row->product_name}}</td>
-      
-      <td class="right"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> {{$row->sales_price}}</td>
-        <td class="center">{{$row->qty}}</td>
-      <td class="right"><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$row->qty * $row->sales_price}}</td>
+      <td class="left" style="font-size:12px">{{$row->product_name}}</td>
+      <td class="right" style="font-size:12px"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> {{$row->sales_price}}</td>
+        <td class="center" style="font-size:12px">{{$row->qty}}</td>
+        <td class="center" style="font-size:12px">GST ({{$row->tax_percent}}%) {{$row->tax_type}} <span style="font-family: DejaVu Sans; sans-serif;">₹</span>{{$row->tax}}</td>
+            @if(count($ifPaint)>0)
+                                        <td style="font-size:12px">{{$ifPaint[$index]->color_id}}	</td>
+                                        <td style="font-size:12px">{{$ifPaint[$index]->lit}}	</td>
+                                        <?php $table_pos=6?>
+                                        @endif
+      <td class="right" style="font-size:12px"><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$row->total_price}}</td>
       </tr>
-      <?php $x++?>
+
+      <?php
+    
+      $x++?>
       @endforeach
+   
       <tr>
      <hr>
       </tr>
@@ -75,27 +94,31 @@
       
       </div>
       
-      <div class="col-lg-4 col-sm-5 ml-auto">
+      <div class="col-lg-6 col-sm-7 ml-auto float-right">
       <table class="table table-clear">
       <tbody>
-      <tr>
-      <td class="left">
-      <strong>Subtotal</strong>
+        
+        
+        @if($order->shipping_type == 1)
+          <tr >
+            <td colspan="{{$table_pos}}">
+      Subtotal
       </td>
-      <td class="right"><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$item[0]->qty * $item[0]->sales_price}}</td>
+      <td><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$order->total_amount - $order->shipping_value}}</td>
       </tr>
-      <tr>
-      <td class="left">
-      <strong>GST ({{$item[0]->tax_percent}}%) {{$item[0]->tax_type}}</strong>
+                                             <tr>
+                                             <td colspan="{{$table_pos}}">Shipping &amp; Heading (Flat Rate - Include)  </td>
+                                                <td><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$order->shipping_value}}</td>
+        
+                                            </tr>
+
+                                            @endif
+      <tr >
+      <td colspan="{{$table_pos}}">
+     Total
       </td>
-      <td class="right"><span style="font-family: DejaVu Sans; sans-serif;">₹</span>{{$item[0]->tax}}</td>
-      </tr>
-      <tr>
-      <td class="left">
-      <strong>Total</strong>
-      </td>
-      <td class="right">
-      <strong><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$item[0]->total_price}}</strong>
+      <td>
+      <span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$order->total_amount}}
       </td>
       </tr>
       </tbody>

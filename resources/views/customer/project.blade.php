@@ -64,9 +64,12 @@
 
 									<ul class="seller_stats">
 
+										@foreach($project_value as $pv)
 
-										<li><i class="fa fa-inr" aria-hidden="true"></i><span class="bold"> 0 </span> Spend</li>
-
+										@if($pv->project_id == $row->id)
+										<li><i class="fa fa-inr" aria-hidden="true"></i><span class="bold"> {{$pv->amount}} </span> Total Spend</li>
+										@endif
+										@endforeach
 
 									</ul>
 
@@ -74,7 +77,7 @@
 
                   <a href="javascript:void(null)" class="small_link" data-modal-url="/account/edit-project/{{$row->id}}"><i class="fas fa-edit"></i></a>
 
-										<a href="javascript:void(null)" class="button_blue mini_btn" onclick="deleteProject($row->id)"><i class="fas fa-trash-alt"></i></a>
+										<a href="javascript:void(null)" class="button_blue mini_btn" onclick="deleteProject({{$row->id}})"><i class="fas fa-trash-alt"></i></a>
 
 									</div>
 
@@ -124,7 +127,20 @@
 	 
 
     function deleteProject(id){
-
+ var r = confirm("Are you sure");
+      if (r == true) {
+      $.ajax({
+        url : '/account/delete-project/'+id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          toastr.success('Construction Site', 'Successfully Delete');
+		   location.reload();
+          
+        }
+      });
+    }
     }
 
 </script>

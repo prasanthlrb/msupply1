@@ -486,6 +486,8 @@ Route::group(['prefix' => 'account'], function () {
     Route::post('/update-project', 'accountController@updateProject');
     //online payment
     Route::post('/online-payment', 'accountController@onlinePayment');
+    //project
+
 });
 Route::post('/submit-company', 'accountController@submitCompany');
 Route::get('/get-compare', 'pageController@compare');

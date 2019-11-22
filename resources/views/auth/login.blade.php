@@ -58,7 +58,9 @@
                                             <div class="col-xs-12">
                             <label for="password" class="required">{{ __('Password') }}</label>
 
-                           
+                           <span toggle="#password-field" class="fa fa-fw fa-eye field_icon toggle-password" style="float: right;
+    position: relative;
+    top: 39px;"></span>
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
@@ -194,6 +196,16 @@ var formData = new FormData($('#otp_form')[0]);
         }
       });
 }
+$("body").on('click', '.toggle-password', function() {
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $("#password");
+  if (input.attr("type") === "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+
+});
 function sendPasswordReset(){
 
 }

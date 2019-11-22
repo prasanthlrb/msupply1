@@ -280,7 +280,7 @@
 
                                         <div class="clearfix product_info">
                                             @if($product1->category != 21)
-                                            <p class="product_price alignleft"><b>₹{{$product1->sales_price}}</b></p>
+                                            <p class="product_price alignleft"><b>₹{{ceil($product1->sales_price)}}</b></p>
                                             @endif
                                             <?php 
                                             $getRating = App\rating::where('item_id',$product1->product_id)->get();

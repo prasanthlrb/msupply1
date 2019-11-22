@@ -410,7 +410,7 @@ p.productdesc{
 										<a href="/product/{{$relate->id}}">{{$relate->product_name}}</a>
 
 										                <div class="clearfix product_info">
-														<p class="product_price alignleft"><b id="rep_pro{{$relate->id}}"></b></p>
+														<p class="product_price alignleft"><b id="rep_pro{{$relate->id}}" class="set-not-available"></b></p>
 														</div>
 
 										</div>
@@ -671,9 +671,12 @@ if(lit !=0 && colors_id !=0){
                     $(".product_price .theme_color").text("Rs : "+ Math.ceil(result[0].price));
 					$('#addToCardPaint').prop('disabled',false);
 					if(result[1].length >0){
+						$('.set-not-available').each(function(){
+							$('.set-not-available').html('<span class="related_price_tag"> Not Available</span>')
+						})
 						console.log(result[1])
 					for(let i=0;i<result[1].length;i++){
-						$('#rep_pro'+result[1][i].product_id).html('<span class="related_price_tag"><i class="fa fa-inr" aria-hidden="true"></i> '+result[1][i].price+'</span>')
+						$('#rep_pro'+result[1][i].product_id).html('<span class="related_price_tag"><i class="fa fa-inr" aria-hidden="true"></i> '+Math.ceil(result[1][i].price)+'</span>')
 					}
 					}
 					}

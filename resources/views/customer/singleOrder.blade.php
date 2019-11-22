@@ -338,6 +338,7 @@
                                         <th class="product_title_col">Product Name</th>
                                         <th class="product_price_col">Price</th>
                                         <th class="product_qty_col">Quantity</th>
+                                        <th class="product_qty_col">Tax(GST)</th>
                                         @if(count($ifPaint)>0)
                                         <th class="product_qty_col">Color Code	</th>
                                         <th class="product_qty_col">Litreage	</th>
@@ -353,7 +354,8 @@
                                 $sub = 0;
                                 $total = 0;
                                 $shipping = 0;
-                                $table_pos =3;
+                                $table_pos =4;
+                                 $subTotal=0;
                                 ?>
                                 @foreach($order_items as $index => $order_item)
                                 <input type="hidden" name="order_item_id" id="order_item_id" value="{{$order_item->id}}">
@@ -371,25 +373,27 @@
                                         </td>
                                         <td data-title="Price" class="subtotal">₹ {{$order_item->sales_price}}</td>
                                         <td data-title="Quantity">{{$order_item->qty}}</td>
+                                          <td class="center">GST ({{$order_item->tax_percent}}%) {{$order_item->tax_type}} <span style="font-family: DejaVu Sans; sans-serif;">₹</span>{{$order_item->tax}}</td>
                                          @if(count($ifPaint)>0)
                                         <td>{{$ifPaint[$index]->color_id}}	</td>
                                         <td>{{$ifPaint[$index]->lit}}	</td>
-                                        <?php $table_pos=5?>
+                                        <?php $table_pos=6?>
                                         @endif
                                         <td data-title="Total" class="total">₹ {{$order_item->total_price }}</td>
                                     </tr>
                                    
                                 @endforeach
+                                
                                 </tbody>
 
                                 <tfoot>
-                                        <tr>
-                                        
-                                        <td colspan="{{$table_pos}}" class="bold">Tax ({{$order_item->tax_percent}} % {{$order_item->tax_type}}) </td>
-                                                <td class="total">₹ {{$order_item->tax}}</td>
-        
-                                            </tr>
+                    
                                             @if($order->shipping_type == 1)
+                                              <td colspan="{{$table_pos}}">
+      <strong>Subtotal</strong>
+      </td>
+      <td class="right"><span style="font-family: DejaVu Sans; sans-serif;">₹</span> {{$order->total_amount - $order->shipping_value}}</td>
+      </tr>
                                              <tr>
                                              <td colspan="{{$table_pos}}" class="bold">Shipping &amp; Heading (Flat Rate - Include)  </td>
                                                 <td class="total">₹ {{$order->shipping_value}}</td>

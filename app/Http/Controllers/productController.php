@@ -527,6 +527,8 @@ class productController extends Controller
         $product->delivery_from = $request->delivery_from;
         $product->delivery_to = $request->delivery_to;
         $product->notes = $request->notes;
+        $product->lat = $request->lat;
+        $product->lng = $request->lng;
         $product->save();
 
         if (isset($request->attribute)) {
@@ -677,6 +679,8 @@ class productController extends Controller
         $product->delivery_from = $request->delivery_from;
         $product->delivery_to = $request->delivery_to;
         $product->notes = $request->notes;
+        $product->lat = $request->lat;
+        $product->lng = $request->lng;
         $product->save();
 
         if (isset($request->attribute)) {

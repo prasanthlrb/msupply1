@@ -52,7 +52,7 @@
           </div>
           <div class="card-content">
             <div class="card-body pb-0">
-                <h1 class="card-title" style="font-size: 23px;text-align: center;">Select Your District</h1>
+                <h1 class="card-title" style="font-size: 23px;text-align: center;">Select Your District / City</h1>
             </div>
             
             <div id="search-results" class="card-body">
@@ -64,7 +64,7 @@
                                     <div class="card-body">
                                       <div class="row" id="placed_colors">
                                       @foreach($data as $data)
-                                        <div class="col-md-3">
+                                        <div class="col-md-6 col-sm-6 col-lg-3">
                                             <div class="card mb-1 color-item" id="color-item" onclick="getLocation('{{$data}}')">
                                               <div class="card-content">
                                                 <div class="bg-lighten-1 height-50" style="background-color:#ff4557;cursor:pointer" >

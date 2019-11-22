@@ -58,7 +58,8 @@ class CreateProductsTable extends Migration
             $table->string('delivery_from')->nullable();
             $table->string('delivery_to')->nullable();
             $table->string('notes', 5120)->nullable();
-
+            $table->string('lat', 5120)->nullable();
+            $table->string('lng', 5120)->nullable();
             $table->timestamps();
         });
     }

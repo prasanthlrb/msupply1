@@ -269,7 +269,7 @@ p.productdesc{
 
 //78.10098082241404,9.959194195481757;78.09465931140852,9.893505079270398
     var saved_markers = '';
-    var user_location = [78.10098082241404,9.959194195481757];
+    var user_location = ['{{$product1->lng}}','{{$product1->lat}}'];
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
     var map = new mapboxgl.Map({
         container: 'map',

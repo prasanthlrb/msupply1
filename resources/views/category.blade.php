@@ -275,10 +275,10 @@
 
                                         <p class="product_price bold">
                                          	@if($product1->regular_price != null)
-															<s>₹ {{$product1->regular_price}}</s> 
-															<b>₹ {{$product1->sales_price}}</b>
+															<s>₹ {{ceil($product1->regular_price)}}</s> 
+															<b>₹ {{ceil($product1->sales_price)}}</b>
 															@else
-															<b>₹ {{$product1->sales_price}}</b>
+															<b>₹ {{ceil($product1->sales_price)}}</b>
 																@endif
                                         
                                         </p>
