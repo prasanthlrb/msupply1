@@ -423,6 +423,8 @@ function removeLitAndPriceEdit(id) {
 function paint_lit_change(classes, id) {
     // var fields;
     var getDatas = $('#' + classes + id).val();
+    // console.log('classes', classes)
+    // console.log('getDatas', getDatas)
     $.ajax({
         url: '/admin/change-paint-lit',
         method: "GET",

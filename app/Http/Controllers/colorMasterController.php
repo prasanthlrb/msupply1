@@ -407,7 +407,10 @@ class colorMasterController extends Controller
             $paint_lit->paint_lit = $request->data;
         } else if ($request->fields == "value_type_edit") {
             $paint_lit->value_type = $request->data;
-        } else if ($request->fields == "price_edit") { } else {
+        } else if ($request->fields == "amount_edit") {
+            $paint_lit->amount = $request->data;
+        } else if ($request->fields == "price_edit") {
+
             $paint_lit->price = $request->data;
         }
         $paint_lit->save();
