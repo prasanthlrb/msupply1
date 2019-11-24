@@ -85,23 +85,7 @@
 
                 <!-- - - - - - - - - - - - - - Tags - - - - - - - - - - - - - - - - -->
 
-                <section class="section_offset">
-
-                    <h3>Brand</h3>
-
-                    <div class="tags_container">
-                            <ul class="tags_cloud">
-                                @if(count($brand)>0)
-                                @foreach($brand as $brand1)    
-                                    <li><a href="/filter-brand/{{$brand1->id}}" class="button_grey">{{$brand1->brand}}</a></li>
-                                @endforeach
-                                @endif
-                                </ul>
-                       
-                        
-                    </div>
-
-                </section>
+    
 
             
 

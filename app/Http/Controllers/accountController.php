@@ -504,7 +504,7 @@ class accountController extends Controller
                     if (in_array($row->brand_name, $freeShipping)) {
                         $result .= '<ul class="sc_product_info"><li style="color: #2db125;"> Free Delivery Eligible</li></ul>';
                     }
-                    $result .= '<td data-title="Price" class="subtotal">₹ ' . AppHelper::instance()->IND_money_format(ceil($item->price)) . '</td>
+                    $result .= '<td data-title="Price" class="subtotal">₹ ' . AppHelper::instance()->IND_money_format($item->price) . '</td>
 
                     <td data-title="Quantity" style="text-align:center">' . $item->quantity . '</td>';
                     $item_total = $item->quantity * $item->price;
@@ -1447,7 +1447,7 @@ class accountController extends Controller
                         $order_item->product_name = $item->name;
                         $order_item->order_id = $order->id;
                         $order_item->product_id = $row->id;
-                        $order_item->sales_price = ceil($item->price);
+                        $order_item->sales_price = $item->price;
                         $order_item->qty = $item->quantity;
 
 

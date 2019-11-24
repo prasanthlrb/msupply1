@@ -135,7 +135,7 @@ input[type="radio"] + label,
                             <!-- - - - - - - - - - - - - - End of share - - - - - - - - - - - - - - - - -->
                             <div class="description_section v_centered">
                                      <h5>Product Description :</h5><br>
-                            <p>{{$brands->description}}</p>
+                            <p><?php echo $brands->description?></p>
                                  </div>
                         </div>
                         
@@ -237,7 +237,7 @@ input[type="radio"] + label,
                                             </td>
                                             @endforeach
 												<td>
-                                                <input type="number" onkeyup="qtyBox({{$pro->id}})" id="qtybox{{$pro->id}}">
+                                                <input type="number" min="0" onkeyup="qtyBox({{$pro->id}})" id="qtybox{{$pro->id}}">
                                                 </td>
                                             <td id="total_price{{$pro->id}}">0</td>
 											</tr>
@@ -350,6 +350,10 @@ input[type="radio"] + label,
         }
         function qtyBox(id){
             var qty = Math.ceil($('#qtybox'+id).val());
+             if(qty<0){
+                $('#qtybox'+id).val(0);
+                qty=0;
+            }
             var totalAmount=0;
              for(let i =0;i<bulkItems.length;i++){
               if(bulkItems[i].product_id == id){
@@ -421,6 +425,7 @@ input[type="radio"] + label,
                     //$("#form")[0].reset();
 					//console.log(data)
 					CartMenuUpdate();
+                    toastr.success('Successfully Added');
                     //  $('#category_model').modal('hide');
                     //  $('.zero-configuration').load(location.href+' .zero-configuration');
                     //  toastr.success('Group Store Successfully', 'Successfully Save');

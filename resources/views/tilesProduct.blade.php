@@ -805,9 +805,10 @@ function addCart(id){
                 success: function(data)
                 {                
                     //$("#form")[0].reset();
-					console.log(data)
+					//console.log(data)
 					CartMenuUpdate();
-                },error: function (data) {
+					toastr.success('Successfully Added');
+			    },error: function (data) {
                 toastr.error("Not Available");
                 
               }

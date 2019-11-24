@@ -532,6 +532,7 @@ Route::get('/cart-item', function () {
 });
 
 Route::post('/transportDetails-save', 'pageController@transportDetails');
+Route::post('/hard-materials-to-cart', 'cartController@hardMaterialsToCart');
 
 
 Route::get('/cart-menu', 'cartController@cartMenu');

@@ -137,7 +137,7 @@ p.productdesc{
 									<div class="single_product_description">
 
 									<h3 class="offset_title"><a href="#">{{$product1->product_name}}</a></h3>
-
+                                        
 									
  <div class="description_section">
 
@@ -193,12 +193,11 @@ p.productdesc{
                              
                                 <div class="aterSubmitShow" id="afterpickQty">
                                     <p class="product_price">Total Rs : <b class="theme_color" id="fixedTotal"></b></p>
-                                    <form id="brickForm" method="POST">
-                                            {{ csrf_field() }}
+                                   
                                         <div class="buttons_row">
                                             <button class="button_blue middle_btn" onclick="buyIt()">Buy Now</button>
                                         </div>
-                                    </form>
+                                  
    
                                        </div>
                                 </div>
@@ -425,7 +424,26 @@ p.productdesc{
 
     function buyIt(){
         let product_id = $('#product_id').val();
-        console.log(parseFloat(brick_price) * parseInt(quantity));
+        // console.log(parseFloat(brick_price));
+        // console.log(parseInt(quantity));
+        $.ajax({
+				   url: '/hard-materials-to-cart',
+				   headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           },
+                   type: 'post',
+                   dataType: 'json',
+                   data: {
+                    product_id: product_id,price:brick_price,quantity:quantity,
+                   }, 
+                   success: function (msg) {
+                    //console.log(msg)
+                    CartMenuUpdate();
+                     toastr.success('Successfully Added');
+                       //window.location.href = '/account/orders';
+                   }
+               });
+
     }
     
 </script>

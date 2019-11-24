@@ -727,8 +727,9 @@ if(lit !=0 && colors_id !=0){
                 success: function(data)
                 {                
                     //$("#form")[0].reset();
-					console.log(data)
+					//console.log(data)
 					CartMenuUpdate();
+					toastr.success('Successfully Added');
                     //  $('#category_model').modal('hide');
                     //  $('.zero-configuration').load(location.href+' .zero-configuration');
                     //  toastr.success('Group Store Successfully', 'Successfully Save');

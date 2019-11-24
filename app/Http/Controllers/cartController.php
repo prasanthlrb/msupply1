@@ -524,7 +524,7 @@ class cartController extends Controller
         }
         //return response()->json($checkValue);
         if ($product_data->order_limit != null) {
-            if ($product_data->order_limit <= $values) {
+            if ($product_data->order_limit <= $values || $checkValue->quantity <= $values) {
 
                 Cart::update($id, array(
                     'quantity' => array(
@@ -546,5 +546,22 @@ class cartController extends Controller
             ));
             return response()->json("OK");
         }
+    }
+    public function hardMaterialsToCart(Request $request)
+    {
+        $product = product::find($request->product_id);
+        $attribute = array(
+            //'unit_name' => $row['unit_name'],
+            'brand' => $product->brand_name,
+            'category' => $product->category
+        );
+        Cart::add(array(
+            'id' => $request->product_id,
+            'name' => $product->product_name,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'attributes' => $attribute,
+        ));
+        return response()->json($request);
     }
 }
