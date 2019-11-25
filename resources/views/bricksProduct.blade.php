@@ -302,7 +302,7 @@ p.productdesc{
     map.on('click', function (e) {
         marker.remove();
         addMarker(e.lngLat,'click');
-        var current_loc ='78.10098082241404,9.959194195481757;';
+        var current_loc =['{{$product1->lng}}','{{$product1->lat}}'];
         //var newCoords = current_loc + '78.09465931140852,9.893505079270398';
         // transportData.lat = e.lngLat.lat;
         // transportData.lng = e.lngLat.lng;
