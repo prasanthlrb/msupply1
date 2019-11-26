@@ -60,7 +60,7 @@ Route::get('/category/{id}/{sort}', 'categoryController@categorySortProduct');
 Route::get('/product/{id}', 'categoryController@getProduct');
 Route::get('/steel-product/{id}', 'categoryController@steelProduct');
 Route::get('/quick-view/{id}', 'pageController@quickModel');
-Route::get('/quick-view-tiles/{id}', 'pageController@quickModelTiles');
+Route::get('/quick-view-tiles/{id}/{price}', 'pageController@quickModelTiles');
 Route::get('/product-advance-filter/{product}/{attr}/{terms}', 'categoryController@advanceFilter');
 
 Route::get('/selected-color', 'pageController@selectedColor');

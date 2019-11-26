@@ -31,6 +31,7 @@ use App\painting_guides;
 use App\location_management;
 //use File;
 use Storage;
+use AppHelper;
 
 class pageController extends Controller
 {
@@ -197,25 +198,30 @@ class pageController extends Controller
                         if ($product_data->count() > 0) {
                             if ($product_data[0]->group_product == null) {
                                 if (count($product_data) > 0 && $product_data[0]->category != 1) {
-                                    foreach ($product_data as $row) {
-                                        $lm = $this->locationManagement($row->id);
-                                        if (isset($lm) && $lm->status == 0) {
-                                            $row->sales_price = $lm->sales_price;
-                                            $row->regular_price = $lm->regular_price;
-                                        }
-                                        if ($row->amount != null) {
-                                            if ($row->price_type == "discount") {
-                                                if ($row->value_type == "percentage") {
-                                                    $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
-                                                } else {
-                                                    $row->sales_price = $row->sales_price - $row->amount;;
+                                    foreach ($product_data as $index => $row) {
+
+
+                                        $lm = AppHelper::instance()->locationManagement($row->id);
+                                        if (isset($lm)) {
+                                            if ($lm->status == 0) {
+                                                if (isset($lm->sales_price)) {
+
+                                                    $row->sales_price = $lm->sales_price;
+                                                }
+                                                if (isset($lm->regular_price)) {
+
+                                                    $row->regular_price = $lm->regular_price;
+                                                }
+                                                if ($row->amount != null) {
+                                                    $row = AppHelper::instance()->productDiscount($row);
                                                 }
                                             } else {
-                                                if ($row->value_type == "percentage") {
-                                                    $row->sales_price = $row->sales_price + ($row->sales_price * ($row->amount / 100));
-                                                } else {
-                                                    $row->sales_price = $row->sales_price + $row->amount;
-                                                }
+                                                unset($product_data[$index]);
+                                                $row = null;
+                                            }
+                                        } else {
+                                            if ($row->amount != null) {
+                                                $row = AppHelper::instance()->productDiscount($row);
                                             }
                                         }
                                     }
@@ -376,34 +382,38 @@ class pageController extends Controller
                 <div class="owl_carousel carousel_in_tabs">';
                     foreach (explode(',', $layout->product_id) as $product_id) {
                         $row = product::find($product_id);
+                        if ($row->category == 1) {
+                            $row = AppHelper::instance()->tilesSingleLocation($row->id);
+                            //return response()->json($row);
+                        } else {
+                            $lm = AppHelper::instance()->locationManagement($row->id);
+                            if (isset($lm)) {
+                                if ($lm->status == 0) {
+                                    if (isset($lm->sales_price)) {
 
-                        if (isset($row)) {
-                            $lm = $this->locationManagement($row->id);
-                            if (isset($lm) && $lm->status == 0) {
-                                $row->sales_price = $lm->sales_price;
-                                $row->regular_price = $lm->regular_price;
-                            }
-                            if ($row->amount != null) {
-                                if ($row->price_type == "discount") {
-                                    if ($row->value_type == "percentage") {
-                                        $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
-                                    } else {
-                                        $row->sales_price = $row->sales_price - $row->amount;;
+                                        $row->sales_price = $lm->sales_price;
+                                    }
+                                    if (isset($lm->regular_price)) {
+
+                                        $row->regular_price = $lm->regular_price;
+                                    }
+                                    if ($row->amount != null) {
+                                        $row = AppHelper::instance()->productDiscount($row);
                                     }
                                 } else {
-                                    if ($row->value_type == "percentage") {
-                                        $row->sales_price = $row->sales_price + ($row->sales_price * ($row->amount / 100));
-                                    } else {
-                                        $row->sales_price = $row->sales_price + $row->amount;
-                                    }
+                                    unset($row);
+                                    $row = null;
+                                }
+                            } else {
+                                if ($row->amount != null) {
+                                    $row = AppHelper::instance()->productDiscount($row);
                                 }
                             }
                         }
-                        if ($row->category == 1) {
-                            $row = $this->tilesSingleLocation($row->id);
-                            //return response()->json($row);
-                        }
-                        if (isset($row)) {
+
+
+                        if (isset($row) && $row != null) {
+
                             $output .= '
                 <div class="product_item type_2">
                     <div class="image_wrap">';
@@ -417,7 +427,7 @@ class pageController extends Controller
                             <div class="centered_buttons">';
                             if ($row->category == 1) {
                                 $output .= '
-            <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/' . $row->id . '">Quick View</a>';
+            <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/' . $row->id .  '/' . ceil($row->sales_price) . '">Quick View</a>';
                             } else if ($row->category == 21) {
                                 $output .= '
             <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-model-paint/' . $row->id . '">Quick View</a>';
@@ -534,30 +544,40 @@ class pageController extends Controller
             //return response()->json($datas);
             //  $paint = product::where('category', 21)->get();
             if (count($product_today) > 0) {
-                foreach ($product_today as $row) {
-                    $lm = $this->locationManagement($row->id);
-                    if (isset($lm) && $lm->status == 0) {
-                        $row->sales_price = $lm->sales_price;
-                        $row->regular_price = $lm->regular_price;
-                    }
-                    if ($row->amount != null) {
-                        if ($row->price_type == "discount") {
-                            if ($row->value_type == "percentage") {
-                                $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
+
+                foreach ($product_today as $index => $row) {
+                    if ($row->category != 1 && $row->category != 21) {
+                        $lm = AppHelper::instance()->locationManagement($row->id);
+                        if (isset($lm)) {
+                            if ($lm->status == 0) {
+                                if (isset($lm->sales_price)) {
+
+                                    $row->sales_price = $lm->sales_price;
+                                }
+                                if (isset($lm->regular_price)) {
+
+                                    $row->regular_price = $lm->regular_price;
+                                }
+                                if ($row->amount != null) {
+                                    $row = AppHelper::instance()->productDiscount($row);
+                                }
                             } else {
-                                $row->sales_price = $row->sales_price - $row->amount;;
+                                unset($product_today[$index]);
+                                //$row = [];
                             }
                         } else {
-                            if ($row->value_type == "percentage") {
-                                $row->sales_price = $row->sales_price + ($row->sales_price * ($row->amount / 100));
-                            } else {
-                                $row->sales_price = $row->sales_price + $row->amount;
+                            if ($row->amount != null) {
+                                $row = AppHelper::instance()->productDiscount($row);
                             }
+                        }
+                    } else {
+                        if ($row->category == 1) {
+                            $row = AppHelper::instance()->tilesSingleLocation($row->id);
                         }
                     }
                 }
             }
-
+            // return response()->json($product_today[0]->id);
             return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel', 'brand_slider'));
 
             //  foreach($product_today as $row){
@@ -573,26 +593,26 @@ class pageController extends Controller
     {
         $upload = upload::where('product_id', $id)->get();
         $product = product::find($id);
-        $lm = $this->locationManagement($id);
-        if (isset($lm) && $lm->status == 0) {
-            $product->sales_price = $lm->sales_price;
-            $product->regular_price = $lm->regular_price;
-        }
-        if ($product->amount != null) {
-            if ($product->price_type == "discount") {
-                if ($product->value_type == "percentage") {
-                    $product->sales_price = $product->sales_price - ($product->sales_price * ($product->amount / 100));
-                } else {
-                    $product->sales_price = $product->sales_price - $product->amount;;
-                }
-            } else {
-                if ($product->value_type == "percentage") {
-                    $product->sales_price = $product->sales_price + ($product->sales_price * ($product->amount / 100));
-                } else {
-                    $product->sales_price = $product->sales_price + $product->amount;
-                }
+        $lm = AppHelper::instance()->locationManagement($product->id);
+        if (isset($lm)) {
+
+            if (isset($lm->sales_price)) {
+
+                $product->sales_price = $lm->sales_price;
+            }
+            if (isset($lm->regular_price)) {
+
+                $product->regular_price = $lm->regular_price;
+            }
+            if ($product->amount != null) {
+                $product = AppHelper::instance()->productDiscount($product);
+            }
+        } else {
+            if ($product->amount != null) {
+                $product = AppHelper::instance()->productDiscount($product);
             }
         }
+
         $output = '
      <div id="quick_view" class="modal_window">
 
@@ -711,25 +731,29 @@ class pageController extends Controller
 
         echo $output;
     }
-    public function quickModelTiles($id)
+    public function quickModelTiles($id, $price)
     {
         $upload = upload::where('product_id', $id)->get();
         $product = product::find($id);
-        if ($product->amount != null) {
-            if ($product->price_type == "discount") {
-                if ($product->value_type == "percentage") {
-                    $product->sales_price = $product->sales_price - ($product->sales_price * ($product->amount / 100));
-                } else {
-                    $product->sales_price = $product->sales_price - $product->amount;;
-                }
-            } else {
-                if ($product->value_type == "percentage") {
-                    $product->sales_price = $product->sales_price + ($product->sales_price * ($product->amount / 100));
-                } else {
-                    $product->sales_price = $product->sales_price + $product->amount;
-                }
-            }
-        }
+        // $lm = AppHelper::instance()->locationManagement($product->id);
+        // if (isset($lm)) {
+
+        //     if (isset($lm->sales_price)) {
+
+        //         $product->sales_price = $lm->sales_price;
+        //     }
+        //     if (isset($lm->regular_price)) {
+
+        //         $product->regular_price = $lm->regular_price;
+        //     }
+        //     if ($product->amount != null) {
+        //         $product = AppHelper::instance()->productDiscount($product);
+        //     }
+        // } else {
+        //     if ($product->amount != null) {
+        //         $product = AppHelper::instance()->productDiscount($product);
+        //     }
+        // }
 
         $output = '
      <div id="quick_view" class="modal_window">
@@ -780,11 +804,9 @@ class pageController extends Controller
 
                ';
 
-        if ($product->regular_price != "") {
-            $output .= ' <p class="product_price"><s>₹' . ceil($product->regular_price) . '</s> <b class="theme_color">₹' . ceil($product->sales_price) . '</b></p>';
-        } else {
-            $output .= ' <p class="product_price"><b class="theme_color">₹' . ceil($product->sales_price) . '</b></p>';
-        }
+
+        $output .= ' <p class="product_price"><b class="theme_color">₹' . $price . '</b></p>';
+
 
         $output .= '<ul class="specifications">
        
@@ -1390,7 +1412,7 @@ class pageController extends Controller
         //$location = 'Salem';
         $stock = DB::table('tiles_stock_locations as tsl')
             ->select(DB::raw('sum(tsl.stock) as stocks,max(tsl.price) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price'))
-            ->whereIn('tsl.location', $this->locationFullData()[$location])
+            ->whereIn('tsl.location', AppHelper::instance()->locationValues()[$location])
             ->where('p.sales_price', '!=', null)
             ->where($where, $where_value)
             ->join('products as p', 'p.id', '=', 'tsl.product_id')
@@ -1427,79 +1449,12 @@ class pageController extends Controller
 
         return $stock;
     }
-    public function tilesSingleLocation($id)
-    {
-        $location = Session::get('locations');
-        $stock = DB::table('tiles_stock_locations as tsl')
-            ->select(DB::raw('sum(tsl.stock) as stocks,max(tsl.price) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id,p.regular_price,p.width,p.weight,p.length,p.items,p.product_description,p.map_location'))
-            ->whereIn('tsl.location', $this->locationFullData()[$location])
-            ->where('p.id', $id)
-            // ->where('tsl.price', '!=', null)
-            ->join('products as p', 'p.id', '=', 'tsl.product_id')
-            ->groupBy('tsl.product_id')
-            ->orderBy('stocks', 'desc')
-            ->first();
-        //return response()->json($stock);
-        if (isset($stock)) {
-            if ($stock->amount != null) {
-                if ($stock->price_type == "discount") {
-                    if ($stock->value_type == "percentage") {
-                        $stock->sales_price = $stock->sales_price - ($stock->sales_price * ($stock->amount / 100));
-                    } else {
-                        $stock->sales_price = $stock->sales_price - $stock->amount;;
-                    }
-                } else {
-                    if ($stock->value_type == "percentage") {
-                        $stock->sales_price = $stock->sales_price + ($stock->sales_price * ($stock->amount / 100));
-                    } else {
-                        $stock->sales_price = $stock->sales_price + $stock->amount;
-                    }
-                }
-            }
-        }
-        return $stock;
-    }
-    public function locationFullData()
-    {
-        return  $data = array(
-            'Ariyalur' => ['Trichy', 'Karaikal'],
-            'Chennai' => ['Perungalthur', 'Pallavaram', 'Vadapalani', 'Tambaram'],
-            'Coimbatore' => ['Coimbatore'],
-            'Cuddalore' => ['Pondicherry'],
-            'Dindigul' => ['Madurai', 'Trichy'],
-            'Dharmapuri' => ['Salem', 'Vellore'],
-            'Erode' => ['Coimbatore', 'Salem'],
-            'Karur' => ['Trichy'],
-            'Kanniyakumari' => ['Tirunelveli'],
-            'Kanchipuram' => ['Perungalthur', 'Pallavaram', 'Vadapalani', 'Tambaram'],
-            'Krishnagiri' => ['Vellore'],
-            'Madurai' => ['Madurai', 'Trichy'],
-            'Nillgiris' => ['Coimbatore'],
-            'Namakkal' => ['Salem', 'Trichy'],
-            'Nagapattinam' => ['Karaikal'],
-            'Perambalur' => ['Salem', 'Trichy'],
-            'Pudukottai' => ['Trichy'],
-            'Ramanathapuram' => ['Madurai', 'Tirunelveli'],
-            'Salem' => ['Salem'],
-            'Sivaganga' => ['Madurai', 'Trichy'],
-            'Thanjavur' => ['Trichy'],
-            'Theni' => ['Madurai'],
-            'Thoothukudi' => ['Tirunelveli'],
-            'Tiruppur' => ['Coimbatore'],
-            'Tirunelveli' => ['Tirunelveli'],
-            'Tiruchirappalli' => ['Trichy', 'Madurai'],
-            'Tiruvannamalai' => ['Vellore', 'Pondicherry'],
-            'Tiruvallur' => ['Perungalthur', 'Pallavaram', 'Vadapalani', 'Tambaram'],
-            'Tiruvarur' => ['Karaikal'],
-            'Virudunagar' => ['Madurai', 'Tirunelveli'],
-            'Vellore' => ['Vellore'],
-            'Viluppuram' => ['Pondicherry'],
-        );
-    }
 
     public function viewCompare()
     {
         if (Session::has('compare') && count(Session::get('compare')) > 0) {
+            $product = [];
+            $related = [];
             $product = product::whereIn('id', Session::get('compare'))->get();
             if ($product[0]->category == 21) {
                 $pg = painting_guides::whereIn('product_id', Session::get('compare'))->get();
@@ -1520,47 +1475,74 @@ class pageController extends Controller
             $product = [];
             $related = [];
         }
-        if (count($product) > 0) {
-            foreach ($product as $row) {
-                if ($row->amount != null && $row->sales_price != null) {
-                    if ($row->price_type == "discount") {
-                        if ($row->value_type == "percentage") {
-                            $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
-                        } else {
-                            $row->sales_price = $row->sales_price - $row->amount;;
-                        }
-                    } else {
-                        if ($row->value_type == "percentage") {
-                            //$discount = $row->sales_price / $row->amount;
-                            $row->sales_price = $discount = $row->sales_price + ($row->sales_price * ($row->amount / 100));
-                        } else {
-                            $row->sales_price = $row->sales_price + $row->amount;
-                        }
-                    }
-                }
-            }
-        }
+
         if (count($related) > 0) {
-            foreach ($related as $row) {
-                if ($row->amount != null && $row->sales_price != null) {
-                    if ($row->price_type == "discount") {
-                        if ($row->value_type == "percentage") {
-                            $row->sales_price = $row->sales_price - ($row->sales_price * ($row->amount / 100));
+            foreach ($related as $index1 => $row1) {
+                if ($row1->category != 1) {
+                    $lm = AppHelper::instance()->locationManagement($row1->id);
+                    if (isset($lm)) {
+                        if ($lm->status == 0) {
+                            if (isset($lm->sales_price)) {
+
+                                $row1->sales_price = $lm->sales_price;
+                            }
+                            if (isset($lm->regular_price)) {
+
+                                $row1->regular_price = $lm->regular_price;
+                            }
+                            if ($row1->amount != null) {
+                                $row1 = AppHelper::instance()->productDiscount($row1);
+                            }
                         } else {
-                            $row->sales_price = $row->sales_price - $row->amount;;
+                            unset($related[$index1]);
+                            //$row1 = [];
                         }
                     } else {
-                        if ($row->value_type == "percentage") {
-                            //$discount = $row->sales_price / $row->amount;
-                            $row->sales_price = $discount = $row->sales_price + ($row->sales_price * ($row->amount / 100));
-                        } else {
-                            $row->sales_price = $row->sales_price + $row->amount;
+                        if ($row1->amount != null) {
+                            $row1 = AppHelper::instance()->productDiscount($row1);
                         }
                     }
+                } else {
+
+                    $row1 = AppHelper::instance()->tilesSingleLocation($row1->id);
                 }
             }
         }
-        //return response()->json(Session::get('compare'));
+        if (count($product) > 0) {
+            foreach ($product as $index => $row2) {
+                if ($row2->category != 1) {
+                    $lm = AppHelper::instance()->locationManagement($row2->id);
+                    if (isset($lm)) {
+                        if ($lm->status == 0) {
+                            if (isset($lm->sales_price)) {
+
+                                $row2->sales_price = $lm->sales_price;
+                            }
+                            if (isset($lm->regular_price)) {
+
+                                $row2->regular_price = $lm->regular_price;
+                            }
+                            if ($row2->amount != null) {
+                                $row2 = AppHelper::instance()->productDiscount($row2);
+                            }
+                        } else {
+                            unset($product[$index]);
+                            //$row2 = [];
+                        }
+                    } else {
+                        if ($row2->amount != null) {
+                            $row2 = AppHelper::instance()->productDiscount($row2);
+                        }
+                    }
+                } else {
+                    //return response()->json($row2);
+                    //$row2->sales_price = (int) $row2->sales_price;
+                    $row2->sales_price = ceil(AppHelper::instance()->tilesSingleLocation($row2->id)->sales_price);
+                    //return response()->json($product);
+                }
+            }
+        }
+
         return view('compare', compact('product', 'related'));
     }
 
@@ -1572,7 +1554,7 @@ class pageController extends Controller
                 $location = Session::get('locations');
                 $result = DB::table('tiles_stock_locations as tsl')
                     ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.amount,p.price_type,p.value_type,p.group_product,p.category,p.id'))
-                    ->whereIn('tsl.location', $this->locationFullData()[$location])
+                    ->whereIn('tsl.location', AppHelper::instance()->locationValues()[$location])
                     ->where('p.sales_price', '!=', null)
                     ->where('tsl.stock', '!=', null)
                     ->where('product_name', 'like', '%' . $request->search . '%')

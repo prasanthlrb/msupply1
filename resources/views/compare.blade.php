@@ -56,7 +56,7 @@
 									<th class="row_title_col">Price</th>
 										@foreach($product as $row)
 										
-									<td class="total">{{$row->sales_price}}</td>
+									<td class="total">Rs: {{$row->sales_price}}</td>
 										@endforeach
 
 								</tr>
@@ -140,7 +140,7 @@
 									<th class="row_title_col">Price</th>
 										@foreach($product as $row)
 			
-									<td class="total">{{$row->sales_price}}</td>
+									<td class="total">Rs: {{$row->sales_price}}</td>
 										@endforeach
 
 								</tr>

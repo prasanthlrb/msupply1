@@ -160,7 +160,7 @@
 		
 														</div><!--/ .centered_buttons -->
 		
-														<a href="/add-wishlist/{{$row->id}}" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
+														<a href="/add-wishlist/{{$product_today[0]->id}}" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
 		
 														<a href="javascript:void(null)" onclick="addCompare({{$product_today[0]->id}})" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
 		
@@ -174,17 +174,17 @@
 		
 												<!-- - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - -->
 		
-												<div class="label_offer percentage">
+												{{-- <div class="label_offer percentage">
 		
 													<div>25%</div>OFF
 		
-												</div>
+												</div> --}}
 		
 												<!-- - - - - - - - - - - - - - End label - - - - - - - - - - - - - - - - -->
 		
 												<!-- - - - - - - - - - - - - - Countdown - - - - - - - - - - - - - - - - -->
 		
-												<div class="countdown" data-year="2016" data-month="2" data-day="9" data-hours="10" data-minutes="30" data-seconds="30"></div>
+												{{-- <div class="countdown" data-year="2016" data-month="2" data-day="9" data-hours="10" data-minutes="30" data-seconds="30"></div> --}}
 		
 												<!-- - - - - - - - - - - - - - End countdown - - - - - - - - - - - - - - - - -->
 		

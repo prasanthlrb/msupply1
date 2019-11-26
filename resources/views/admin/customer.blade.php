@@ -104,7 +104,6 @@
 <script>
     var status_id = null;
     $('.customer').addClass('active');
-
     var orderPageTable = $('.zero-configuration').DataTable(
     {
         processing: true,

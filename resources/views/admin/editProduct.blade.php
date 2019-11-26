@@ -506,7 +506,7 @@
                             <div class="col-md-4">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Dis / High</label>
                                   <select name="price_type" id="price_type" class="form-control">
-                                       <option <?php echo $product_find->price_type == null ? 'selected' : '' ?> value="" selected="" disabled="">Select </option>
+                                       <option <?php echo $product_find->price_type == null ? 'selected' : '' ?> value="" selected="">Select </option>
                                           <option value="discount" <?php echo $product_find->price_type == 'discount' ? 'selected' : '' ?>>Discount </option>
                                           <option value="high" <?php echo $product_find->price_type == 'high' ? 'selected' : '' ?>>High </option>
                                         </select>
@@ -514,7 +514,7 @@
                             <div class="col-md-4">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Type</label>
                                   <select name="value_type"  class="form-control">
-                                        <option <?php echo $product_find->value_type == null ? 'selected' : '' ?> selected="" disabled="">Select </option>
+                                        <option <?php echo $product_find->value_type == null ? 'selected' : '' ?> selected="">Select </option>
                                           <option <?php echo $product_find->value_type == 'percentage' ? 'selected' : '' ?> value="percentage">Percentage </option>
                                           <option <?php echo $product_find->value_type == 'amount' ? 'selected' : '' ?> value="amount">Amount </option>
                                         </select>
