@@ -291,6 +291,40 @@ class categoryController extends Controller
             //return response()->json($optionData[1][2]['name']);
             //dd($optionData);
             $brand = brand::find($product1->brand_name);
+            if (count($related_product) > 0) {
+
+                foreach ($related_product as $index => $row) {
+                    if ($row->category != 1 && $row->category != 21) {
+                        $lm = AppHelper::instance()->locationManagement($row->id);
+                        if (isset($lm)) {
+                            if ($lm->status == 0) {
+                                if (isset($lm->sales_price)) {
+
+                                    $row->sales_price = $lm->sales_price;
+                                }
+                                if (isset($lm->regular_price)) {
+
+                                    $row->regular_price = $lm->regular_price;
+                                }
+                                if ($row->amount != null) {
+                                    $row = AppHelper::instance()->productDiscount($row);
+                                }
+                            } else {
+                                unset($related_product[$index]);
+                                //$row = [];
+                            }
+                        } else {
+                            if ($row->amount != null) {
+                                $row = AppHelper::instance()->productDiscount($row);
+                            }
+                        }
+                    } else {
+                        if ($row->category == 1) {
+                            $row = AppHelper::instance()->tilesSingleLocation($row->id);
+                        }
+                    }
+                }
+            }
             return view('product', compact('product1', 'optionData', 'brand', 'Upload', 'related_product', 'breadcrumbs', 'product_attribute', 'attribute', 'review', 'reviews', 'rating', 'custom_qty'));
         }
     }

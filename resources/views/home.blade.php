@@ -140,13 +140,14 @@
 		
 										</div><!--/ .widgets_carousel-->
 										@else
+										@foreach($product_today as $product_today)
 										<div class="product_item">
 		
 												<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
 												
 												<div class="image_wrap">
 		
-														<img src="product_img/{{$product_today[0]->product_image}}" alt="">
+														<img src="product_img/{{$product_today->product_image}}" alt="">
 		
 													<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
 		
@@ -154,15 +155,15 @@
 		
 														<div class="centered_buttons">
 		
-														<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product_today[0]->id}}">Quick View</a>
+														<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product_today->id}}">Quick View</a>
 		
 														
 		
 														</div><!--/ .centered_buttons -->
 		
-														<a href="/add-wishlist/{{$product_today[0]->id}}" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
+														<a href="/add-wishlist/{{$product_today->id}}" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
 		
-														<a href="javascript:void(null)" onclick="addCompare({{$product_today[0]->id}})" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
+														<a href="javascript:void(null)" onclick="addCompare({{$product_today->id}})" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
 		
 													</div><!--/ .actions_wrap-->
 													
@@ -192,14 +193,14 @@
 		
 												<div class="description">
 		
-														<p><a href="product/{{$product_today[0]->id}}">{{$product_today[0]->product_name}}</a></p>
+														<p><a href="product/{{$product_today->id}}">{{$product_today->product_name}}</a></p>
 		
 													<div class="clearfix product_info">
 		
 														<!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
 		
 														<?php 
-														$getRating = App\rating::where('item_id',$product_today[0]->id)->get();
+														$getRating = App\rating::where('item_id',$product_today->id)->get();
 														if(count($getRating) > 0){
 															$rating_count;
 														
@@ -230,11 +231,11 @@
 														<!-- - - - - - - - - - - - - - End product rating - - - - - - - - - - - - - - - - -->
 		
 														<p class="product_price alignleft">
-																@if($product_today[0]->sales_price != null)
-															<s>₹ {{$product_today[0]->regular_price}}</s> 
-															<b>₹ {{$product_today[0]->sales_price}}</b></p>
+																@if($product_today->sales_price != null)
+															<s>₹ {{$product_today->regular_price}}</s> 
+															<b>₹ {{$product_today->sales_price}}</b></p>
 															@else
-															<b>₹ {{$product_today[0]->regular_price}}</b></p>
+															<b>₹ {{$product_today->regular_price}}</b></p>
 																@endif
 		
 													</div><!--/ .clearfix.product_info-->
@@ -244,6 +245,7 @@
 												<!-- - - - - - - - - - - - - - End of product description - - - - - - - - - - - - - - - - -->
 		
 											</div><!--/ .product_item-->
+											@endforeach
 										@endif
 										<!-- - - - - - - - - - - - - - End of carousel of today's deals - - - - - - - - - - - - - - - - -->
 		
@@ -415,16 +417,16 @@
 			$('.home_menu').addClass('current');
 
 window.onscroll = function() {scrollFunction()};
-function scrollFunction() {
-  if (document.documentElement.scrollTop > 905 && document.documentElement.scrollTop < 2900) {
-	$('#stricky-sideimg').addClass('fixedSideImage');
-	  //console.log(document.documentElement.scrollTop)
-    // document.getElementById("stricky-sideimg").style.fontSize = "30px";
-  } else {
-	 $('#stricky-sideimg').removeClass('fixedSideImage');
-// 	  console.log(document.documentElement.scrollTop)
-//    document.getElementById("stricky-sideimg").style.fontSize = "90px";
-  }
-}
+// function scrollFunction() {
+//   if (document.documentElement.scrollTop > 905 && document.documentElement.scrollTop < 2900) {
+// 	$('#stricky-sideimg').addClass('fixedSideImage');
+// 	  //console.log(document.documentElement.scrollTop)
+//     // document.getElementById("stricky-sideimg").style.fontSize = "30px";
+//   } else {
+// 	 $('#stricky-sideimg').removeClass('fixedSideImage');
+// // 	  console.log(document.documentElement.scrollTop)
+// //    document.getElementById("stricky-sideimg").style.fontSize = "90px";
+//   }
+// }
 			</script>
 			@endsection

@@ -347,6 +347,7 @@ input[type="radio"] + label,
 
           //  $('#unit_'+data.id).addClass('select_unit_type');
               qtyBox(pro.id)
+              //console.log(bulkItems)
         }
         function qtyBox(id){
             var qty = Math.ceil($('#qtybox'+id).val());
@@ -354,29 +355,40 @@ input[type="radio"] + label,
                 $('#qtybox'+id).val(0);
                 qty=0;
             }
-            var totalAmount=0;
+            //var totalAmount=0;
              for(let i =0;i<bulkItems.length;i++){
               if(bulkItems[i].product_id == id){
                   bulkItems[i]['qty'] = qty;
-                  let total = parseInt(bulkItems[i]['unit_price']) * parseInt(qty)
-                  if(qty == ''){
+                  let total = parseInt(bulkItems[i]['unit_price']) * parseInt(bulkItems[i]['qty'])
+                  if(qty == '' || qty ==0){
                       total=0;
                   $('#total_price'+id).html('<p style="color:#ed4154">Rs : '+total+'</p>')
                   }else{
                   $('#total_price'+id).html('<p style="color:#ed4154">Rs : '+total+'</p>')
 
-                  totalAmount = parseInt(totalAmount) + parseInt(total);
+                  //totalAmount = parseInt(totalAmount) + parseInt(total);
                   }
                   break;
               }else{
                   let dummytotal = bulkItems[i]['unit_price'] * bulkItems[i]['qty'];
-                  totalAmount = parseInt(totalAmount) + parseInt(dummytotal);
+                  //totalAmount = parseInt(totalAmount) + parseInt(dummytotal);
               }
 
              }
-              $('#total_price_place').html('<h3 style="color:#ed4154">Rs : '+totalAmount+'</h3>')
+             totalCalc();
+              
             // console.log(id)
              //console.log(bulkItems)
+             //console.log(bulkItems)
+        }
+
+        function totalCalc(){
+           var totalAmount=0;
+             for(let i =0;i<bulkItems.length;i++){
+                let total = parseInt(bulkItems[i]['unit_price']) * parseInt(bulkItems[i]['qty']);
+                totalAmount = parseInt(totalAmount) + parseInt(total);
+             }
+             $('#total_price_place').html('<h3 style="color:#ed4154">Rs : '+totalAmount+'</h3>');
         }
 
         function noofkg(data){

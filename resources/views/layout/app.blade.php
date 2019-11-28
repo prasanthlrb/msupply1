@@ -388,7 +388,7 @@
 									<div class="call_us">
 										<?php $main_mobile = App\contactinfo::all(); ?>
 										@if(count($main_mobile)>0)
-									<span>Call us toll free:</span> <b> {{$main_mobile[0]->toll_free}}</b>
+									<span>Call us : </span> <b> {{$main_mobile[0]->toll_free}}</b>
 										@endif
 									</div><!--/ .call_us-->
 

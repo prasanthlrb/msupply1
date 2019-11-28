@@ -47,6 +47,12 @@
                                   <input type="text" id="projectinput2" class="form-control" name="toll_free" value="{{$data['toll_free']}}">
                                 </div>
                               </div>
+                              <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput2">GSTIN</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="projectinput2" class="form-control" name="gstin" value="{{$data['gstin']}}">
+                                </div>
+                              </div>
                              
                               
                               <div class="form-group row">

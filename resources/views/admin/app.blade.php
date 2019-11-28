@@ -317,10 +317,10 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
         </li>
        
 
-        @if($role->transport == 1)
-        <li class="transports nav-item"><a href="/admin/transport"><i class="la la-truck"></i><span class="menu-title">Transport</span></a>
-        </li>
-        @endif
+     
+        {{-- <li class="transports nav-item"><a href="/admin/transport"><i class="la la-truck"></i><span class="menu-title">Transport</span></a>
+        </li> --}}
+    
 
 
 

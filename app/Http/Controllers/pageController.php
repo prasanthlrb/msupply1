@@ -58,15 +58,15 @@ class pageController extends Controller
         //$price = paint_price::select('product_id')->where('price', '<', 100)->groupBy('product_id')->get();
         // $price = paint_price::where('price', '<', 100)->where('product_id', 3962)->get();
         // return response()->json($price);
-        // $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
-        // return response()->json($product);
-        $product = product::where('category', 21)->get();
-        // try {
-        foreach ($product as $row) {
-            $pro = product::find($row->id);
-            $pro->brand_name = 1;
-            $pro->save();
-        }
+        $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
+        return response()->json($product);
+        // $product = product::where('category', 21)->get();
+        // // try {
+        // foreach ($product as $row) {
+        //     $pro = product::find($row->id);
+        //     $pro->brand_name = 1;
+        //     $pro->save();
+        // }
 
         //     return response()->json($product);
         // foreach ($product as $row) {
@@ -577,7 +577,7 @@ class pageController extends Controller
                     }
                 }
             }
-            // return response()->json($product_today[0]->id);
+            //return response()->json($product_today);
             return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel', 'brand_slider'));
 
             //  foreach($product_today as $row){

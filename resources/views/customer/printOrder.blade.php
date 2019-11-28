@@ -28,6 +28,7 @@
     <div>{{$info->address}}</div>
       <div>Email: {{$info->email}}</div>
       <div>Phone: {{$info->phone}}</div>
+      <div>GSTIN: {{$info->gstin}}</div>
       </div>
       
       <div class="col-sm-5 ml-auto">
@@ -40,6 +41,7 @@
       <div>{{$billing->state}}</div>
       <div>Email: {{$billing->email}}</div>
       <div>Phone: {{$billing->telephone}}</div>
+      
       </div>
       </div>
       <table class="table table-striped">
