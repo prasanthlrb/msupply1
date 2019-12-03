@@ -423,6 +423,14 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/delete-assign-location/{id}', 'locationController@DeleteLocationManagement');
     Route::post('/assign-price-based-location', 'locationController@assignPriceBasedLocation');
     Route::post('/edit-price-based-location', 'locationController@editPriceBasedLocation');
+
+    //marketing app
+    Route::get('/createNew', 'marketingController@createNew');
+    Route::get('/view-post', 'marketingController@index');
+    Route::get('/update-post/{id}', 'marketingController@editData');
+    Route::get('/delete-post/{id}', 'marketingController@deleteData');
+    Route::post('/send-save', 'marketingController@saveSend');
+    Route::post('/send-update', 'marketingController@updateData');
 });
 
 Auth::routes();
@@ -519,7 +527,10 @@ Route::get('/cart-qty-plus/{id}', function ($id) {
 });
 Route::get('/remove-cart/{id}', function ($id) {
     Cart::remove($id);
-    Session::forget('coupon');
+    // if (count(Cart::getContent()) < 1) {
+    //     Cart::clear();
+    // }
+    //Session::forget('coupon');
 });
 Route::get('/cart-update-value/{id}/{value}', 'cartController@cartUpdateValue');
 Route::get('/cart', function () {

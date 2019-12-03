@@ -150,7 +150,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        // 'Spatie\Analytics\LaravelAnalyticsServiceProvider',
         /*
          * Application Service Providers...
          */
@@ -209,6 +209,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'AppHelper' => App\Helpers\AppHelper::class,
+        'LaravelAnalytics' => 'Spatie\Analytics\LaravelAnalyticsFacade',
 
     ],
 

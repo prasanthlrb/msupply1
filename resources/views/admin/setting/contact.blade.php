@@ -26,7 +26,7 @@
                           <form class="form form-horizontal" method="POST" action="/admin/setting-contact">
                             {{ csrf_field() }}
                             <div class="form-body">
-                              <h4 class="form-section"><i class="ft-user"></i> Contact Info</h4>
+                              <h4 class="form-section"><i class="ft-user"></i> Contact Info & COD LIMIT</h4>
                              <input type="hidden" name="id" value="{{$data['id']}}">
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Email</label>
@@ -80,6 +80,12 @@
                                 <label class="col-md-3 label-control" for="projectinput11">Map sidebar</label>
                                 <div class="col-md-9">
                                   <textarea id="projectinput11" rows="5" class="form-control" name="map2">{{$data['map2']}}</textarea>
+                                </div>
+                              </div>
+                                  <div class="form-group row">
+                                <label class="col-md-3 label-control" for="projectinput2">COD Limit</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="projectinput2" class="form-control" name="cod" value="{{$data['cod']}}">
                                 </div>
                               </div>
                             </div>

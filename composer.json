@@ -16,6 +16,7 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "razorpay/razorpay": "2.*",
+        "spatie/laravel-analytics": "^3.6",
         "yajra/laravel-datatables": "^1.0"
     },
     "require-dev": {

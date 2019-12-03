@@ -359,6 +359,23 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
           </ul>
         </li>
         @endif
+
+          <li class=" navigation-header">
+          <span data-i18n="nav.category.support">Marketing App</span><i class="la la-ellipsis-h ft-minus" data-toggle="tooltip"
+          data-placement="right" data-original-title="Support"></i>
+        </li>
+           <li class="nav-item"><a href="#"><i class="la la-send"></i><span class="menu-title">Send New</span></a>
+          <ul class="menu-content">
+             
+            <li class="order_report"><a class="menu-item" href="/admin/createNew" data-i18n="nav.dash.ecommerce">Send New</a>
+            </li>
+            <li class="order_report"><a class="menu-item" href="/admin/view-post" data-i18n="nav.dash.ecommerce">All List</a>
+            </li>
+         
+         
+          </ul>
+
+        </li>
         @if($role->report == 1)
         <li class=" navigation-header">
           <span data-i18n="nav.category.support">Report</span><i class="la la-ellipsis-h ft-minus" data-toggle="tooltip"

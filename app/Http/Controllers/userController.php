@@ -13,6 +13,8 @@ use App\User;
 use App\order;
 use App\order_item;
 use Illuminate\Support\Carbon;
+use Analytics;
+use Spatie\Analytics\Period;
 
 class userController extends Controller
 {
@@ -23,6 +25,8 @@ class userController extends Controller
 
     public function dashboard()
     {
+        $analytic = Analytics::fetchMostVisitedPages(Period::days(7));
+        return response()->json($analytic);
         $currentMonth = date('m');
         $product = product::all();
         $user = User::all();

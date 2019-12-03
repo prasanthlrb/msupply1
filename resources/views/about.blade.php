@@ -33,7 +33,6 @@
                 </div><!--/ .theme_box-->
 
             </main><!--/ [col]-->
-
         </div><!--/ .row-->
 
     </div><!--/ .container-->

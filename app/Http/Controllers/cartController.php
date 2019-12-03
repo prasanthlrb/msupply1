@@ -140,6 +140,7 @@ class cartController extends Controller
             $brand_data[$b['attributes']->brand] = $b['attributes']->brand; // Get unique country by code.
             //array_push($brand_data[$b['attributes']->brand], );
         }
+        $final_data = array();
         $get_brand = brand::whereIn('id', $brand_data)->get();
         foreach ($get_brand as $b) {
             $dummy_total = array('total' => 0, 'brand' => '', 'order_type' => '', 'category' => '');
@@ -191,18 +192,20 @@ class cartController extends Controller
         $limit_outline = array();
         $total = ceil(Cart::getTotal());
         $limit_msg = '';
-        foreach ($final_data as $fd) {
-            $limit_data = brand::find($fd['brand']);
-            if ($limit_data->order_limit >= $fd['total']) {
-                $limit_outline[] = $fd['brand'];
-                if ($fd['order_type'] == "Price") {
-                    $limit_msg .= '<div class="alert_box error">
+        if (count($final_data) > 0) {
+            foreach ($final_data as $fd) {
+                $limit_data = brand::find($fd['brand']);
+                if ($limit_data->order_limit >= $fd['total']) {
+                    $limit_outline[] = $fd['brand'];
+                    if ($fd['order_type'] == "Price") {
+                        $limit_msg .= '<div class="alert_box error">
         <b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  <i class="fas fa-rupee-sign" style="margin-top:5px;font-size:10px"></i>' . AppHelper::instance()->IND_money_format($limit_data->order_limit) . ', Please Order Equal Or Above Value!.
         <button class="close"></button> </div>';
-                } else {
-                    $limit_msg .= '<div class="alert_box error">
-<b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  ' . $limit_data->order_limit .  ' ' . $fd['order_type'] . ', Please Order Equal Or Above Value!.
+                    } else {
+                        $limit_msg .= '<div class="alert_box error">
+<b>' . $limit_data->brand . '</b> Brand Minimum Order Limit is  ' . $limit_data->order_limit .  ' ' . $fd['order_type'] . ', Please Order  Above Value!.
 <button class="close"></button> </div>';
+                    }
                 }
             }
         }

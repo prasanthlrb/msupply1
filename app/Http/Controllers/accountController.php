@@ -269,6 +269,8 @@ class accountController extends Controller
     public function checkout()
     {
         // try {
+        $cod_limit = contactinfo::first();
+        //return response()->json($cod_limit);
         $location = location::where('location_name', Session::get('locations'))->first();
         //return response()->json($location);
         $shipping = shipping::where('customer_id', Auth::user()->id)->get();
@@ -536,7 +538,7 @@ class accountController extends Controller
             $final_total = AppHelper::instance()->IND_money_format($final_total);
             $totalPrice = AppHelper::instance()->IND_money_format($totalPrice);
             $project = project::where('user_id', Auth::user()->id)->get();
-            return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing', 'result', 'totalPrice', 'location', 'shipping_price', 'final_total', 'project', 'online_total'));
+            return view('checkout', compact('cod_limit', 'getCart', 'product_data', 'shipping', 'billing', 'result', 'totalPrice', 'location', 'shipping_price', 'final_total', 'project', 'online_total'));
             //return response()->json($result);
             //print $result;
         } else {

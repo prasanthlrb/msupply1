@@ -421,7 +421,7 @@
 
                                     <button class="theme_button" type="button" data-direction="minus">-</button>
                                     @endif
-                                    <input type="text" name="button_qty" value="<?php echo $product1->order_limit !=null ? $product1->order_limit : 1?>" id="button_qty" onchange="checkOrderLimitInInput({{$product1->order_limit}})">
+                                    <input type="text" name="button_qty" value="<?php echo $product1->order_limit !=null ? $product1->order_limit : 1?>" id="button_qty" onchange="checkOrderLimit({{$product1->order_limit}})">
                                     <button class="theme_button" type="button" data-direction="plus">+</button>
 
                                 </div>
@@ -829,40 +829,42 @@ function addCart(id){
                         url : '/get-color-modal'
                     });
         }
-        function getColors(id){
-            $('.arcticmodal-close').trigger('click');
-            $.ajax({
-                url:'/selected-color/'+id,
-                method:'GET',
-                success:function(data){
-                    console.log(data);
-                    $('#inputColor').remove();
-                    $('#colorButtonModule').css('background-color',data.color)
-                    $('#colorButtonModule').text(data.name+' Rs: '+data.price)
-                    $('#colorButtonModule').append('<input type="hidden" name="inputColor" id="inputColor" value="'+data.id+'">')
-                }
-            })
-        }
+        // function getColors(id){
+        //     $('.arcticmodal-close').trigger('click');
+        //     $.ajax({
+        //         url:'/selected-color/'+id,
+        //         method:'GET',
+        //         success:function(data){
+        //             console.log(data);
+        //             $('#inputColor').remove();
+        //             $('#colorButtonModule').css('background-color',data.color)
+        //             $('#colorButtonModule').text(data.name+' Rs: '+data.price)
+        //             $('#colorButtonModule').append('<input type="hidden" name="inputColor" id="inputColor" value="'+data.id+'">')
+        //         }
+        //     })
+        // }
 
         function checkOrderLimit(data){
+            if(data !=null){
             var button_qty = $('#button_qty').val();
-            if(button_qty <= button_qty){
-
+            if(data >= button_qty){
                 toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
                 setTimeout(()=>{
                     $('#button_qty').val(data);
                 },0)
             }
-        }
-        function checkOrderLimitInInput(data){
-          var button_qty = $('#button_qty').val();
-            if(button_qty <= button_qty){
-
-                toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
-                setTimeout(()=>{
-                    $('#button_qty').val(data);
-                },0)
             }
+           
         }
+        // function checkOrderLimitInInput(data){
+        //   var button_qty = $('#button_qty').val();
+        //     if(button_qty <= button_qty){
+
+        //         toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
+        //         setTimeout(()=>{
+        //             $('#button_qty').val(data);
+        //         },0)
+        //     }
+        // }
     </script>
 @endsection

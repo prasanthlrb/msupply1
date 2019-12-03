@@ -209,7 +209,8 @@
 										<label for="radio_button_2222">Pay Online</label>
 
 									</li>
-									@if($location->cod == 0)
+									@if($location->cod == 0 && $cod_limit->cod > $totalPrice)
+									
 									<li>
 
 										<input value="cod" type="radio" name="payment_type" id="radio_button_1111">

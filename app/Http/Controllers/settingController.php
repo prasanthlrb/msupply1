@@ -96,10 +96,13 @@ class settingController extends Controller
                 'id' => '0',
                 'email' => '',
                 'phone' => '',
+                'toll_free' => '',
                 'address' => '',
+                'gstin' => '',
                 'described' => '',
                 'map1' => '',
-                'map2' => ''
+                'map2' => '',
+                'cod' => ''
             );
             //return response()->json($data['email']);
             return view('admin.setting.contact', compact('data'));
@@ -122,6 +125,7 @@ class settingController extends Controller
         $data->described = $request->described;
         $data->map1 = $request->map1;
         $data->map2 = $request->map2;
+        $data->cod = $request->cod;
         $data->save();
         return redirect('/admin/contact-details');
     }
