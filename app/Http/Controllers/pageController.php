@@ -380,132 +380,133 @@ class pageController extends Controller
             <section class="section_offset animated transparent" data-animation="fadeInDown">
                 <h3 class="offset_title">' . $layout->title . '</h3>
                 <div class="owl_carousel carousel_in_tabs">';
-                    foreach (explode(',', $layout->product_id) as $product_id) {
-                        $row = product::find($product_id);
-                        if ($row->category == 1) {
-                            $row = AppHelper::instance()->tilesSingleLocation($row->id);
-                            //return response()->json($row);
-                        } else {
-                            $lm = AppHelper::instance()->locationManagement($row->id);
-                            if (isset($lm)) {
-                                if ($lm->status == 0) {
-                                    if (isset($lm->sales_price)) {
+                    try {
+                        foreach (explode(',', $layout->product_id) as $product_id) {
+                            $row = product::find($product_id);
+                            if ($row->category == 1) {
+                                $row = AppHelper::instance()->tilesSingleLocation($row->id);
+                                //return response()->json($row);
+                            } else {
+                                $lm = AppHelper::instance()->locationManagement($row->id);
+                                if (isset($lm)) {
+                                    if ($lm->status == 0) {
+                                        if (isset($lm->sales_price)) {
 
-                                        $row->sales_price = $lm->sales_price;
-                                    }
-                                    if (isset($lm->regular_price)) {
+                                            $row->sales_price = $lm->sales_price;
+                                        }
+                                        if (isset($lm->regular_price)) {
 
-                                        $row->regular_price = $lm->regular_price;
+                                            $row->regular_price = $lm->regular_price;
+                                        }
+                                        if ($row->amount != null) {
+                                            $row = AppHelper::instance()->productDiscount($row);
+                                        }
+                                    } else {
+                                        unset($row);
+                                        $row = null;
                                     }
+                                } else {
                                     if ($row->amount != null) {
                                         $row = AppHelper::instance()->productDiscount($row);
                                     }
-                                } else {
-                                    unset($row);
-                                    $row = null;
-                                }
-                            } else {
-                                if ($row->amount != null) {
-                                    $row = AppHelper::instance()->productDiscount($row);
                                 }
                             }
-                        }
 
 
-                        if (isset($row) && $row != null) {
+                            if (isset($row) && $row != null) {
 
-                            $output .= '
+                                $output .= '
                 <div class="product_item type_2">
                     <div class="image_wrap">';
-                            if ($row->category == 1) {
-                                $output .= '<img src="http://www.kagtech.net/KAGAPP/Partsupload/' . $row->product_image . '" alt="">';
-                            } else {
-                                $output .= '<img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">';
-                            }
+                                if ($row->category == 1) {
+                                    $output .= '<img src="http://www.kagtech.net/KAGAPP/Partsupload/' . $row->product_image . '" alt="">';
+                                } else {
+                                    $output .= '<img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">';
+                                }
 
-                            $output .= '<div class="actions_wrap">
+                                $output .= '<div class="actions_wrap">
                             <div class="centered_buttons">';
-                            if ($row->category == 1) {
-                                $output .= '
+                                if ($row->category == 1) {
+                                    $output .= '
             <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/' . $row->id .  '/' . ceil($row->sales_price) . '">Quick View</a>';
-                            } else if ($row->category == 21) {
-                                $output .= '
+                                } else if ($row->category == 21) {
+                                    $output .= '
             <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-model-paint/' . $row->id . '">Quick View</a>';
-                            } else if ($row->category == 7) { } else {
+                                } else if ($row->category == 7) { } else {
 
-                                $output .= '
+                                    $output .= '
                 <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/' . $row->id . '">Quick View</a>';
-                            }
-                            $output .= '
+                                }
+                                $output .= '
                             </div>
                         </div>
                     </div>';
-                            if ($row->regular_price != null && $row->category != 7) {
+                                if ($row->regular_price != null && $row->category != 7) {
 
-                                $v1 = $row->regular_price - $row->sales_price;
-                                $v2 = ceil($v1 / $row->regular_price * 100);
-                                $output .= '<div class="label_offer percentage">
+                                    $v1 = $row->regular_price - $row->sales_price;
+                                    $v2 = ceil($v1 / $row->regular_price * 100);
+                                    $output .= '<div class="label_offer percentage">
 													<div>' . $v2 . '%</div>OFF</div>';
-                            }
-                            $output .= '<div class="description">
+                                }
+                                $output .= '<div class="description">
                     <a href="/product/' . $row->id . '">' . $row->product_name . '</a>
                         <div class="clearfix product_info"> ';
 
-                            $getRating = rating::where('item_id', $row->id)->get();
-                            $rating_count = 0;
-                            if (count($getRating) > 0) {
-                                $total = 0;
-                                foreach ($getRating as $rows) {
-                                    $total += $rows->rating;
-                                }
-                                $rating_count = $total / count($getRating);
+                                $getRating = rating::where('item_id', $row->id)->get();
+                                $rating_count = 0;
+                                if (count($getRating) > 0) {
+                                    $total = 0;
+                                    foreach ($getRating as $rows) {
+                                        $total += $rows->rating;
+                                    }
+                                    $rating_count = $total / count($getRating);
 
-                                $output .= '<ul class="rating alignright">
+                                    $output .= '<ul class="rating alignright">
 
                             <li class="active"></li>
 
                             <li class="';
-                                if ($rating_count >= 2) {
+                                    if ($rating_count >= 2) {
 
-                                    $output .= 'active';
-                                }
-                                $output .= '"></li>
-
-                            <li class="';
-                                if ($rating_count >= 3) {
-
-                                    $output .= 'active';
-                                }
-                                $output .= '"></li>
+                                        $output .= 'active';
+                                    }
+                                    $output .= '"></li>
 
                             <li class="';
-                                if ($rating_count >= 4) {
+                                    if ($rating_count >= 3) {
 
-                                    $output .= 'active';
-                                }
-                                $output .= '"></li>
+                                        $output .= 'active';
+                                    }
+                                    $output .= '"></li>
 
                             <li class="';
-                                if ($rating_count >= 5) {
+                                    if ($rating_count >= 4) {
 
-                                    $output .= 'active';
-                                }
-                                $output .= '"></li>
+                                        $output .= 'active';
+                                    }
+                                    $output .= '"></li>
+
+                            <li class="';
+                                    if ($rating_count >= 5) {
+
+                                        $output .= 'active';
+                                    }
+                                    $output .= '"></li>
 
 
                         </ul>';
-                            }
-                            $output .= ' <p class="product_price alignleft">';
-                            if ($row->category != 7 && $row->category != 21 && $row->map_location == null) {
-                                if ($row->regular_price != null) {
-                                    $output .= ' <s>₹ ' . ceil($row->regular_price) . '</s>
-                                    <b>₹ ' . ceil($row->sales_price) . '</b></p>';
-                                } else {
-                                    $output .= '<b>₹ ' . ceil($row->sales_price) . '</b></p>';
                                 }
-                            }
+                                $output .= ' <p class="product_price alignleft">';
+                                if ($row->category != 7 && $row->category != 21 && $row->map_location == null) {
+                                    if ($row->regular_price != null) {
+                                        $output .= ' <s>₹ ' . ceil($row->regular_price) . '</s>
+                                    <b>₹ ' . ceil($row->sales_price) . '</b></p>';
+                                    } else {
+                                        $output .= '<b>₹ ' . ceil($row->sales_price) . '</b></p>';
+                                    }
+                                }
 
-                            $output .= ' </div>
+                                $output .= ' </div>
                     </div>
                 <div class="buttons_row">
                     <a href="/product/' . $row->id . '" class="button_blue middle_btn">See Details</a>
@@ -513,7 +514,11 @@ class pageController extends Controller
 			<a href="javascript:void(null)" onclick="addCompare(' . $row->id . ')" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></a>
                 </div>
             </div>';
+                            }
                         }
+                    } catch (\Exception $e) {
+
+                        //return $e->getMessage();
                     }
                     $output .= '
         </div>
