@@ -55,11 +55,14 @@ class pageController extends Controller
         // }
         // File::put($destinationPath . $file, $data);
         // return response()->download($destinationPath . $file);
-        //$price = paint_price::select('product_id')->where('price', '<', 100)->groupBy('product_id')->get();
-        // $price = paint_price::where('price', '<', 100)->where('product_id', 3962)->get();
-        // return response()->json($price);
-        $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
-        return response()->json($product);
+         //$price = paint_price::select('product_id')->where('price', '<', 100)->groupBy('product_id')->get();
+        //$prices = paint_price::where('price', '<', 100)->get();
+        // foreach($prices as $price){
+        //     $prices = paint_price::find($price->id)->delete();
+        // }
+      ///return response()->json($prices);
+        // $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
+        // return response()->json($product);
         // $product = product::where('category', 21)->get();
         // // try {
         // foreach ($product as $row) {

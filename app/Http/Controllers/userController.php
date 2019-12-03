@@ -25,8 +25,8 @@ class userController extends Controller
 
     public function dashboard()
     {
-        $analytic = Analytics::fetchMostVisitedPages(Period::days(7));
-        return response()->json($analytic);
+        // $analytic = Analytics::fetchMostVisitedPages(Period::days(7));
+        // return response()->json($analytic);
         $currentMonth = date('m');
         $product = product::all();
         $user = User::all();

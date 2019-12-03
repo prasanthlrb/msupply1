@@ -765,6 +765,7 @@ function addCart(id){
     success: function(data)
     {
         console.log(data);
+        toastr.success('Successfully Added');
     },error: function (error) {
            console.log(error);
         }
@@ -786,6 +787,7 @@ function addCart(id){
     success: function(data)
     {
         console.log(data);
+        toastr.success('Successfully Added');
     },error: function (error) {
            console.log(error);
         }
@@ -810,6 +812,7 @@ function addCart(id){
         success: function(data)
         {
         console.log(data);
+        toastr.success('Successfully Added');
         },error: function (error) {
            console.log(error);
         }
@@ -817,7 +820,7 @@ function addCart(id){
     }
     //both color and option not have
     else{
-
+        toastr.success('Successfully Added');
         setCart(id,qty);
     }
 

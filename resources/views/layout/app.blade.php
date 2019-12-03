@@ -48,7 +48,15 @@
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" type="text/css" href="{{ asset('css/oldie.css')}}">
 		<![endif]-->
-		
+		  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153785209-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-153785209-1');
+</script>
 
 		@yield('extra-css')
 		<style>
@@ -241,6 +249,15 @@
       transform: rotate(90deg);
     }
   </style>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153785209-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-153785209-1');
+</script>
 	</head>
 	<body class="front_page promo_popup">
 
