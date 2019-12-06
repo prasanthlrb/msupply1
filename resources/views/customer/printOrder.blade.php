@@ -70,7 +70,7 @@
       <td class="center">{{$x}}</td>
       <td class="left" style="font-size:12px">{{$row->product_name}}</td>
       <td class="right" style="font-size:12px"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> {{$row->sales_price}}</td>
-        <td class="center" style="font-size:12px">{{$row->qty}}</td>
+        <td class="center" style="font-size:12px">{{$row->qty}} <?php echo $row->unit_type !=null ? $row->unit_type :''?></td>
         <td class="center" style="font-size:12px">GST ({{$row->tax_percent}}%) {{$row->tax_type}} <span style="font-family: DejaVu Sans; sans-serif;">₹</span>{{$row->tax}}</td>
             @if(count($ifPaint)>0)
                                         <td style="font-size:12px">{{$ifPaint[$index]->color_id}}	</td>

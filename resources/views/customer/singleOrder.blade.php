@@ -372,7 +372,7 @@
                                             </ul> -->
                                         </td>
                                         <td data-title="Price" class="subtotal">₹ {{$order_item->sales_price}}</td>
-                                        <td data-title="Quantity">{{$order_item->qty}}</td>
+                                        <td data-title="Quantity">{{$order_item->qty}} <?php echo $order_item->unit_type !=null ? $order_item->unit_type :''?> </td>
                                           <td class="center">GST ({{$order_item->tax_percent}}%) {{$order_item->tax_type}} <span style="font-family: DejaVu Sans; sans-serif;">₹</span>{{$order_item->tax}}</td>
                                          @if(count($ifPaint)>0)
                                         <td>{{$ifPaint[$index]->color_id}}	</td>

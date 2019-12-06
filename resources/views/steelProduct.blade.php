@@ -237,7 +237,7 @@ input[type="radio"] + label,
                                             </td>
                                             @endforeach
 												<td>
-                                                <input type="number" min="0" onkeyup="qtyBox({{$pro->id}})" id="qtybox{{$pro->id}}">
+                                                <input type="number" min="0" onchange="qtyBox({{$pro->id}})" id="qtybox{{$pro->id}}">
                                                 </td>
                                             <td id="total_price{{$pro->id}}">0</td>
 											</tr>
@@ -302,6 +302,7 @@ input[type="radio"] + label,
     <script src="/js/fancybox/source/helpers/jquery.fancybox-media.js"></script>
     <script src="/js/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
     <script>
+       
         var bulkItems = [];
         function setUnit(pro,data){
             // console.log(pro)

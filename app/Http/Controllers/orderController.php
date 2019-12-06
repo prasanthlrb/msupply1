@@ -280,7 +280,12 @@ class orderController extends Controller
             $output .= '
            <td class="text-right">(' . $item->tax_percent . '%) - ' . $item->tax_type . '</td>
            <td class="text-right">₹ ' . $item->sales_price . '</td>
-           <td class="text-right">' . $item->qty . '</td>';
+           <td class="text-right">' . $item->qty;
+           if($item->unit_type !=null){
+            $output .= ' '.$item->unit_type. '</td>';
+           }else{
+               $output .= '</td>';
+           }
             if ($paint_details->count() > 0) {
                 $pdetails = paintOrderDetails::where('order_item_id', $item->id)->first();
                 $output .= '<td class="text-right">' . $pdetails->color_id . '</td><td class="text-right">' . $pdetails->lit . '</td>';
