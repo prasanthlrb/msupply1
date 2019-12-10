@@ -8,7 +8,8 @@ use App\marketing;
 use AppHelper;
 use App\Mail\PostMailable;
 use Illuminate\Support\Facades\Mail;
-
+use Notification;
+use App\Notifications\NewsWasPublished;
 class marketingController extends Controller
 {
     public function index()
@@ -165,5 +166,10 @@ class marketingController extends Controller
     {
         marketing::find($id)->delete();
         return response()->json(['message' => 'Successfully Delete'], 200);
+    }
+
+    public function publishedPost(){
+        $data ="text";
+        Notification::send($data,new NewsWasPublished($data));
     }
 }

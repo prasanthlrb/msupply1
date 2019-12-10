@@ -549,6 +549,7 @@ Route::post('/hard-materials-to-cart', 'cartController@hardMaterialsToCart');
 Route::get('/cart-menu', 'cartController@cartMenu');
 
 Route::get('/cart-data', 'cartController@cartData');
+Route::get('/publish-post', 'marketingController@publishedPost');
 
 
 Route::get('/checkout', 'accountController@checkout');
