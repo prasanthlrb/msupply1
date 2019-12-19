@@ -11,6 +11,7 @@ use App\optionGroup;
 use App\optionValue;
 use Cart;
 use Illuminate\Support\Collection;
+use App\custom_qty;
 use AppHelper;
 
 class cartController extends Controller
@@ -195,7 +196,7 @@ class cartController extends Controller
         if (count($final_data) > 0) {
             foreach ($final_data as $fd) {
                 $limit_data = brand::find($fd['brand']);
-                if ($limit_data->order_limit >= $fd['total']) {
+                if ($limit_data->order_limit > $fd['total']) {
                     $limit_outline[] = $fd['brand'];
                     if ($fd['order_type'] == "Price") {
                         $limit_msg .= '<div class="alert_box error">
@@ -347,19 +348,41 @@ class cartController extends Controller
     </td>
 
     <td class="subtotal" data-title="Price">
-    ₹ ' . AppHelper::instance()->IND_money_format(ceil($cartData->price)) . '
+    ₹ ' . AppHelper::instance()->IND_money_format($cartData->price) . '
     </td>
 
-    <td data-title="Quantity">
-        <div class="qty min clearfix">
-            <button class="theme_button" data-direction="minus" onclick="updateqtyMinus(' . $cartData->id . ')">&#45;</button>
-            <input type="text" name="cartQty" id="cartQty' . $cartData->id . '" value="' . $cartData->quantity . '">
-            <button class="theme_button" data-direction="plus" onclick="updateqtyPlus(' . $cartData->id . ')">&#43;</button>
-            <div class="left_side" style="margin-top: 12px;">
-        <a href="javascript:void(null)" onclick="updateCart(' . $cartData->id . ')" class="button_blue middle_btn">Update</a>
-    </div>
-        </div>
-    </td>
+    <td data-title="Quantity">';
+    $custom_qty = custom_qty::where('product_id',$cartData->id)->get();
+                if(count($custom_qty)>0){
+                    $output .= '<div class="form-group">
+
+  <select class="form-control" id="custom_qty_'.$cartData->id.'" onChange="customQTYChage('.$cartData->id.')" style="height:35px">
+    ';
+    foreach($custom_qty as $qtyData){
+        if($qtyData->customqty == $cartData->quantity){
+            $output .= '<option selected value="'.$qtyData->customqty.'">'.$qtyData->customqty.'</option>';
+        }else{
+
+            $output .= '<option value="'.$qtyData->customqty.'">'.$qtyData->customqty.'</option>';
+        }
+    }
+      
+                                               
+  $output .= '</select>
+</div>';
+                }else{
+                    $output .= '<div class="qty min clearfix">
+                       <button class="theme_button" data-direction="minus" onclick="updateqtyMinus(' . $cartData->id . ')">&#45;</button>
+                       <input type="text" name="cartQty" id="cartQty' . $cartData->id . '" value="' . $cartData->quantity . '">
+                       <button class="theme_button" data-direction="plus" onclick="updateqtyPlus(' . $cartData->id . ')">&#43;</button>
+                       <div class="left_side" style="margin-top: 12px;">
+                   <a href="javascript:void(null)" onclick="updateCart(' . $cartData->id . ')" class="button_blue middle_btn">Update</a>
+               </div>
+                   </div>';
+                }
+
+
+            $output .= ' </td>
 
     <td class="total" data-title="Total">
     ₹ ' . AppHelper::instance()->IND_money_format(ceil($amount)) . '
@@ -552,6 +575,14 @@ class cartController extends Controller
     }
     public function hardMaterialsToCart(Request $request)
     {
+        if(count(Cart::get($request->product_id))>0){
+              Cart::update($request->product_id, array(
+                'quantity' => array(
+                    'relative' => false,
+                    'value' => $request->quantity
+                ),
+            ));
+        }else{
         $product = product::find($request->product_id);
         $attribute = array(
             //'unit_name' => $row['unit_name'],
@@ -565,6 +596,8 @@ class cartController extends Controller
             'quantity' => $request->quantity,
             'attributes' => $attribute,
         ));
-        return response()->json($request);
+      
+    }
+      return response()->json($request);
     }
 }

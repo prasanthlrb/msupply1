@@ -111,11 +111,11 @@
                                 <div class="form-actions">
                                     <div class="text-tight">
                                         <button type="button" class="btn btn-success" id="send_only">
-                                          <i class="la la-check-square-o"></i> Save
+                                          <i class="la la-check-square-o"></i> Update
                                         </button>
 
                                             <button type="button" class="btn btn-success" id="send_save">
-                                              <i class="la la-check-square-o"></i> Save & Send
+                                              <i class="la la-check-square-o"></i> Update & Send
                                             </button>
                                         </div>
 
@@ -166,6 +166,7 @@
 <script src="../../../custom/color.js" type="text/javascript"></script>
 
 <script>
+    $('.marketing').addClass('active');
 $('#send_type').change(function(){
     var send_type = $(this).val();
     if(send_type == 1){
@@ -185,6 +186,21 @@ $('#send_save').click(function(){
 function savePost(types){
      var formData = new FormData($('#post_form_data')[0]);
         formData.append('save_type', types);
+             $.blockUI({
+            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            timeout: 20000, //unblock after 2 seconds
+            overlayCSS: {
+                backgroundColor: '#FFF',
+                opacity: 0.8,
+                cursor: 'wait'
+            },
+            css: {
+                border: 0,
+                padding: 0,
+                color: '#333',
+                backgroundColor: 'transparent'
+            },
+        });
       $.ajax({
           url : '/admin/send-update',
           type: "POST",
@@ -194,11 +210,12 @@ function savePost(types){
           dataType: "JSON",
           success: function(data)
           {
+             $.unblockUI();
              console.log(data);
             //   $("#brand_form")[0].reset();
             //    $('#brand_model').modal('hide');
             //    $('.zero-configuration').load(location.href+' .zero-configuration');
-            //    toastr.success('Brand Update Successfully', 'Successfully Update');
+              toastr.success(data.message);
           },error: function (data) {
             toastr.error('All Fields', 'Required!');
         }

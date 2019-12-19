@@ -178,6 +178,7 @@ class categoryController extends Controller
     public function getProduct($id)
     {
         $product1 = product::find($id);
+        
         $Upload = upload::where('product_id', '=', $id)->get();
         $lm = AppHelper::instance()->locationManagement($product1->id);
         if (isset($lm)) {
@@ -226,29 +227,36 @@ class categoryController extends Controller
                 $divider = explode(' ', $product1->product_name, 2);
                 // $loc = $this->locationValues();
                 if (count($divider) > 1) {
-                    $relatedProducts = product::where('third_sub_category', $product1->third_sub_category)
+                    $relatedProducts_ = product::where('third_sub_category', $product1->third_sub_category)
                         ->where('id', '!=', $product1->id)
                         ->where('product_name', 'like', substr($product1->product_name, 0, strlen($divider[0])) . '%')
                         // ->whereIn('tsl.location', $data[$location])
-                        ->where('stock_quantity', '>', 200)
                         ->take(20)->get();
-                    if (count($relatedProducts) == 0) {
-                        $relatedProducts = product::where('third_sub_category', $product1->third_sub_category)
+                    if (count($relatedProducts_) == 0) {
+                        $relatedProducts_ = product::where('third_sub_category', $product1->third_sub_category)
                             ->where('id', '!=', $product1->id)
-                            ->where('stock_quantity', '>', 200)
                             ->take(20)->get();
                     }
                 } else {
-                    $relatedProducts = product::where('second_sub_category', $product1->second_sub_category)
+                    $relatedProducts_ = product::where('second_sub_category', $product1->second_sub_category)
                         ->where('id', '!=', $product1->id)
-                        ->where('stock_quantity', '>', 200)
                         ->take(20)->get();
                 }
             } else {
                 $related = explode(',', $product1->related_product);
-                $relatedProducts = product::whereIn('id', $related)->get();
+                $relatedProducts_ = product::whereIn('id', $related)->get();
             }
-            //return response()->json($stock);
+            $relatedProducts =array();
+            if(count($relatedProducts_)>0){
+                foreach($relatedProducts_ as $rp_id){
+                    $rp = AppHelper::instance()->tilesSingleLocation($rp_id->id); 
+                    if(isset($rp)){
+                      $relatedProducts[]=$rp;  
+                    }
+                }
+            }
+
+            //return response()->json($relatedProducts);
             $brand = brand::find($product1->brand_name);
             //return response()->json($brand);
             return view('tilesProduct', compact('product1', 'subCategoty', 'relatedProducts', 'stock', 'Upload', 'second_sub_category', 'third_sub_category', 'brand'));

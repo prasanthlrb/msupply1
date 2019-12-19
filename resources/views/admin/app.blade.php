@@ -367,9 +367,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
            <li class="nav-item"><a href="#"><i class="la la-send"></i><span class="menu-title">Send New</span></a>
           <ul class="menu-content">
              
-            <li class="order_report"><a class="menu-item" href="/admin/createNew" data-i18n="nav.dash.ecommerce">Send New</a>
+            <li class="marketing"><a class="menu-item" href="/admin/createNew" data-i18n="nav.dash.ecommerce">Send New</a>
             </li>
-            <li class="order_report"><a class="menu-item" href="/admin/view-post" data-i18n="nav.dash.ecommerce">All List</a>
+            <li class="marketing-list"><a class="menu-item" href="/admin/view-post" data-i18n="nav.dash.ecommerce">All List</a>
             </li>
          
          
@@ -390,10 +390,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li class="order_report"><a class="menu-item" href="/admin/order-report" data-i18n="nav.dash.ecommerce">Order</a>
             </li>
             @endif
-            @if($role->report_transport == 1)
-            <li class="transport_report"><a class="menu-item" href="/admin/transport-report">Transport</a>
-            </li>
-            @endif
+          
             <li><a href="#"><i class="la la-file-o"></i> Logs</a>
                 <ul>
                   <li class="log-order"><a class="menu-item" href="/admin/order-log">  Order Log</a></li>

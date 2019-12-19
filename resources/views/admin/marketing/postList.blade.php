@@ -103,7 +103,7 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
-    $('.brand-menu').addClass('active');
+    $('.marketing-list').addClass('active');
   
      function deletePost(id){
       var r = confirm("Are you sure");

@@ -49,6 +49,7 @@ function getCartPage(){
         type: "GET",
         success: function(data)
         {
+             toastr.success('Successfully Update');
             $('#shopping_table').html(data);
         }
     });
@@ -100,6 +101,23 @@ function removeItemCart(id){
         }
    });
 }         
+function customQTYChage(ids){
+    var custom_qty = $('#custom_qty_'+ids).val();
+ $.ajax({        
+        url : '/cart-update-value/'+ids+'/'+custom_qty,
+        type: "GET",
+        success: function(data)
+        {
+            if(data =="OK"){
+            getCartPage();
+            CartMenuUpdate();
+
+            }else{
+                toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
+            }
+        }
+    });
+}
 </script>
 
 @endsection

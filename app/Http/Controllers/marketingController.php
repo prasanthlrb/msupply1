@@ -60,28 +60,31 @@ class marketingController extends Controller
         if ($request->send_type == 1) {
             $marketing->contact_id = collect($request->contact_id)->implode(',');
         }
-
+        
         if ($request->save_type == 1) {
-            $msg = 'Post Save & Send Successfully';
             $marketing->status = 1;
+            $marketing->save();
+            $msg = 'Post Save & Send Successfully';
             if ($request->send_type == 0) {
                 $contact = User::all();
             } else {
                 $contact = User::whereIn('id', $request->contact_id)->get();
             }
             if ($sms == 1) {
-                $this->sms($contact, $request->content);
+                $content = $request->title.','.$request->content;
+                $this->sms($contact, $content);
             }
             if ($email == 1) {
-                $this->email($contact, $request);
+                $this->email($contact, $marketing);
             }
             if ($facebook == 1) { }
             if ($whatsapp == 1) { }
         } else {
             $msg = 'Post Save Successfully';
             $marketing->status = 0;
+            $marketing->save();
         }
-        $marketing->save();
+        
         return response()->json(['message' => $msg], 200);
     }
 
@@ -101,6 +104,11 @@ class marketingController extends Controller
 
     public function updateData(Request $request)
     {
+          $sms = 0;
+        $email = 0;
+        $facebook = 0;
+        $whatsapp = 0;
+        $msg = '';
         $marketing = marketing::find($request->id);
         $marketing->title = $request->title;
         $fileName = null;
@@ -114,39 +122,49 @@ class marketingController extends Controller
         if (isset($request->sms)) {
             $marketing->sms = $request->sms;
             $sms = 1;
-        } else {
-            $marketing->sms = null;
         }
         if (isset($request->email)) {
             $marketing->email = $request->email;
             $email = 1;
-        } else {
-            $marketing->email = null;
         }
         if (isset($request->facebook)) {
             $marketing->facebook = $request->facebook;
             $facebook = 1;
-        } else {
-            $marketing->facebook = null;
         }
         if (isset($request->whatapp)) {
             $marketing->whatapp = $request->whatapp;
             $whatsapp = 1;
-        } else {
-            $marketing->whatapp = null;
         }
         $marketing->send_type = $request->send_type;
         if ($request->send_type == 1) {
             $marketing->contact_id = collect($request->contact_id)->implode(',');
         }
-        $marketing->send_type = $request->send_type;
+        
         if ($request->save_type == 1) {
             $marketing->status = 1;
+            $marketing->save();
+            $msg = 'Post Save & Send Successfully';
+            if ($request->send_type == 0) {
+                $contact = User::all();
+            } else {
+                $contact = User::whereIn('id', $request->contact_id)->get();
+            }
+            if ($sms == 1) {
+                $content = $request->title.','.$request->content;
+                $this->sms($contact, $content);
+            }
+            if ($email == 1) {
+                $this->email($contact, $marketing);
+            }
+            if ($facebook == 1) { }
+            if ($whatsapp == 1) { }
         } else {
+            $msg = 'Post Save Successfully';
             $marketing->status = 0;
+            $marketing->save();
         }
-        $marketing->save();
-        return response()->json($request);
+        
+        return response()->json(['message' => $msg], 200);
     }
 
     public function editData($id)

@@ -258,10 +258,10 @@
                                              
                                                 @if($product1->category == 1)
                                                 
-                                                <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/{{$product1->product_id}}">Quick View</a>
+                                                <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/{{$product1->product_id}}/{{$product1->sales_price}}">Quick View</a>
                                                 @else
                                                 
-                                                <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product1->product_id}}">Quick View</a>
+                                            <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product1->product_id}}">Quick View</a>
                                                 @endif
 
                                             </div>
@@ -389,7 +389,7 @@
 
 
                     </div><!--/ .table_layout -->
-
+                </div>
                     <footer class="bottom_box" style="padding-bottom:38px">
 @if ($product->lastPage() > 1)
 <ul class="pags">

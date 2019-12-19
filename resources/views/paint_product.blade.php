@@ -11,7 +11,13 @@ p.productdesc{
     padding-top: 10px;
     overflow: hidden;
 }
+tr td {
+    width: 25%;
+}
 </style>
+
+
+
 @endsection
 @section('content')
 
@@ -530,6 +536,7 @@ p.productdesc{
 			
 		}
 function setLitre(lits){
+try{
 lit = lits.paint_lit;
 console.log(lits)
 $('.litBtn').each(function(index){
@@ -544,6 +551,10 @@ $('#addToCardPaint').prop('disabled',false);
 }else{
 
 getPrice();
+}
+}
+catch(error){
+alert("Not Available")
 }
 }
 
@@ -648,6 +659,7 @@ function addCart(id){
 			getPrice();
         }
 		function getPrice(){
+			try{
 		$('.related_price_tag').remove();
 			// console.log(lit)
 			// console.log(colors_id)
@@ -659,9 +671,9 @@ if(lit !=0 && colors_id !=0){
                 method:'GET',
 				data:{product_id:product_id,lit:lit,colors_id:colors_id},
                 success:function(result){
-                    //console.log(result);
+                    console.log(result);
                     //$('#inputColor').remove();
-					if(result[0] ==0){
+					if(result ==0){
                     $(".product_price .theme_color").text("Not Available");
 					$('#addToCardPaint').prop('disabled',true);
 					}else{
@@ -684,6 +696,10 @@ if(lit !=0 && colors_id !=0){
                 }
             });
 }
+			}
+			catch(err){
+				alert("Not Available1")
+			}
 		}
         function checkOrderLimit(data){
             var button_qty = $('#button_qty').val();

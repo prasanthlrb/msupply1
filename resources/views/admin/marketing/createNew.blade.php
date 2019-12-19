@@ -152,6 +152,7 @@
 <script src="../../../custom/color.js" type="text/javascript"></script>
 
 <script>
+  $('.marketing').addClass('active');
 $('#send_type').change(function(){
     var send_type = $(this).val();
     if(send_type == 1){

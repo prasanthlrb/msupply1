@@ -195,7 +195,7 @@ p.productdesc{
                                     <p class="product_price">Total Rs : <b class="theme_color" id="fixedTotal"></b></p>
                                    
                                         <div class="buttons_row">
-                                            <button class="button_blue middle_btn" onclick="buyIt()">Buy Now</button>
+                                            <button class="button_blue middle_btn" onclick="buyIt()">Add to Cart</button>
                                         </div>
                                   
    

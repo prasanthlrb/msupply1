@@ -24,6 +24,10 @@ p.productdesc{
 .calculatoreBox {
     padding-top: 120px;
 }
+tr td {
+    width: 25%;
+}
+
 </style>
 @endsection
 @section('content')
@@ -561,7 +565,7 @@ p.productdesc{
 
 												<div class="centered_buttons">
 
-													<a href="#" class="button_dark_grey quick_view" data-modal-url="/quick-view-tiles/{{$relate->id}}">Quick View</a>
+												<a href="javascript:void(null)" class="button_dark_grey quick_view" data-modal-url="/quick-view-tiles/{{$relate->id}}/{{ceil($relate->sales_price)}}">Quick View</a>
 
 							
 

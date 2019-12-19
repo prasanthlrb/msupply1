@@ -5,7 +5,12 @@
     ============================================ -->
     <link rel="stylesheet" href="/js/fancybox/source/jquery.fancybox.css">
     <link rel="stylesheet" href="/js/fancybox/source/helpers/jquery.fancybox-thumbs.css">
+<style>
+tr td {
+    width: 25%;
+}
 
+</style>
 @endsection
 @section('content')
 

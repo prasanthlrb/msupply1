@@ -1,6 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
         <head>
+      <title>Msupply | Material-stores</title>
+		<meta charset="utf-8">
+		<meta name="author" content="">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
         <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
         <link rel="stylesheet" type="text/css" href="../../../app-assets/css/app.css">
         <link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/search.css">

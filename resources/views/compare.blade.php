@@ -274,9 +274,12 @@
                 <div class="actions_wrap">
 
                     <div class="centered_buttons">
-
+						 @if($r_product->category == 1)
+                                                
+                        <a href="javascript:void(null)" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/{{$r_product->product_id}}/{{$r_product->sales_price}}">Quick View</a>
+                         @else
                         <a href="#" class="button_dark_grey quick_view" data-modal-url="/quick-view/{{$r_product->id}}">Quick View</a>
-
+						@endif
                         <!-- <a href="#" class="button_blue add_to_cart">Add to Cart</a> -->
 
                     </div>

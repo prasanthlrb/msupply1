@@ -145,7 +145,7 @@ class colorMasterController extends Controller
             foreach ($colorMaster as $colors) {
                 $color = color::where('code_name', $colors['code_name'])->first();
                 if (isset($color)) {
-                    //  if($colors[4] < $colors[10]){
+                     if($colors[4] < $colors[10]){
                     foreach ($paint_lit as $liter) {
                         $paint = new paint_price;
                         $paint->colors_id = $color->id;
@@ -156,22 +156,22 @@ class colorMasterController extends Controller
                         //$final[]=$paint;
                     }
 
-                    // }else{
-                    //      $paint = new paint_price;
-                    //         $paint->colors_id = $color->id;
-                    //         $paint->lit = 1;
-                    //         $paint->price = $colors[1];
-                    //         $paint->product_id = $request->product_id;
-                    //         $paint->save();
+                    }else{
+                         $paint = new paint_price;
+                            $paint->colors_id = $color->id;
+                            $paint->lit = 1;
+                            $paint->price = $colors[1];
+                            $paint->product_id = $request->product_id;
+                            $paint->save();
 
-                    //          $paint = new paint_price;
-                    //         $paint->colors_id = $color->id;
-                    //         $paint->lit = 4;
-                    //         $paint->price = $colors[4];
-                    //         $paint->product_id = $request->product_id;
-                    //         $paint->save();
+                             $paint = new paint_price;
+                            $paint->colors_id = $color->id;
+                            $paint->lit = 4;
+                            $paint->price = $colors[4];
+                            $paint->product_id = $request->product_id;
+                            $paint->save();
 
-                    // }
+                    }
 
                 }
             }

@@ -56,11 +56,11 @@ class pageController extends Controller
         // File::put($destinationPath . $file, $data);
         // return response()->download($destinationPath . $file);
          //$price = paint_price::select('product_id')->where('price', '<', 100)->groupBy('product_id')->get();
-        //$prices = paint_price::where('price', '<', 100)->get();
+        $prices = paint_price::where('product_id', 3978)->get();
         // foreach($prices as $price){
         //     $prices = paint_price::find($price->id)->delete();
         // }
-      ///return response()->json($prices);
+         return response()->json($prices);
         // $product = product::whereIn('id', ['3962', '3976', '3979', '3989', '843'])->get();
         // return response()->json($product);
         // $product = product::where('category', 21)->get();
@@ -813,7 +813,7 @@ class pageController extends Controller
                ';
 
 
-        $output .= ' <p class="product_price"><b class="theme_color">₹' . $price . '</b></p>';
+        $output .= ' <p class="product_price"><b class="theme_color">₹' . ceil($price) . '</b></p>';
 
 
         $output .= '<ul class="specifications">

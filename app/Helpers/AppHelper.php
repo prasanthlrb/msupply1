@@ -102,7 +102,7 @@ class AppHelper
             ->groupBy('tsl.product_id')
             ->orderBy('stocks', 'desc')
             ->first();
-
+        if(isset($stock->amount)){
         if ($stock->amount != null) {
             if ($stock->price_type == "discount") {
                 if ($stock->value_type == "percentage") {
@@ -117,6 +117,7 @@ class AppHelper
                     $stock->sales_price = $stock->sales_price + $stock->amount;
                 }
             }
+        }
         }
         return $stock;
     }
