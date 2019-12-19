@@ -197,11 +197,11 @@ function savePost(types){
           success: function(data)
           {
             $.unblockUI();
-             //console.log(data);
+             console.log(data);
             //   $("#brand_form")[0].reset();
             //    $('#brand_model').modal('hide');
             //    $('.zero-configuration').load(location.href+' .zero-configuration');
-             toastr.success(data.message);
+            // toastr.success(data.message);
           },error: function (data) {
             toastr.error('All Fields', 'Required!');
         }

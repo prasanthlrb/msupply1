@@ -72,10 +72,10 @@ class marketingController extends Controller
             }
             if ($sms == 1) {
                 $content = $request->title.','.$request->content;
-                $this->sms($contact, $content);
+                //$this->sms($contact, $content);
             }
             if ($email == 1) {
-                $this->email($contact, $marketing);
+               // $this->email($contact, $marketing);
             }
             if ($facebook == 1) { }
             if ($whatsapp == 1) { }
@@ -85,7 +85,7 @@ class marketingController extends Controller
             $marketing->save();
         }
         
-        return response()->json(['message' => $msg], 200);
+        return response()->json($request);
     }
 
     public function sms($contact, $message)
