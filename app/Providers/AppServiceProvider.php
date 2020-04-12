@@ -11,10 +11,15 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
+      protected $policies = [
+        'App\Model' => 'App\Policies\ModelPolicy',
+    ];
+
+    
     public function boot()
     {
         Schema::defaultStringLength(191);
-    
         view()->composer('layout.app', function($view) {
             $setting = DB::table('contactinfos')->first();
             $social = DB::table('social_media')->first();

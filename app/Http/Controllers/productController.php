@@ -26,6 +26,7 @@ use App\unit;
 use App\product_unit;
 use App\tiles_stock_location;
 use App\distance_price;
+use App\app_recomended;
 
 
 class productController extends Controller
@@ -311,9 +312,18 @@ class productController extends Controller
             $fileName = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('category_image/'), $fileName);
         }
+
+        $fileName1 = null;
+        if ($request->file('app_icon') != "") {
+            $image = $request->file('app_icon');
+            $fileName1 = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('category_image/'), $fileName1);
+        }
+
         $category = new category;
         $category->category_name = $request->category_name;
         $category->category_image = $fileName;
+        $category->app_icon = $fileName1;
         $category->parent_id = $request->parent_id;
         $category->save();
         return response()->json("200");
@@ -330,6 +340,17 @@ class productController extends Controller
             \File::delete($filename1);
             $image->move(public_path('category_image/'), $fileName);
             $category->category_image = $fileName;
+        }
+
+        $app_icon_file = null;
+        if ($request->file('app_icon') != "") {
+            $image = $request->file('app_icon');
+            $app_icon_file = rand() . '.' . $image->getClientOriginalExtension();
+            $file = $category->app_icon;
+            $app_icon_file1 = public_path() . '/category_image/' . $file;
+            \File::delete($app_icon_file1);
+            $image->move(public_path('category_image/'), $app_icon_file);
+            $category->app_icon = $app_icon_file;
         }
 
         $category->category_name = $request->category_name;
@@ -1574,4 +1595,43 @@ class productController extends Controller
         $product->save();
         return response()->json(['message' => 'update Successfully'], 200);
     }
+
+
+    public function recommendedProduct()
+    {
+        $app_recomended = app_recomended::all();
+        $product = product::all();
+        return view('admin.recommended_product', compact('app_recomended', 'product'));
+    }
+
+    public function recommendedProductSave(Request $request)
+    {
+        $app_recomended = new app_recomended;
+        $app_recomended->product_id = $request->product_id;
+        $app_recomended->save();
+        return response()->json($request);
+    }
+    public function EditrecommendedProduct($id)
+    {
+        $app_recomended = app_recomended::find($id);
+        return response()->json($app_recomended);
+    }
+
+    public function recommendedProductUpdate(Request $request)
+    {
+        $app_recomended = app_recomended::find($request->id);
+        $app_recomended->product_id = $request->product_id;
+        $app_recomended->save();
+        return response()->json(['message' => 'Successfully Store'], 200);
+    }
+
+    public function DeleterecommendedProduct($id)
+    {
+        $app_recomended = app_recomended::find($id);
+        $app_recomended->delete();
+        return response()->json(['message' => 'Successfully Delete'], 200);
+    }
+
+
+
 }

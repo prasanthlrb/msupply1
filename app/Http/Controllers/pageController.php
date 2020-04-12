@@ -40,6 +40,11 @@ class pageController extends Controller
         // $this->middleware('location');
     }
 
+    public function location(){
+        $data = AppHelper::instance()->location();
+        return view('modal.location', compact('data'));
+    }
+
     public function testTiles()
     {
         //$product = product::select('product_name')->where('category', 1)->where('length', null)->get();

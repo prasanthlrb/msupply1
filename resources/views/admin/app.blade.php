@@ -376,6 +376,24 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
           </ul>
 
         </li>
+
+
+          <li class=" navigation-header">
+          <span data-i18n="nav.category.support">Mobile App</span><i class="la la-ellipsis-h ft-minus" data-toggle="tooltip"
+          data-placement="right" data-original-title="Support"></i>
+        </li>
+           <li class="nav-item"><a href="#"><i class="la la la-android"></i><span class="menu-title">App Management</span></a>
+          <ul class="menu-content">
+            <li class="login-slider"><a class="menu-item" href="/admin/app-login-slider" data-i18n="nav.dash.ecommerce">Login Slider</a></li>
+            <li class="marketing-list"><a class="menu-item" href="/admin/app-sign-screen" data-i18n="nav.dash.ecommerce">Login & Signup Screen</a></li>
+            <li class="home-slider"><a class="menu-item" href="/admin/app-home-slider" data-i18n="nav.dash.ecommerce">Home Slider</a></li>
+            <li class="marketing-list"><a class="menu-item" href="/admin/app-layout" data-i18n="nav.dash.ecommerce">app Layout</a></li>
+            <li class="marketing-list"><a class="menu-item" href="/admin/recommended-product" data-i18n="nav.dash.ecommerce">Recomended Product</a></li>
+          </ul>
+
+        </li>
+
+
         @if($role->report == 1)
         <li class=" navigation-header">
           <span data-i18n="nav.category.support">Report</span><i class="la la-ellipsis-h ft-minus" data-toggle="tooltip"

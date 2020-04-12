@@ -2,70 +2,41 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
-
-
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
 @endsection
 @section('section')
 <div class="content-wrapper">
-
-    <div class="content-body">
-        <div class="row breadcrumbs-top">
-            <div class="breadcrumb-wrapper col-12">
-              <ol class="breadcrumb">
-                <?php $y=1;?>
-                @if(count($linkCat2) >0)
-                <li class="breadcrumb-item"><a href="/admin/category/0">Category</a>
-                </li>
-
-                @foreach($linkCat2 as $link)
-              <li class="breadcrumb-item"><a href="/admin/category/{{$link['id']}}">{{$link['name']}}</a>
-                </li>
-                <?php $y++;?>
-                @endforeach
-                @endif
-              </ol>
-            </div>
-          </div>
+    <div class="content-body">  
    <br>
 <section id="column-selectors">
     <div class="row">
       <div class="col-12">
-
         <div class="card">
           <div class="card-header">
-            @if($role->category_create ==1)
-                <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Category</button>
-            @endif
-
+                <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Product</button>
           </div>
           <div class="card-content collapse show">
             <div class="card-body card-dashboard">
-
               <table class="table table-striped table-bordered zero-configuration">
                 <thead>
                   <tr>
                     <th>S No</th>
-                    <th>Category Name</th>
-                    <th>Category Image</th>
-                    @if($y < 4)
-                  <th>SubCategory</th>
-                  @endif
-                  @if($role->category_action ==1)
+                    <th>Product Name</th>
+                    <th>Product Image</th>
                     <th>Action</th>
-                  @endif
                   </tr>
                 </thead>
                 <tbody>
                  <?php $x=1?>
-                @foreach($category as $row)
+                @foreach($app_recomended as $row)
                 <tr>
                 <td>{{$x}}</td>
-                <td>{{$row->category_name}}</td>
-                <td><img src="{{ asset("category_image/$row->category_image")}}" alt="" style="width:80px"></td>
-                @if($y < 4)
-                <td><a href="/admin/category/{{$row->id}}">Create SubCategory</a></td>
+                @foreach($product as $pro)
+                @if($pro->id == $row->product_id)
+                <td>{{$pro->product_name}}</td>
+                <td><img src="{{ asset("product_img/$pro->product_image")}}" alt="" style="width:80px"></td>
                 @endif
-                @if($role->category_action ==1)
+                @endforeach
                 <td class="text-center">
                     <span class="dropdown">
           <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -74,26 +45,19 @@
 
             <a href="javascript:void(null)" onclick="Edit({{$row->id}})" class="dropdown-item"><i class="ft-edit"></i> Edit</a>
             <a href="#" onclick="Delete({{$row->id}})" class="dropdown-item"><i class="la la-trash"></i> Delete</a>
-
           </span>
         </span>
                     </td>
-               @endif
                 </tr>
-                <?php $x++?>
+                <?php $x++ ?>
                   @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>S No</th>
-                        <th>Category Name</th>
-                        <th>Category Image</th>
-                        @if($y < 4)
-                      <th>SubCategory</th>
-                      @endif
-                      @if($role->category_action ==1)
+                        <th>Product Name</th>
+                        <th>Product Image</th>
                         <th>Action</th>
-                      @endif
                       </tr>
                 </tfoot>
               </table>
@@ -107,7 +71,7 @@
     </div>
   </div>
 
-  <div class="modal fade text-left" id="attribute_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel8"
+  <div class="modal fade text-left" id="attribute_model" role="dialog" aria-labelledby="myModalLabel8"
   aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -120,30 +84,17 @@
         <form id="Category_form" method="post">
             {{ csrf_field() }}
             <input type="hidden" name="id">
-            <input type="hidden" name="parent_id" value="{{ Request::segment(3) }}">
         <div class="modal-body">
 
           <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput1">Category Name</label>
+            <label class="col-md-3 label-control" for="projectinput1">Choose Product ID</label>
             <div class="col-md-9">
-              <input type="text" id="category_name" class="form-control" placeholder="Enter your Category Name"
-              name="category_name">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput1">Category Image</label>
-            <div class="col-md-9">
-              <input id="category_image" type="file" class="form-control" accept="image/*" name="category_image" />
-              <div id="preview"><img id="prevImage" style="width:120px;padding-top:20px;" src="" /></div><br>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput1">App Icon</label>
-            <div class="col-md-9">
-              <input id="app_icon" type="file" class="form-control" accept="image/*" name="app_icon" />
-              <div id="preview"><img id="prevImage1" style="width:120px;padding-top:20px;" src="" /></div><br>
+              <select class="form-control select2"  name="product_id" id="product_id">
+                <option value="">SELECT</option>
+                @foreach($product as $row)
+              <option value="{{$row->id}}">{{$row->product_name}}</option>
+                @endforeach
+              </select>
             </div>
           </div>
 
@@ -161,20 +112,22 @@
 
 <script src="../../../app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
 
-
+<script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
+  $(".select2").select2({
+      width: '100%', 
+    });
+
   $('.category-menu').addClass('active');
   var action_type; // the action type used to from data Save And Update
   $('#open_model').click(function(){
     $('#attribute_model').modal('show');
     $("#Category_form")[0].reset();
-    $('#prevImage').attr('src', '');
-    $('#prevImage1').attr('src', '');
     action_type = 1;
     $('#saveCat').text('Save');
-    $('#myModalLabel8').text('Create Category');
+    $('#myModalLabel8').text('Create Recommended Product');
   });
 
 
@@ -184,7 +137,7 @@
       if(action_type == 1){
 
         $.ajax({
-                url : '/admin/category-save',
+                url : '/admin/recommended-product-save',
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -196,7 +149,7 @@
                     $("#Category_form")[0].reset();
                      $('#attribute_model').modal('hide');
                      $('.zero-configuration').load(location.href+' .zero-configuration');
-                     toastr.success('Category Store Successfully', 'Successfully Save');
+                     toastr.success('Product Store Successfully', 'Successfully Save');
                 },error: function (data, errorThrown) {
                 var errorData = data.responseJSON.errors;
                   $.each(errorData, function(i, obj) {
@@ -206,7 +159,7 @@
             });
       }else{
         $.ajax({
-          url : '/admin/category-update',
+          url : '/admin/recommended-product-update',
           type: "POST",
           data: formData,
           contentType: false,
@@ -232,56 +185,39 @@
     }
 
     function Edit(id){
-
       $.ajax({
-        url : '/admin/edit-category/'+id,
+        url : '/admin/edit-recommended-product/'+id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
-          $('#myModalLabel8').text('Update Attribute');
+          $('#myModalLabel8').text('Update Product');
           $('#saveCat').text('Save Change');
-          $('input[name=category_name]').val(data.category_name);
-          $('#prevImage').attr('src', '/category_image/'+data.category_image);
-          $('#prevImage1').attr('src', '/category_image/'+data.app_icon);
+          $('select[name=product_id]').val(data.product_id);
           $('input[name=id]').val(id);
-
           $('#attribute_model').modal('show');
           action_type = 2;
         }
       });
     }
-     function Delete(id){
+
+    function Delete(id){
       var r = confirm("Are you sure");
-      if (r == true) {
-      $.ajax({
-        url : '/admin/delete-category/'+id,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data)
-        {
-          toastr.success('Category Delete Successfully', 'Successfully Delete');
-          $('.zero-configuration').load(location.href+' .zero-configuration');
+        if (r == true) {
+            $.ajax({
+                url : '/admin/delete-recommended-product/'+id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data)
+                {
+                toastr.success('Category Delete Successfully', 'Successfully Delete');
+                $('.zero-configuration').load(location.href+' .zero-configuration');
+                }
+            });
         }
-      });
-    }
      }
-     $('#category_image').change(function(){
-      readURL(this);
-     });
 
-     function readURL(input) {
 
-if (input.files && input.files[0]) {
-  var reader = new FileReader();
-
-  reader.onload = function(e) {
-    $('#prevImage').attr('src', e.target.result);
-  }
-
-  reader.readAsDataURL(input.files[0]);
-}
-}
 
 </script>
 @endsection

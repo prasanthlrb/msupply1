@@ -121,6 +121,42 @@ class AppHelper
         }
         return $stock;
     }
+    public function location(){
+        return $data = [
+        'Ariyalur',
+        'Chennai',
+        'Coimbatore',
+        'Cuddalore',
+        'Dharmapuri',
+        'Dindigul',
+        'Erode',
+        'Kanchipuram',
+        'Kanniyakumari',
+        'Karur',
+        'Krishnagiri',
+        'Madurai',
+        'Nagapattinam',
+        'Namakkal',
+        'Nilgiris',
+        'Perambalur',
+        'Pudukkottai',
+        'Ramanathapuram',
+        'Salem',
+        'Sivaganga',
+        'Thanjavur',
+        'Theni',
+        'Thoothukudi',
+        'Tiruchirappalli',
+        'Tirunelveli',
+        'Tiruppur',
+        'Tiruvallur',
+        'Tiruvannamalai',
+        'Tiruvarur',
+        'Vellore',
+        'Viluppuram',
+        'Virudhunagar',
+    ];
+    }
     public function locationValues()
     {
         return  $data = array(

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoriesTable extends Migration
+class CreateAppLoginSlidersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('app_login_sliders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('category_name');
-            $table->string('app_icon')->nullable();
-            $table->string('category_image')->nullable();
-            $table->string('parent_id')->nullable();
-            $table->string('active')->default(0);
+            $table->string('slider_image')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('app_login_sliders');
     }
 }

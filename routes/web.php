@@ -139,6 +139,31 @@ Auth::routes(['verify' => true]);
 Route::get('/show_otp_login', 'oneTimePasswordController@otpLogin');
 Route::group(['prefix' => 'admin'], function () {
 
+//mobile app management
+//view
+Route::get('/app-login-slider', 'AppController@LoginSlider');
+Route::get('/app-sign-screen', 'AppController@LoginScreen');
+Route::get('/app-home-slider', 'AppController@HomeSlider');
+Route::get('/app-layout', 'AppController@LayoutTitle');
+Route::get('/app-recomended', 'AppController@dashboard');
+
+//create,update,edit,delete login slider
+Route::post('/add-login-slider', 'AppController@LoginSliderCreate');
+Route::post('/update-login-slider', 'AppController@LoginSliderUpdate');
+Route::get('/edit_login-slider/{id}', 'AppController@LoginSliderEdit');
+Route::get('/delete_login-slider/{id}', 'AppController@LoginSliderDelete');
+
+
+
+//create,update,edit,delete Home slider
+Route::post('/add-home-slider', 'AppController@HomeSliderCreate');
+Route::post('/update-home-slider', 'AppController@HomeSliderUpdate');
+Route::get('/edit_home-slider/{id}', 'AppController@HomeSliderEdit');
+Route::get('/delete_home-slider/{id}', 'AppController@HomeSliderDelete');
+
+
+Route::post('/login-screen-update', 'AppController@LoginScreenUpdate');
+
 
     // Route::get('/login', function () {
     //     return view('admin/login');
@@ -190,6 +215,15 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/delete-category/{id}', 'productController@DeleteCategory');
     Route::post('/category-save', 'productController@CategorySave');
     Route::post('/category-update', 'productController@CategoryUpdate');
+
+
+    // Recommended Product Management
+    Route::get('/recommended-product','productController@recommendedProduct');
+    Route::get('/edit-recommended-product/{id}', 'productController@EditrecommendedProduct');
+    Route::get('/delete-recommended-product/{id}', 'productController@DeleterecommendedProduct');
+    Route::post('/recommended-product-save', 'productController@recommendedProductSave');
+    Route::post('/recommended-product-update', 'productController@recommendedProductUpdate');
+
 
     //colors
     Route::get('/colors-category', 'productController@viewColorCategory');
@@ -431,6 +465,19 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/delete-post/{id}', 'marketingController@deleteData');
     Route::post('/send-save', 'marketingController@saveSend');
     Route::post('/send-update', 'marketingController@updateData');
+
+
+    //marketing app
+    Route::get('/create-deal', 'dealController@createDeal');
+    Route::get('/view-deal', 'dealController@index');
+    Route::get('/get-user/{id}', 'dealController@getUserID');
+    Route::get('/get-product-deal/{id}', 'dealController@getProductDeal');
+    // Route::get('/update-post/{id}', 'dealController@editData');
+    // Route::get('/delete-post/{id}', 'dealController@deleteData');
+    // Route::post('/send-save', 'dealController@saveSend');
+    // Route::post('/send-update', 'dealController@updateData');
+
+
 });
 
 Auth::routes();
@@ -561,41 +608,5 @@ Route::get('menu-data', 'pageController@menuData');
 Route::get('order-placed/{id}/{ship}/{bill}', 'accountController@orderPlaced');
 
 //location
-Route::get('/get-location-page', function () {
-    $data = [
-        'Ariyalur',
-        'Chennai',
-        'Coimbatore',
-        'Cuddalore',
-        'Dharmapuri',
-        'Dindigul',
-        'Erode',
-        'Kanchipuram',
-        'Kanniyakumari',
-        'Karur',
-        'Krishnagiri',
-        'Madurai',
-        'Nagapattinam',
-        'Namakkal',
-        'Nilgiris',
-        'Perambalur',
-        'Pudukkottai',
-        'Ramanathapuram',
-        'Salem',
-        'Sivaganga',
-        'Thanjavur',
-        'Theni',
-        'Thoothukudi',
-        'Tiruchirappalli',
-        'Tirunelveli',
-        'Tiruppur',
-        'Tiruvallur',
-        'Tiruvannamalai',
-        'Tiruvarur',
-        'Vellore',
-        'Viluppuram',
-        'Virudhunagar',
-    ];
-    return view('modal.location', compact('data'));
-});
+Route::get('/get-location-page', 'pageController@location');
 Route::get('/set-location/{data}', 'pageController@setLocations');

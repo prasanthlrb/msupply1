@@ -291,6 +291,7 @@
     $('#myModalLabel8').text('Create Brand');
   })
     function saveBrand(){
+    
       var formData = new FormData($('#brand_form')[0]);
         var description = tinyMCE.activeEditor.getContent();
         formData.append('description', description);
